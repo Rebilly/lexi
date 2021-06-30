@@ -1,0 +1,85 @@
+name: PR checks
+
+on: pull_request
+
+env:
+    GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+jobs:
+    eslint:
+        name: Eslint
+        runs-on: ubuntu-latest
+        steps:
+            - name: Checkout repo
+              uses: actions/checkout@v2
+            - name: Setup node
+              uses: actions/setup-node@v1
+              with:
+                  node-version: 14
+            - name: Restore node_modules cache
+              uses: actions/cache@v2
+              with:
+                  path: "**/node_modules"
+                  key: ${{ runner.os }}-modules-${{ hashFiles('**/yarn.lock') }}
+            - name: Install packages
+              run: yarn
+            - name: ESLint
+              run: yarn eslint
+
+    tests:
+        name: Unit tests
+        runs-on: ubuntu-latest
+        steps:
+            - name: Checkout repo
+              uses: actions/checkout@v2
+            - name: Setup node
+              uses: actions/setup-node@v1
+              with:
+                  node-version: 14
+            - name: Restore node_modules cache
+              uses: actions/cache@v2
+              with:
+                  path: "**/node_modules"
+                  key: ${{ runner.os }}-modules-${{ hashFiles('**/yarn.lock') }}
+            - name: Install packages
+              run: yarn
+            - name: All tests
+              run: yarn test
+
+    build:
+        name: Check build is committed
+        runs-on: ubuntu-latest
+        steps:
+            - name: Checkout repo
+              uses: actions/checkout@v2
+            - name: Setup node
+              uses: actions/setup-node@v1
+              with:
+                  node-version: 14
+            - name: Restore node_modules cache
+              uses: actions/cache@v2
+              with:
+                  path: "**/node_modules"
+                  key: ${{ runner.os }}-modules-${{ hashFiles('**/yarn.lock') }}
+            - name: Install packages
+              run: yarn
+            - name: Build
+              run: yarn build
+            - name: Ensure that the committed dist matches the build
+              # See if there are any diffs in the dist file. Grep returns an error
+              # when there are no changes, so we flip the output
+              run: (git diff --name-only | grep dist/index.js || exit 0 && exit 1)
+
+    # Use the branch we are running against, to write to our own PR
+    # to check the comment output
+    report-readability:
+        name: Report readability
+        needs: build
+        runs-on: ubuntu-latest
+        steps:
+            - name: Checkout repo
+              uses: actions/checkout@v2
+            - uses: ./
+              with:
+                github-token: ${{ secrets.GITHUB_TOKEN }}
+                glob: "**/*.md"
