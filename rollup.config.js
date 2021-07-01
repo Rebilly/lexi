@@ -18,7 +18,7 @@ export default {
         commonjs(),
         babel({
             babelHelpers: 'runtime',
-            exclude: 'node_modules/**'
+            exclude: 'node_modules/**',
         }),
         json(),
     ],

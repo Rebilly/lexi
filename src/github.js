@@ -79,3 +79,19 @@ export const upsertComment = async ({
               hiddenHeader
           );
 };
+
+export const getFileStatusesFromPR = async ({client, context, prNumber}) => {
+    const {data: files} = await client.rest.pulls.listFiles({
+        ...context.repo,
+        pull_number: prNumber,
+    });
+
+    return {
+        added: files
+            .filter((file) => file.status === 'added')
+            .map((file) => file.filename),
+        modified: files
+            .filter((file) => file.status === 'modified')
+            .map((file) => file.filename),
+    };
+};
