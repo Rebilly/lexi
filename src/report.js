@@ -1,5 +1,16 @@
 import {FILE_STATUS} from './constants';
 
+// Return a new object where every key is the diff
+// between the objects. For example:
+// diffScores({a: 1, b: 10}, {a: 3, b:10})
+// returns: {a:2, b:0}
+function diffScores(newResult, oldResult) {
+    return Object.keys(newResult).reduce((acc, key) => {
+        acc[key] = newResult[key] - oldResult[key];
+        return acc;
+    }, {});
+}
+
 // Adds a diff property to each result object, showing an increase
 // or decrease in each score
 function addDiffToResults(newResults, oldResults) {
@@ -19,26 +30,16 @@ function addDiffToResults(newResults, oldResults) {
     });
 }
 
-// Return a new object where every key is the diff
-// between the objects. For example:
-// diffScores({a: 1, b: 10}, {a: 3, b:10})
-// returns: {a:2, b:0}
-function diffScores(newResult, oldResult) {
-    return Object.keys(newResult).reduce((acc, key) => {
-        acc[key] = newResult[key] - oldResult[key];
-        return acc;
-    }, {});
-}
-
 // Adds a status property to each result object, showing
 // if that file was added or modified in this PR
 function addFileStatusToResults(results, {added, modified}) {
     return results.map((result) => {
-        const status = added.includes(result.name)
-            ? FILE_STATUS.ADDED
-            : modified.includes(result.name)
-            ? FILE_STATUS.MODIFIED
-            : null;
+        let status = null;
+        if (added.includes(result.name)) {
+            status = FILE_STATUS.ADDED;
+        } else if (modified.includes(result.name)) {
+            status = FILE_STATUS.MODIFIED;
+        }
 
         return {
             ...result,

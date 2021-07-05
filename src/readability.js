@@ -1,5 +1,4 @@
 import fs from 'fs';
-import path from 'path';
 import strip from 'strip-markdown';
 import remark from 'remark';
 import glob from 'glob';
@@ -31,7 +30,7 @@ function scoreText(text) {
         linsearWriteFormula: readability.linsearWriteFormula(text),
         daleChallReadabilityScore: readability.daleChallReadabilityScore(text),
         // The CLI index can be NaN for some texts, so ensure it's 0
-        colemanLiauIndex: isNaN(colemanLiauIndex) ? 0 : colemanLiauIndex,
+        colemanLiauIndex: Number.isNaN(colemanLiauIndex) ? 0 : colemanLiauIndex,
     };
 }
 

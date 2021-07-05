@@ -8164,7 +8164,8 @@ var upsertComment = /*#__PURE__*/function () {
   return function upsertComment(_x2) {
     return _ref9.apply(this, arguments);
   };
-}();
+}(); // Given a PR number, returns two arrays of file names, modified and added
+
 var getFileStatusesFromPR = /*#__PURE__*/function () {
   var _ref11 = _asyncToGenerator( /*#__PURE__*/regenerator.mark(function _callee3(_ref10) {
     var client, context, prNumber, _yield$client$rest$pu, files;
@@ -8207,41 +8208,6 @@ var getFileStatusesFromPR = /*#__PURE__*/function () {
     return _ref11.apply(this, arguments);
   };
 }();
-
-function _arrayLikeToArray(arr, len) {
-  if (len == null || len > arr.length) len = arr.length;
-
-  for (var i = 0, arr2 = new Array(len); i < len; i++) {
-    arr2[i] = arr[i];
-  }
-
-  return arr2;
-}
-
-function _arrayWithoutHoles(arr) {
-  if (Array.isArray(arr)) return _arrayLikeToArray(arr);
-}
-
-function _iterableToArray(iter) {
-  if (typeof Symbol !== "undefined" && iter[Symbol.iterator] != null || iter["@@iterator"] != null) return Array.from(iter);
-}
-
-function _unsupportedIterableToArray(o, minLen) {
-  if (!o) return;
-  if (typeof o === "string") return _arrayLikeToArray(o, minLen);
-  var n = Object.prototype.toString.call(o).slice(8, -1);
-  if (n === "Object" && o.constructor) n = o.constructor.name;
-  if (n === "Map" || n === "Set") return Array.from(o);
-  if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return _arrayLikeToArray(o, minLen);
-}
-
-function _nonIterableSpread() {
-  throw new TypeError("Invalid attempt to spread non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method.");
-}
-
-function _toConsumableArray(arr) {
-  return _arrayWithoutHoles(arr) || _iterableToArray(arr) || _unsupportedIterableToArray(arr) || _nonIterableSpread();
-}
 
 var stripMarkdown = strip;
 
@@ -30479,6 +30445,9 @@ class Readability {
 const readability = new Readability();
 var main$1 = readability;
 
+// This helps the readability algorithms correctly calculate
+// sentence length.
+
 var addPeriodToHeadings = function addPeriodToHeadings() {
   return function (tree) {
     unistUtilVisit(tree, 'heading', function (node) {
@@ -30502,7 +30471,7 @@ function scoreText(text) {
     linsearWriteFormula: main$1.linsearWriteFormula(text),
     daleChallReadabilityScore: main$1.daleChallReadabilityScore(text),
     // The CLI index can be NaN for some texts, so ensure it's 0
-    colemanLiauIndex: isNaN(colemanLiauIndex) ? 0 : colemanLiauIndex
+    colemanLiauIndex: Number.isNaN(colemanLiauIndex) ? 0 : colemanLiauIndex
   };
 } // Calculates the average of a particular property value, given an array of objects
 
@@ -30538,7 +30507,9 @@ function averageScores(scores) {
       return score.daleChallReadabilityScore;
     })
   };
-}
+} // Calculate the readabilty result for all files found in a given path glob.
+// This result contains readability scores for each file, and an overall average
+
 
 function calculateReadability(globPath) {
   var filePaths = glob_1.sync(globPath);
@@ -30552,23 +30523,6 @@ function calculateReadability(globPath) {
       name: filePath,
       scores: scores
     };
-  }); // Unique list of all folders containing our MD files
-
-  var allFolders = _toConsumableArray(new Set(filePaths.map(function (filePath) {
-    return require$$0__default$1['default'].dirname(filePath);
-  })));
-
-  var folderResults = allFolders.map(function (folder) {
-    // Take the average from the other results, if that result is
-    // inside the folder.
-    return {
-      name: folder,
-      scores: averageScores(fileResults.filter(function (result) {
-        return result.name.startsWith(folder);
-      }).map(function (result) {
-        return result.scores;
-      }))
-    };
   });
   var averageResult = [{
     name: 'Average',
@@ -30578,7 +30532,6 @@ function calculateReadability(globPath) {
   }];
   return {
     fileResults: fileResults,
-    folderResults: folderResults,
     averageResult: averageResult
   };
 }
@@ -30591,7 +30544,18 @@ var FILE_STATUS = {
 function ownKeys(object, enumerableOnly) { var keys = Object.keys(object); if (Object.getOwnPropertySymbols) { var symbols = Object.getOwnPropertySymbols(object); if (enumerableOnly) { symbols = symbols.filter(function (sym) { return Object.getOwnPropertyDescriptor(object, sym).enumerable; }); } keys.push.apply(keys, symbols); } return keys; }
 
 function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i] != null ? arguments[i] : {}; if (i % 2) { ownKeys(Object(source), true).forEach(function (key) { _defineProperty(target, key, source[key]); }); } else if (Object.getOwnPropertyDescriptors) { Object.defineProperties(target, Object.getOwnPropertyDescriptors(source)); } else { ownKeys(Object(source)).forEach(function (key) { Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key)); }); } } return target; }
+// between the objects. For example:
+// diffScores({a: 1, b: 10}, {a: 3, b:10})
+// returns: {a:2, b:0}
+
+function diffScores(newResult, oldResult) {
+  return Object.keys(newResult).reduce(function (acc, key) {
+    acc[key] = newResult[key] - oldResult[key];
+    return acc;
+  }, {});
+} // Adds a diff property to each result object, showing an increase
 // or decrease in each score
+
 
 function addDiffToResults(newResults, oldResults) {
   return newResults.map(function (newResult) {
@@ -30603,15 +30567,6 @@ function addDiffToResults(newResults, oldResults) {
       diff: diff
     });
   });
-} // Return a new object where every key is the diff
-// between the objects
-
-
-function diffScores(newResult, oldResult) {
-  return Object.keys(newResult).reduce(function (acc, key) {
-    acc[key] = newResult[key] - oldResult[key];
-    return acc;
-  }, {});
 } // Adds a status property to each result object, showing
 // if that file was added or modified in this PR
 
@@ -30620,12 +30575,22 @@ function addFileStatusToResults(results, _ref) {
   var added = _ref.added,
       modified = _ref.modified;
   return results.map(function (result) {
-    var status = added.includes(result.name) ? FILE_STATUS.ADDED : modified.includes(result.name) ? FILE_STATUS.MODIFIED : null;
+    var status = null;
+
+    if (added.includes(result.name)) {
+      status = FILE_STATUS.ADDED;
+    } else if (modified.includes(result.name)) {
+      status = FILE_STATUS.MODIFIED;
+    }
+
     return _objectSpread(_objectSpread({}, result), {}, {
       status: status
     });
   });
-}
+} // Creates a report object using the old and new readability
+// scores and files statuses. The report has extra details such
+// as the difference between the old and the new values.
+
 
 var generateReport = function generateReport(_ref2) {
   var newReadability = _ref2.newReadability,
@@ -30643,7 +30608,7 @@ var generateReport = function generateReport(_ref2) {
 };
 
 var arrayToCells = function arrayToCells(array) {
-  return array.join(' | ') + '\n';
+  return "".concat(array.join(' | '), "\n");
 };
 
 var tableToMD = function tableToMD(_ref) {
@@ -30659,48 +30624,67 @@ var tableToMD = function tableToMD(_ref) {
     return arrayToCells(row);
   }).join('');
   return table;
-};
+}; // Round a number to 2 decimal places, but return a float
+// so that trailing 0's will not be stringified
+
 
 var roundValue = function roundValue(value) {
   if (typeof value !== 'undefined') {
     return parseFloat(value.toFixed(2));
   }
-};
+
+  return value;
+}; // Adds an emoji marker to a value.
+// If the value is POSITIVE, we consider it a good value
+// and add a positive marker, otherwise a negative marker
+
 
 var addPositiveDiffMarker = function addPositiveDiffMarker(value) {
   if (typeof value !== 'undefined') {
     if (value === 0 || value > 0) {
       return "\uD83D\uDFE2 +".concat(value);
-    } else {
-      return "\uD83D\uDD34 ".concat(value);
     }
+
+    return "\uD83D\uDD34 ".concat(value);
   }
-};
+
+  return value;
+}; // Adds an emoji marker to a value.
+// If the value is NEGATIVE, we consider it a good value
+// and add a positive marker, otherwise a negative marker
+
 
 var addNegativeDiffMarker = function addNegativeDiffMarker(value) {
   if (typeof value !== 'undefined') {
     if (value === 0 || value < 0) {
       return "\uD83D\uDFE2 ".concat(value);
-    } else {
-      return "\uD83D\uDD34 +".concat(value);
     }
-  }
-};
 
-var resultToScoreTableRow = function resultToScoreTableRow(result, nameToLink) {
+    return "\uD83D\uDD34 +".concat(value);
+  }
+
+  return value;
+}; // Returns a table row showing the absolute scores for a given result object.
+// If a nameToLinkFunction is passed, the result name will be created
+// as link, using the result of that function as the target
+
+
+var resultToScoreTableRow = function resultToScoreTableRow(result, nameToLinkFunction) {
   var name = result.name,
       scores = result.scores;
   var filenameOnly = require$$0__default$1['default'].basename(name);
-  var displayName = nameToLink ? "[".concat(filenameOnly, "](").concat(nameToLink(name), " \"").concat(name, "\")") : name;
+  var displayName = nameToLinkFunction ? "[".concat(filenameOnly, "](").concat(nameToLinkFunction(name), " \"").concat(name, "\")") : name;
   return [displayName, roundValue(scores.fleschReadingEase), roundValue(scores.gunningFog), roundValue(scores.smogIndex), roundValue(scores.automatedReadabilityIndex), roundValue(scores.colemanLiauIndex), roundValue(scores.linsearWriteFormula), roundValue(scores.daleChallReadabilityScore)];
-};
+}; // Returns a table row showing the difference in scores for a given result object.
+
 
 var resultToDiffTableRow = function resultToDiffTableRow(result) {
   var _addPositiveDiffMarke, _addNegativeDiffMarke, _addNegativeDiffMarke2, _addNegativeDiffMarke3, _addNegativeDiffMarke4, _addNegativeDiffMarke5, _addNegativeDiffMarke6;
 
   var diff = result.diff;
   return ['&nbsp;', (_addPositiveDiffMarke = addPositiveDiffMarker(roundValue(diff === null || diff === void 0 ? void 0 : diff.fleschReadingEase))) !== null && _addPositiveDiffMarke !== void 0 ? _addPositiveDiffMarke : '-', (_addNegativeDiffMarke = addNegativeDiffMarker(roundValue(diff === null || diff === void 0 ? void 0 : diff.gunningFog))) !== null && _addNegativeDiffMarke !== void 0 ? _addNegativeDiffMarke : '-', (_addNegativeDiffMarke2 = addNegativeDiffMarker(roundValue(diff === null || diff === void 0 ? void 0 : diff.smogIndex))) !== null && _addNegativeDiffMarke2 !== void 0 ? _addNegativeDiffMarke2 : '-', (_addNegativeDiffMarke3 = addNegativeDiffMarker(roundValue(diff === null || diff === void 0 ? void 0 : diff.automatedReadabilityIndex))) !== null && _addNegativeDiffMarke3 !== void 0 ? _addNegativeDiffMarke3 : '-', (_addNegativeDiffMarke4 = addNegativeDiffMarker(roundValue(diff === null || diff === void 0 ? void 0 : diff.colemanLiauIndex))) !== null && _addNegativeDiffMarke4 !== void 0 ? _addNegativeDiffMarke4 : '-', (_addNegativeDiffMarke5 = addNegativeDiffMarker(roundValue(diff === null || diff === void 0 ? void 0 : diff.linsearWriteFormula))) !== null && _addNegativeDiffMarke5 !== void 0 ? _addNegativeDiffMarke5 : '-', (_addNegativeDiffMarke6 = addNegativeDiffMarker(roundValue(diff === null || diff === void 0 ? void 0 : diff.daleChallReadabilityScore))) !== null && _addNegativeDiffMarke6 !== void 0 ? _addNegativeDiffMarke6 : '-'];
-};
+}; // Convert a report object to a markdown comment
+
 
 var reportToComment = function reportToComment(_ref2) {
   var report = _ref2.report,
@@ -30734,7 +30718,8 @@ var main = /*#__PURE__*/function () {
       while (1) {
         switch (_context.prev = _context.next) {
           case 0:
-            _ref2 = github || {}, _ref2$context = _ref2.context, context = _ref2$context === void 0 ? {} : _ref2$context;
+            _ref2 = github || {}, _ref2$context = _ref2.context, context = _ref2$context === void 0 ? {} : _ref2$context; // action parameters
+
             token = core$1.getInput('github-token');
             glob = core$1.getInput('glob');
             baseBranchRef = context.payload.pull_request.base.ref;

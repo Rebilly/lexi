@@ -1,6 +1,6 @@
 import path from 'path';
 
-const arrayToCells = (array) => array.join(' | ') + '\n';
+const arrayToCells = (array) => `${array.join(' | ')}\n`;
 
 const tableToMD = ({headers, rows}) => {
     let table = arrayToCells(headers);
@@ -16,6 +16,7 @@ const roundValue = (value) => {
     if (typeof value !== 'undefined') {
         return parseFloat(value.toFixed(2));
     }
+    return value;
 };
 
 // Adds an emoji marker to a value.
@@ -25,10 +26,10 @@ const addPositiveDiffMarker = (value) => {
     if (typeof value !== 'undefined') {
         if (value === 0 || value > 0) {
             return `🟢 +${value}`;
-        } else {
-            return `🔴 ${value}`;
         }
+        return `🔴 ${value}`;
     }
+    return value;
 };
 
 // Adds an emoji marker to a value.
@@ -38,10 +39,10 @@ const addNegativeDiffMarker = (value) => {
     if (typeof value !== 'undefined') {
         if (value === 0 || value < 0) {
             return `🟢 ${value}`;
-        } else {
-            return `🔴 +${value}`;
         }
+        return `🔴 +${value}`;
     }
+    return value;
 };
 
 // Returns a table row showing the absolute scores for a given result object.
