@@ -8190,9 +8190,17 @@ var getFileStatusesFromPR = /*#__PURE__*/function () {
                 return file.filename;
               }),
               modified: files.filter(function (file) {
-                return file.status === 'modified';
+                return file.status === 'modified' || file.status === 'renamed' && file.changes > 0;
               }).map(function (file) {
                 return file.filename;
+              }),
+              renamed: files.filter(function (file) {
+                return file.status === 'renamed';
+              }).map(function (file) {
+                return {
+                  from: file.previous_filename,
+                  to: file.filename
+                };
               })
             });
 
@@ -30540,9 +30548,15 @@ function diffScores(newResult, oldResult) {
 
 
 function addDiffToResults(newResults, oldResults) {
+  var renamedFiles = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : [];
   return newResults.map(function (newResult) {
+    var _renamedFiles$find$fr, _renamedFiles$find;
+
+    var oldName = (_renamedFiles$find$fr = (_renamedFiles$find = renamedFiles.find(function (file) {
+      return file.to === newResult.name;
+    })) === null || _renamedFiles$find === void 0 ? void 0 : _renamedFiles$find.from) !== null && _renamedFiles$find$fr !== void 0 ? _renamedFiles$find$fr : newResult.name;
     var matchingOldResult = oldResults.find(function (oldResult) {
-      return oldResult.name === newResult.name;
+      return oldResult.name === oldName;
     });
     var diff = matchingOldResult ? diffScores(newResult.scores, matchingOldResult.scores) : null;
     return _objectSpread(_objectSpread({}, newResult), {}, {
@@ -30578,7 +30592,7 @@ var generateReport = function generateReport(_ref2) {
   var newReadability = _ref2.newReadability,
       oldReadability = _ref2.oldReadability,
       fileStatuses = _ref2.fileStatuses;
-  var filesWithDiff = addDiffToResults(newReadability.fileResults, oldReadability.fileResults);
+  var filesWithDiff = addDiffToResults(newReadability.fileResults, oldReadability.fileResults, fileStatuses.renamed);
   var filesWithStatuses = addFileStatusToResults(filesWithDiff, fileStatuses);
   var onlyTouchedFiles = filesWithStatuses.filter(function (result) {
     return result.status !== null;

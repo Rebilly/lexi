@@ -80,7 +80,7 @@ export const upsertComment = async ({
           );
 };
 
-// Given a PR number, returns two arrays of file names, modified and added
+// Given a PR number, returns 3 arrays: file names modified, added and renamed
 export const getFileStatusesFromPR = async ({client, context, prNumber}) => {
     const {data: files} = await client.rest.pulls.listFiles({
         ...context.repo,
@@ -92,7 +92,14 @@ export const getFileStatusesFromPR = async ({client, context, prNumber}) => {
             .filter((file) => file.status === 'added')
             .map((file) => file.filename),
         modified: files
-            .filter((file) => file.status === 'modified')
+            .filter(
+                (file) =>
+                    file.status === 'modified' ||
+                    (file.status === 'renamed' && file.changes > 0)
+            )
             .map((file) => file.filename),
+        renamed: files
+            .filter((file) => file.status === 'renamed')
+            .map((file) => ({from: file.previous_filename, to: file.filename})),
     };
 };

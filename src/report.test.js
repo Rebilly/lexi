@@ -51,4 +51,30 @@ describe('generateReport', () => {
         expect(report.fileResults).toHaveLength(1);
         expect(report.fileResults[0].name).toBe('3');
     });
+
+    it('should be able to add diffs when a file is renamed with changes', () => {
+        const oldReadability = {
+            fileResults: [{name: '1', scores: {a: 1, b: 1}}],
+            averageResult: [{name: 'Average', scores: {a: 1, b: 1}}],
+        };
+        const newReadability = {
+            fileResults: [{name: '2', scores: {a: 2, b: 3}}],
+            averageResult: [{name: 'Average', scores: {a: 1, b: 1}}],
+        };
+        const fileStatuses = {
+            modified: ['2'],
+            added: [],
+            renamed: [{from: '1', to: '2'}],
+        };
+        const report = generateReport({
+            oldReadability,
+            newReadability,
+            fileStatuses,
+        });
+
+        expect(
+            report.fileResults.find((result) => result.name === '2').diff
+        ).toStrictEqual({a: 1, b: 2});
+        expect(report.fileResults).toHaveLength(1);
+    });
 });

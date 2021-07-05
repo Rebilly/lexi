@@ -13,10 +13,14 @@ function diffScores(newResult, oldResult) {
 
 // Adds a diff property to each result object, showing an increase
 // or decrease in each score
-function addDiffToResults(newResults, oldResults) {
+function addDiffToResults(newResults, oldResults, renamedFiles = []) {
     return newResults.map((newResult) => {
+        const oldName =
+            renamedFiles.find((file) => file.to === newResult.name)?.from ??
+            newResult.name;
+
         const matchingOldResult = oldResults.find(
-            (oldResult) => oldResult.name === newResult.name
+            (oldResult) => oldResult.name === oldName
         );
 
         const diff = matchingOldResult
@@ -58,7 +62,8 @@ export const generateReport = ({
 }) => {
     const filesWithDiff = addDiffToResults(
         newReadability.fileResults,
-        oldReadability.fileResults
+        oldReadability.fileResults,
+        fileStatuses.renamed
     );
     const filesWithStatuses = addFileStatusToResults(
         filesWithDiff,
