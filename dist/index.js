@@ -30483,33 +30483,15 @@ function calcAverage(arrayOfObjects, accessorFn) {
 } // Returns a score object containing the averages, given an array of scores
 
 
-function averageScores(scores) {
-  return {
-    fleschReadingEase: calcAverage(scores, function (score) {
-      return score.fleschReadingEase;
-    }),
-    gunningFog: calcAverage(scores, function (score) {
-      return score.gunningFog;
-    }),
-    smogIndex: calcAverage(scores, function (score) {
-      return score.smogIndex;
-    }),
-    automatedReadabilityIndex: calcAverage(scores, function (score) {
-      return score.automatedReadabilityIndex;
-    }),
-    colemanLiauIndex: calcAverage(scores, function (score) {
-      return score.colemanLiauIndex;
-    }),
-    linsearWriteFormula: calcAverage(scores, function (score) {
-      return score.linsearWriteFormula;
-    }),
-    daleChallReadabilityScore: calcAverage(scores, function (score) {
-      return score.daleChallReadabilityScore;
-    })
-  };
+function averageObjectProperties(objects) {
+  return Object.keys(objects[0]).reduce(function (acc, key) {
+    acc[key] = calcAverage(objects, function (object) {
+      return object[key];
+    });
+    return acc;
+  }, {});
 } // Calculate the readabilty result for all files found in a given path glob.
 // This result contains readability scores for each file, and an overall average
-
 
 function calculateReadability(globPath) {
   var filePaths = glob_1.sync(globPath);
@@ -30526,7 +30508,7 @@ function calculateReadability(globPath) {
   });
   var averageResult = [{
     name: 'Average',
-    scores: averageScores(fileResults.map(function (result) {
+    scores: averageObjectProperties(fileResults.map(function (result) {
       return result.scores;
     }))
   }];

@@ -43,31 +43,11 @@ function calcAverage(arrayOfObjects, accessorFn) {
 }
 
 // Returns a score object containing the averages, given an array of scores
-function averageScores(scores) {
-    return {
-        fleschReadingEase: calcAverage(
-            scores,
-            (score) => score.fleschReadingEase
-        ),
-        gunningFog: calcAverage(scores, (score) => score.gunningFog),
-        smogIndex: calcAverage(scores, (score) => score.smogIndex),
-        automatedReadabilityIndex: calcAverage(
-            scores,
-            (score) => score.automatedReadabilityIndex
-        ),
-        colemanLiauIndex: calcAverage(
-            scores,
-            (score) => score.colemanLiauIndex
-        ),
-        linsearWriteFormula: calcAverage(
-            scores,
-            (score) => score.linsearWriteFormula
-        ),
-        daleChallReadabilityScore: calcAverage(
-            scores,
-            (score) => score.daleChallReadabilityScore
-        ),
-    };
+export function averageObjectProperties(objects) {
+    return Object.keys(objects[0]).reduce((acc, key) => {
+        acc[key] = calcAverage(objects, (object) => object[key]);
+        return acc;
+    }, {});
 }
 
 // Calculate the readabilty result for all files found in a given path glob.
@@ -93,7 +73,9 @@ export function calculateReadability(globPath) {
     const averageResult = [
         {
             name: 'Average',
-            scores: averageScores(fileResults.map((result) => result.scores)),
+            scores: averageObjectProperties(
+                fileResults.map((result) => result.scores)
+            ),
         },
     ];
 
