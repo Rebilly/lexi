@@ -9,6 +9,7 @@ import {reportToComment} from './markdown';
 const main = async () => {
     const {context = {}} = github || {};
 
+    // action parameters
     const token = core.getInput('github-token');
     const glob = core.getInput('glob');
 

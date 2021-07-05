@@ -6,7 +6,9 @@ import glob from 'glob';
 import visit from 'unist-util-visit';
 import readability from 'text-readability';
 
-// Remark plugin to add a period to heading nodes
+// Remark plugin to add a period to heading nodes.
+// This helps the readability algorithms correctly calculate
+// sentence length.
 const addPeriodToHeadings = () => (tree) => {
     visit(tree, 'heading', (node) => {
         visit(node, 'text', (textNode) => {
@@ -69,6 +71,8 @@ function averageScores(scores) {
     };
 }
 
+// Calculate the readabilty result for all files found in a given path glob.
+// This result contains readability scores for each file, and an overall average
 export function calculateReadability(globPath) {
     const filePaths = glob.sync(globPath);
     const remarker = remark().use(addPeriodToHeadings).use(strip);
@@ -87,23 +91,6 @@ export function calculateReadability(globPath) {
         };
     });
 
-    // Unique list of all folders containing our MD files
-    const allFolders = [
-        ...new Set(filePaths.map((filePath) => path.dirname(filePath))),
-    ];
-    const folderResults = allFolders.map((folder) => {
-        // Take the average from the other results, if that result is
-        // inside the folder.
-        return {
-            name: folder,
-            scores: averageScores(
-                fileResults
-                    .filter((result) => result.name.startsWith(folder))
-                    .map((result) => result.scores)
-            ),
-        };
-    });
-
     const averageResult = [
         {
             name: 'Average',
@@ -113,7 +100,6 @@ export function calculateReadability(globPath) {
 
     return {
         fileResults,
-        folderResults,
         averageResult,
     };
 }

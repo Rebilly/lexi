@@ -20,7 +20,9 @@ function addDiffToResults(newResults, oldResults) {
 }
 
 // Return a new object where every key is the diff
-// between the objects
+// between the objects. For example:
+// diffScores({a: 1, b: 10}, {a: 3, b:10})
+// returns: {a:2, b:0}
 function diffScores(newResult, oldResult) {
     return Object.keys(newResult).reduce((acc, key) => {
         acc[key] = newResult[key] - oldResult[key];
@@ -45,6 +47,9 @@ function addFileStatusToResults(results, {added, modified}) {
     });
 }
 
+// Creates a report object using the old and new readability
+// scores and files statuses. The report has extra details such
+// as the difference between the old and the new values.
 export const generateReport = ({
     newReadability,
     oldReadability,

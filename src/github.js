@@ -80,6 +80,7 @@ export const upsertComment = async ({
           );
 };
 
+// Given a PR number, returns two arrays of file names, modified and added
 export const getFileStatusesFromPR = async ({client, context, prNumber}) => {
     const {data: files} = await client.rest.pulls.listFiles({
         ...context.repo,
