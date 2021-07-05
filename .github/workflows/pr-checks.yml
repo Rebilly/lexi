@@ -19,12 +19,12 @@ jobs:
             - name: Restore node_modules cache
               uses: actions/cache@v2
               with:
-                  path: "**/node_modules"
+                  path: '**/node_modules'
                   key: ${{ runner.os }}-modules-${{ hashFiles('**/yarn.lock') }}
             - name: Install packages
               run: yarn
             - name: ESLint
-              run: yarn eslint
+              run: yarn lint
 
     tests:
         name: Unit tests
@@ -39,7 +39,7 @@ jobs:
             - name: Restore node_modules cache
               uses: actions/cache@v2
               with:
-                  path: "**/node_modules"
+                  path: '**/node_modules'
                   key: ${{ runner.os }}-modules-${{ hashFiles('**/yarn.lock') }}
             - name: Install packages
               run: yarn
@@ -59,7 +59,7 @@ jobs:
             - name: Restore node_modules cache
               uses: actions/cache@v2
               with:
-                  path: "**/node_modules"
+                  path: '**/node_modules'
                   key: ${{ runner.os }}-modules-${{ hashFiles('**/yarn.lock') }}
             - name: Install packages
               run: yarn
@@ -81,5 +81,5 @@ jobs:
               uses: actions/checkout@v2
             - uses: ./
               with:
-                github-token: ${{ secrets.GITHUB_TOKEN }}
-                glob: "**/*.md"
+                  github-token: ${{ secrets.GITHUB_TOKEN }}
+                  glob: '**/*.md'
