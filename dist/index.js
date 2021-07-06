@@ -8164,7 +8164,7 @@ var upsertComment = /*#__PURE__*/function () {
   return function upsertComment(_x2) {
     return _ref9.apply(this, arguments);
   };
-}(); // Given a PR number, returns two arrays of file names, modified and added
+}(); // Given a PR number, returns 3 arrays: file names modified, added and renamed
 
 var getFileStatusesFromPR = /*#__PURE__*/function () {
   var _ref11 = _asyncToGenerator( /*#__PURE__*/regenerator.mark(function _callee3(_ref10) {
@@ -8177,7 +8177,11 @@ var getFileStatusesFromPR = /*#__PURE__*/function () {
             client = _ref10.client, context = _ref10.context, prNumber = _ref10.prNumber;
             _context3.next = 3;
             return client.rest.pulls.listFiles(_objectSpread$1(_objectSpread$1({}, context.repo), {}, {
-              pull_number: prNumber
+              pull_number: prNumber,
+              // Pull the maximum number of files.
+              // For PRs with over 100 files, we will have too many files which will create
+              // a comment which is too large to post anyway.
+              per_page: 100
             }));
 
           case 3:

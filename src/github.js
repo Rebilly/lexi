@@ -85,6 +85,10 @@ export const getFileStatusesFromPR = async ({client, context, prNumber}) => {
     const {data: files} = await client.rest.pulls.listFiles({
         ...context.repo,
         pull_number: prNumber,
+        // Pull the maximum number of files.
+        // For PRs with over 100 files, we will have too many files which will create
+        // a comment which is too large to post anyway.
+        per_page: 100,
     });
 
     return {
