@@ -127,6 +127,9 @@ Dale-Chall Readability | 4.9 (very easy read) to 9.9(extremely difficult read) |
 
 </details>
 
+🟢 - Shows an _increase_ in readability
+🔴 - Shows a _decrease_ in readability
+
 ${fileTable}
 
 Overall average:

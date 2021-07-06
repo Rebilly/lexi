@@ -63,6 +63,9 @@ describe('reportToComment', () => {
 
             </details>
 
+            🟢 - Shows an _increase_ in readability
+            🔴 - Shows a _decrease_ in readability
+
             Path | FRE | GF | SMOG | ARI | CLI | LWF | DCRS
             --- | --- | --- | --- | --- | --- | --- | ---
             [file-1.md](https://github.com/repo-name/blob/commit-sha/./folder/file-1.md \\"./folder/file-1.md\\") | 10 | 10 | 10 | 10 | 10 | 10 | 10
