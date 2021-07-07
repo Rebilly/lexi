@@ -1,0 +1,16 @@
+name: Readability Reporter
+description: Comments readability scores on a pull request
+author: 'Rebilly Inc'
+branding:
+  icon: edit
+  color: green
+inputs:
+  github-token:
+    description: Github token (required for commenting)
+    required: true
+  glob:
+    description: A glob pattern matching a set of markdown files to run the readability tests on
+    required: true
+runs:
+  using: node12
+  main: dist/index.js
