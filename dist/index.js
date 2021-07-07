@@ -30462,11 +30462,32 @@ var main$1 = readability;
 
 var addPeriodToHeadings = function addPeriodToHeadings() {
   return function (tree) {
-    unistUtilVisit(tree, 'heading', function (node) {
-      unistUtilVisit(node, 'text', function (textNode) {
+    unistUtilVisit(tree, 'heading', function (headingNode) {
+      unistUtilVisit(headingNode, 'text', function (textNode) {
         if (textNode.value) {
           textNode.value += '.';
         }
+      });
+    });
+  };
+}; // Remark plugin to remove list items that have less than 4 works.
+// For us these tend to be long lists of values, and throws off
+// readability results.
+
+
+var removeShortListItems = function removeShortListItems() {
+  return function (tree) {
+    unistUtilVisit(tree, 'listItem', function (listItemNode) {
+      unistUtilVisit(listItemNode, 'paragraph', function (paragraphNode) {
+        // Convert list items to plain text (as they can have children of many
+        // different types, such as italics, bold etc)
+        stripMarkdown()(paragraphNode);
+        unistUtilVisit(paragraphNode, 'text', function (textNode) {
+          // Only keep the list item if it is at least 4 words long
+          if (textNode.value.split(' ').length < 4) {
+            textNode.value = '';
+          }
+        });
       });
     });
   };
@@ -30507,7 +30528,7 @@ function averageObjectProperties(objects) {
 
 function calculateReadability(globPath) {
   var filePaths = glob_1.sync(globPath);
-  var remarker = remark().use(addPeriodToHeadings).use(stripMarkdown);
+  var remarker = remark().use(removeShortListItems).use(addPeriodToHeadings).use(stripMarkdown);
   var fileResults = filePaths.map(function (filePath) {
     var markdown = require$$0__default['default'].readFileSync(filePath);
     var stripped = remarker.processSync(markdown).contents // Remove any blank lines

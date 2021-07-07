@@ -9,11 +9,31 @@ import readability from 'text-readability';
 // This helps the readability algorithms correctly calculate
 // sentence length.
 const addPeriodToHeadings = () => (tree) => {
-    visit(tree, 'heading', (node) => {
-        visit(node, 'text', (textNode) => {
+    visit(tree, 'heading', (headingNode) => {
+        visit(headingNode, 'text', (textNode) => {
             if (textNode.value) {
                 textNode.value += '.';
             }
+        });
+    });
+};
+
+// Remark plugin to remove list items that have less than 4 works.
+// For us these tend to be long lists of values, and throws off
+// readability results.
+const removeShortListItems = () => (tree) => {
+    visit(tree, 'listItem', (listItemNode) => {
+        visit(listItemNode, 'paragraph', (paragraphNode) => {
+            // Convert list items to plain text (as they can have children of many
+            // different types, such as italics, bold etc)
+            strip()(paragraphNode);
+
+            visit(paragraphNode, 'text', (textNode) => {
+                // Only keep the list item if it is at least 4 words long
+                if (textNode.value.split(' ').length < 4) {
+                    textNode.value = '';
+                }
+            });
         });
     });
 };
@@ -54,7 +74,10 @@ export function averageObjectProperties(objects) {
 // This result contains readability scores for each file, and an overall average
 export function calculateReadability(globPath) {
     const filePaths = glob.sync(globPath);
-    const remarker = remark().use(addPeriodToHeadings).use(strip);
+    const remarker = remark()
+        .use(removeShortListItems)
+        .use(addPeriodToHeadings)
+        .use(strip);
 
     const fileResults = filePaths.map((filePath) => {
         const markdown = fs.readFileSync(filePath);
