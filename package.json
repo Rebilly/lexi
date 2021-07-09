@@ -51,5 +51,8 @@
         "tabWidth": 4,
         "singleQuote": true,
         "bracketSpacing": false
+    },
+    "resolutions": {
+        "text-readability/syllable/trim": "^0.0.3"
     }
 }
