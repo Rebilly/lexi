@@ -30780,7 +30780,14 @@ var main = /*#__PURE__*/function () {
               newReadability: newReadability,
               oldReadability: oldReadability,
               fileStatuses: fileStatuses
-            });
+            }); // Only post a comment if there are results from markdown files
+            // changed in this PR
+
+            if (!report.fileResults.length) {
+              _context.next = 27;
+              break;
+            }
+
             repository = context.payload.repository.full_name;
             commit = context.payload.pull_request.head.sha;
             body = reportToComment({
@@ -30788,7 +30795,7 @@ var main = /*#__PURE__*/function () {
               repository: repository,
               commit: commit
             });
-            _context.next = 26;
+            _context.next = 27;
             return upsertComment({
               client: client,
               context: context,
@@ -30797,7 +30804,7 @@ var main = /*#__PURE__*/function () {
               hiddenHeader: "<!-- ".concat(glob, "-code-coverage-assistant -->")
             });
 
-          case 26:
+          case 27:
           case "end":
             return _context.stop();
         }
