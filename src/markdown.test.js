@@ -79,6 +79,7 @@ describe('reportToComment', () => {
 
 
             Overall average:
+
             &nbsp; | FRE | GF | SMOG | ARI | CLI | LWF | DCRS
             --- | --- | --- | --- | --- | --- | --- | ---
             Average | 1 | 1 | 1 | 1 | 1 | 1 | 1

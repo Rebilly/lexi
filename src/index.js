@@ -43,13 +43,12 @@ const main = async () => {
 
     // Only post a comment if there are results from markdown files
     // changed in this PR
-    if(report.fileResults.length)
-    {
+    if (report.fileResults.length) {
         const repository = context.payload.repository.full_name;
         const commit = context.payload.pull_request.head.sha;
-    
+
         const body = reportToComment({report, repository, commit});
-    
+
         await upsertComment({
             client,
             context,

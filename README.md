@@ -30,6 +30,7 @@ Readability after merging this PR:
 | &nbsp;                               | -        | -        | -       | -       | -        | -       | -        |
 
 Overall average:
+
 &nbsp; | FRE | GF | SMOG | ARI | CLI | LWF | DCRS
 --- | --- | --- | --- | --- | --- | --- | ---
 Average | 17.52 | 13.73 | 12.35 | 16.6 | 14.91 | 12.95 | 8.71

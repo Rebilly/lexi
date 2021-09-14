@@ -133,6 +133,7 @@ Dale-Chall Readability | 4.9 (very easy read) to 9.9(extremely difficult read) |
 ${fileTable}
 
 Overall average:
+
 ${averageTable}
 `;
 };
