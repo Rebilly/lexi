@@ -5,20 +5,38 @@ import glob from 'glob';
 import visit from 'unist-util-visit';
 import readability from 'text-readability';
 
-// Remark plugin to add a period to heading nodes.
-// This helps the readability algorithms correctly calculate
-// sentence length.
-const addPeriodToHeadings = () => (tree) => {
+// Remark plugin to remove headings.
+// Generally our headings are short and do not contribute in a
+// meaningful way to our readability scores
+const removeHeadings = () => (tree) => {
     visit(tree, 'heading', (headingNode) => {
         visit(headingNode, 'text', (textNode) => {
-            if (textNode.value) {
-                textNode.value += '.';
-            }
+            textNode.value = '';
         });
     });
 };
 
-// Remark plugin to remove list items that have less than 4 works.
+// Remove the Admonition start and end lines, including the header
+// text as it's not a useful part of the page content. For example
+// :::warning Warning
+// Would be removed.
+const removeAdmonitionHeadings = () => (tree) => {
+    visit(tree, 'text', (textNode) => {
+        if(textNode.value.startsWith(':::')){
+            textNode.value = '';
+        }
+    });
+};
+
+// Alt text is not a part of the sentence structure, so we should
+// remove it.
+const removeImageAltText = () => (tree) => {
+    visit(tree, 'image', (imageNode) => {
+        imageNode.alt = '';
+    });
+};
+
+// Remark plugin to remove list items that have less than 4 words.
 // For us these tend to be long lists of values, and throws off
 // readability results.
 const removeShortListItems = () => (tree) => {
@@ -70,21 +88,30 @@ export function averageObjectProperties(objects) {
     }, {});
 }
 
+// Take our markdown text and clean and process it to the final
+// text we want to analyze.
+export function preprocessMarkdown(markdown) {
+    const remarker = remark()
+        .use(removeShortListItems)
+        .use(removeHeadings)
+        .use(removeAdmonitionHeadings)
+        .use(removeImageAltText)
+        .use(strip);
+
+    return remarker
+        .processSync(markdown)
+        .contents // Remove any blank lines
+        .replace(/\n+/g, `\n`);
+}
+
 // Calculate the readabilty result for all files found in a given path glob.
 // This result contains readability scores for each file, and an overall average
 export function calculateReadability(globPath) {
     const filePaths = glob.sync(globPath);
-    const remarker = remark()
-        .use(removeShortListItems)
-        .use(addPeriodToHeadings)
-        .use(strip);
-
+  
     const fileResults = filePaths.map((filePath) => {
         const markdown = fs.readFileSync(filePath);
-        const stripped = remarker
-            .processSync(markdown)
-            .contents // Remove any blank lines
-            .replace(/\n+/g, `\n`);
+        const stripped = preprocessMarkdown(markdown);
         const scores = scoreText(stripped);
 
         return {
