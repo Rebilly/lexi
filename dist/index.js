@@ -30457,20 +30457,42 @@ class Readability {
 const readability = new Readability();
 var main$1 = readability;
 
-// This helps the readability algorithms correctly calculate
-// sentence length.
+// Generally our headings are short and do not contribute in a
+// meaningful way to our readability scores
 
-var addPeriodToHeadings = function addPeriodToHeadings() {
+var removeHeadings = function removeHeadings() {
   return function (tree) {
     unistUtilVisit(tree, 'heading', function (headingNode) {
       unistUtilVisit(headingNode, 'text', function (textNode) {
-        if (textNode.value) {
-          textNode.value += '.';
-        }
+        textNode.value = '';
       });
     });
   };
-}; // Remark plugin to remove list items that have less than 4 works.
+}; // Remove the Admonition start and end lines, including the header
+// text as it's not a useful part of the page content. For example
+// :::warning Warning
+// Would be removed.
+
+
+var removeAdmonitionHeadings = function removeAdmonitionHeadings() {
+  return function (tree) {
+    unistUtilVisit(tree, 'text', function (textNode) {
+      if (textNode.value.startsWith(':::')) {
+        textNode.value = '';
+      }
+    });
+  };
+}; // Alt text is not a part of the sentence structure, so we should
+// remove it.
+
+
+var removeImageAltText = function removeImageAltText() {
+  return function (tree) {
+    unistUtilVisit(tree, 'image', function (imageNode) {
+      imageNode.alt = '';
+    });
+  };
+}; // Remark plugin to remove list items that have less than 4 words.
 // For us these tend to be long lists of values, and throws off
 // readability results.
 
@@ -30523,16 +30545,21 @@ function averageObjectProperties(objects) {
     });
     return acc;
   }, {});
+} // Take our markdown text and clean and process it to the final
+// text we want to analyze.
+
+function preprocessMarkdown(markdown) {
+  var remarker = remark().use(removeShortListItems).use(removeHeadings).use(removeAdmonitionHeadings).use(removeImageAltText).use(stripMarkdown);
+  return remarker.processSync(markdown).contents // Remove any blank lines
+  .replace(/\n+/g, "\n");
 } // Calculate the readabilty result for all files found in a given path glob.
 // This result contains readability scores for each file, and an overall average
 
 function calculateReadability(globPath) {
   var filePaths = glob_1.sync(globPath);
-  var remarker = remark().use(removeShortListItems).use(addPeriodToHeadings).use(stripMarkdown);
   var fileResults = filePaths.map(function (filePath) {
     var markdown = require$$0__default['default'].readFileSync(filePath);
-    var stripped = remarker.processSync(markdown).contents // Remove any blank lines
-    .replace(/\n+/g, "\n");
+    var stripped = preprocessMarkdown(markdown);
     var scores = scoreText(stripped);
     return {
       name: filePath,
