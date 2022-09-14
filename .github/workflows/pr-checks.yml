@@ -79,4 +79,4 @@ jobs:
             - uses: ./
               with:
                   github-token: ${{ secrets.GITHUB_TOKEN }}
-                  glob: '**/!(user-permissions).md'
+                  glob: '**/*.md'
