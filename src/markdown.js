@@ -118,12 +118,12 @@ Readability after merging this PR:
 Metric | Range | Ideal score
 --- | --- | ---
 Flesch Reading Ease | 100 (very easy read) to 0 (extremely difficult read) | 60
-Gunning Fog | 6 ( very easy read) to 17(extremely difficult read) | 8 or less
-SMOG Index | 6 (very easy read) to 14(extremely difficult read) | 8 or less
-Auto. Read. Index | 6 (very easy read) to 14(extremely difficult read) | 8 or less
-Coleman Liau Index | 6 (very easy read) to 17(extremely difficult read) | 8 or less
-Linsear Write | 0 (very easy read) to 11(extremely difficult read) | 8 or less
-Dale-Chall Readability | 4.9 (very easy read) to 9.9(extremely difficult read) | 6.9 or less
+Gunning Fog | 6 (very easy read) to 17 (extremely difficult read) | 8 or less
+SMOG Index | 6 (very easy read) to 14 (extremely difficult read) | 8 or less
+Auto. Read. Index | 6 (very easy read) to 14 (extremely difficult read) | 8 or less
+Coleman Liau Index | 6 (very easy read) to 17 (extremely difficult read) | 8 or less
+Linsear Write | 0 (very easy read) to 11 (extremely difficult read) | 8 or less
+Dale-Chall Readability | 4.9 (very easy read) to 9.9 (extremely difficult read) | 6.9 or less
 
 </details>
 
