@@ -9,7 +9,8 @@
         "build": "rollup -c",
         "test": "jest",
         "format": "prettier --write src/*.js src/**/*.js ./*.js",
-        "run:local": "babel-node ./src/cli",
+        "run:local:report": "babel-node ./src/cli/report",
+        "run:local:debugfile": "babel-node ./src/cli/debug-file.js",
         "lint": "eslint --ext .js ."
     },
     "dependencies": {
@@ -33,6 +34,7 @@
         "@rollup/plugin-node-resolve": "^13.0.0",
         "babel-eslint": "^10.1.0",
         "babel-jest": "^27.0.6",
+        "commander": "^9.4.0",
         "eslint": "^7.29.0",
         "eslint-config-airbnb": "18.2.1",
         "eslint-config-prettier": "^8.3.0",
