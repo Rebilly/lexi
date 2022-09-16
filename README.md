@@ -10,15 +10,15 @@ Readability after merging this PR:
 <details>
   <summary>View Metric Targets</summary>
 
-| Metric                 | Range                                                 | Ideal score |
-| ---------------------- | ----------------------------------------------------- | ----------- |
-| Flesch Reading Ease    | 100 (very easy read) to 0 (extremely difficult read)  | 60          |
-| Gunning Fog            | 6 ( very easy read) to 17(extremely difficult read)   | 8 or less   |
-| SMOG Index             | 6 (very easy read) to 14(extremely difficult read)    | 8 or less   |
-| Auto. Read. Index      | 6 (very easy read) to 14(extremely difficult read)    | 8 or less   |
-| Coleman Liau Index     | 6 (very easy read) to 17(extremely difficult read)    | 8 or less   |
-| Linsear Write          | 0 (very easy read) to 11(extremely difficult read)    | 8 or less   |
-| Dale-Chall Readability | 4.9 (very easy read) to 9.9(extremely difficult read) | 6.9 or less |
+| Metric                 | Range                                                  | Ideal score |
+| ---------------------- |--------------------------------------------------------| ----------- |
+| Flesch Reading Ease    | 100 (very easy read) to 0 (extremely difficult read)   | 60          |
+| Gunning Fog            | 6 (very easy read) to 17 (extremely difficult read)    | 8 or less   |
+| SMOG Index             | 6 (very easy read) to 14 (extremely difficult read)    | 8 or less   |
+| Auto. Read. Index      | 6 (very easy read) to 14 (extremely difficult read)    | 8 or less   |
+| Coleman Liau Index     | 6 (very easy read) to 17 (extremely difficult read)    | 8 or less   |
+| Linsear Write          | 0 (very easy read) to 11 (extremely difficult read)    | 8 or less   |
+| Dale-Chall Readability | 4.9 (very easy read) to 9.9 (extremely difficult read) | 6.9 or less |
 
 </details>
 
@@ -47,8 +47,8 @@ The [text-readability](https://github.com/clearnote01/readability) library is us
 ### Inputs
 
 | Name           | Necessity | Description                                                                                                                                                                                                                                               |
-| -------------- | --------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `github-token` | Required  | The github token used to post the report comment to the pull request. The [GitHub Actions token](https://docs.github.com/en/actions/reference/authentication-in-a-workflow#about-the-github_token-secret) can be used with `${{ secrets.GITHUB_TOKEN }}`. |
+| -------------- | --------- |-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| `github-token` | Required  | The GitHub token used to post the report comment to the pull request. The [GitHub Actions token](https://docs.github.com/en/actions/reference/authentication-in-a-workflow#about-the-github_token-secret) can be used with `${{ secrets.GITHUB_TOKEN }}`. |
 | `glob`         | Required  | The glob pattern to use for matching Markdown files you want analysed                                                                                                                                                                                     |
 
 ### Example workflow
@@ -86,7 +86,7 @@ jobs:
 
 ### Testing
 
-When developing the action, it can be useful to be able to run it locally rather than pushing a branch and running your development version on github.
+When developing the action, it can be useful to be able to run it locally rather than pushing a branch and running your development version on GitHub.
 
 You can test the action locally by running the `run:local` command. This will report readability on two different folders, as if they were a pull request.
 
