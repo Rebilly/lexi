@@ -30482,6 +30482,42 @@ var removeAdmonitionHeadings = function removeAdmonitionHeadings() {
       }
     });
   };
+}; // Remove code blocks. For example
+// ```json
+// ...
+// ```
+
+
+var removeCodeBlocks = function removeCodeBlocks() {
+  return function (tree) {
+    unistUtilVisit(tree, 'code', function (node) {
+      node.value = '';
+    });
+  };
+}; // Remove page metadata between thematic breaks at the begining of the page. For example
+// ---
+// ...
+// ---
+
+
+var removePageMetadata = function removePageMetadata() {
+  return function (tree) {
+    unistUtilVisit(tree, 'root', function (node) {
+      var secondBreak = node.children.findIndex(function (_ref, index) {
+        var type = _ref.type;
+        return type === 'thematicBreak' && index > 0;
+      });
+
+      if (node.children[0].type !== 'thematicBreak' || secondBreak < 1) {
+        return;
+      }
+
+      for (var i = 1; i < secondBreak; i += 1) {
+        node.children[i].value = '';
+        node.children[i].children = [];
+      }
+    });
+  };
 }; // Alt text is not a part of the sentence structure, so we should
 // remove it.
 
@@ -30549,7 +30585,7 @@ function averageObjectProperties(objects) {
 // text we want to analyze.
 
 function preprocessMarkdown(markdown) {
-  var remarker = remark().use(removeShortListItems).use(removeHeadings).use(removeAdmonitionHeadings).use(removeImageAltText).use(stripMarkdown);
+  var remarker = remark().use(removeShortListItems).use(removeHeadings).use(removeAdmonitionHeadings).use(removeImageAltText).use(removeCodeBlocks).use(removePageMetadata).use(stripMarkdown);
   return remarker.processSync(markdown).contents // Remove any blank lines
   .replace(/\n+/g, "\n");
 } // Calculate the readabilty result for all files found in a given path glob.
