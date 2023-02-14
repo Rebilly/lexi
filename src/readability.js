@@ -48,7 +48,7 @@ const removePageMetadata = () => (tree) => {
         if (node.children[0].type !== 'thematicBreak' || secondBreak < 1) {
             return
         }
-        for (let i = 1; i < secondBreak; i++) {
+        for (let i = 1; i < secondBreak; i += 1) {
             node.children[i].value = '';
             node.children[i].children = [];
         }
