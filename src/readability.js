@@ -28,6 +28,33 @@ const removeAdmonitionHeadings = () => (tree) => {
     });
 };
 
+// Remove code blocks. For example
+// ```json
+// ...
+// ```
+const removeCodeBlocks = () => (tree) => {
+    visit(tree, 'code', (node) => {
+        node.value = '';
+    });
+};
+
+// Remove page metadata between thematic breaks at the begining of the page. For example
+// ---
+// ...
+// ---
+const removePageMetadata = () => (tree) => {
+    visit(tree, 'root', (node) => {
+        const secondBreak = node.children.findIndex(({type}, index) => type === 'thematicBreak' && index > 0);
+        if (node.children[0].type !== 'thematicBreak' || secondBreak < 1) {
+            return
+        }
+        for (let i = 1; i < secondBreak; i++) {
+            node.children[i].value = '';
+            node.children[i].children = [];
+        }
+    });
+};
+
 // Alt text is not a part of the sentence structure, so we should
 // remove it.
 const removeImageAltText = () => (tree) => {
@@ -96,6 +123,8 @@ export function preprocessMarkdown(markdown) {
         .use(removeHeadings)
         .use(removeAdmonitionHeadings)
         .use(removeImageAltText)
+        .use(removeCodeBlocks)
+        .use(removePageMetadata)
         .use(strip);
 
     return remarker
