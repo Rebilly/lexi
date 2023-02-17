@@ -87,9 +87,8 @@ const removeJsItems = () => (tree) => {
     let visitNexParagraph = false;
     visit(tree, 'root', (listItemNode) => {
         visit(listItemNode, ['html', 'paragraph'], (elementNode) => {
-
             if (visitNexParagraph && elementNode.type === 'paragraph') {
-                visit(elementNode, 'text', (textNode) => {textNode.value = ''})
+                visit(elementNode, ['text', 'inlineCode'], (textNode) => {textNode.value = ''})
             }
             if (elementNode.type === 'html') {
                 visitNexParagraph =  elementNode.value === '<!-- JS block -->' && !visitNexParagraph;
