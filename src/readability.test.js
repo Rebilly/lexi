@@ -94,4 +94,24 @@ Test 2.
 "
 `);
     });
+
+    it('should strip js code parts from comment block', () => {
+        const stripped = preprocessMarkdown(`
+<!-- JS block -->
+import MenuGrid from '../../components/MenuGrid';
+const items = [
+    {title: 'Cashier strategies', to: '/docs/settings/cashier-strategies/' },
+    {title: 'Custom cashier properties', to: '/docs/settings/custom-cashier-property-sets/' },
+];
+
+<!-- JS block -->
+Some content. This is paragraph with const items = [];
+`);
+
+        expect(stripped).toMatchInlineSnapshot(`
+"
+Some content. This is paragraph with const items = \\\\[];
+"
+`);
+    });
 });
