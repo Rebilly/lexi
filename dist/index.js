@@ -30549,6 +30549,25 @@ var removeShortListItems = function removeShortListItems() {
       });
     });
   };
+};
+
+var removeJsItems = function removeJsItems() {
+  return function (tree) {
+    var visitNexParagraph = false;
+    unistUtilVisit(tree, 'root', function (listItemNode) {
+      unistUtilVisit(listItemNode, ['html', 'paragraph'], function (elementNode) {
+        if (visitNexParagraph && elementNode.type === 'paragraph') {
+          unistUtilVisit(elementNode, ['text', 'inlineCode'], function (textNode) {
+            textNode.value = '';
+          });
+        }
+
+        if (elementNode.type === 'html') {
+          visitNexParagraph = elementNode.value === '<!-- JS block -->' && !visitNexParagraph;
+        }
+      });
+    });
+  };
 }; // Returns scores for a given string
 
 
@@ -30585,7 +30604,7 @@ function averageObjectProperties(objects) {
 // text we want to analyze.
 
 function preprocessMarkdown(markdown) {
-  var remarker = remark().use(removeShortListItems).use(removeHeadings).use(removeAdmonitionHeadings).use(removeImageAltText).use(removeCodeBlocks).use(removePageMetadata).use(stripMarkdown);
+  var remarker = remark().use(removeShortListItems).use(removeHeadings).use(removeAdmonitionHeadings).use(removeImageAltText).use(removeCodeBlocks).use(removePageMetadata).use(removeJsItems).use(stripMarkdown);
   return remarker.processSync(markdown).contents // Remove any blank lines
   .replace(/\n+/g, "\n");
 } // Calculate the readabilty result for all files found in a given path glob.
