@@ -83,6 +83,22 @@ const removeShortListItems = () => (tree) => {
     });
 };
 
+const removeJsItems = () => (tree) => {
+    let visitNexParagraph = false;
+    visit(tree, 'root', (listItemNode) => {
+        visit(listItemNode, ['html', 'paragraph'], (elementNode) => {
+            if (visitNexParagraph && elementNode.type === 'paragraph') {
+                visit(elementNode, ['text', 'inlineCode'], (textNode) => {textNode.value = ''})
+            }
+            if (elementNode.type === 'html') {
+                visitNexParagraph =  elementNode.value === '<!-- JS block -->' && !visitNexParagraph;
+            }
+        })
+    })
+
+
+}
+
 // Returns scores for a given string
 function scoreText(text) {
     const colemanLiauIndex = readability.colemanLiauIndex(text);
@@ -125,6 +141,7 @@ export function preprocessMarkdown(markdown) {
         .use(removeImageAltText)
         .use(removeCodeBlocks)
         .use(removePageMetadata)
+        .use(removeJsItems)
         .use(strip);
 
     return remarker
@@ -137,7 +154,7 @@ export function preprocessMarkdown(markdown) {
 // This result contains readability scores for each file, and an overall average
 export function calculateReadability(globPath) {
     const filePaths = glob.sync(globPath);
-  
+
     const fileResults = filePaths.map((filePath) => {
         const markdown = fs.readFileSync(filePath);
         const stripped = preprocessMarkdown(markdown);
