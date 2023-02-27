@@ -95,8 +95,6 @@ const removeJsItems = () => (tree) => {
             }
         })
     })
-
-
 }
 
 // Returns scores for a given string
@@ -146,8 +144,12 @@ export function preprocessMarkdown(markdown) {
 
     return remarker
         .processSync(markdown)
-        .contents // Remove any blank lines
-        .replace(/\n+/g, `\n`);
+        .contents
+        // Remove any blank lines
+        .replace(/\n+/g, `\n`)
+        // Remove any new lines that are added for manual word wrapping.
+        // Here we just presume these will be preceeded by a normal alphabetical character
+        .replace(/([a-zA-Z])\n/g, '$1 ');
 }
 
 // Calculate the readabilty result for all files found in a given path glob.
