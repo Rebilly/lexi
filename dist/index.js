@@ -30606,7 +30606,9 @@ function averageObjectProperties(objects) {
 function preprocessMarkdown(markdown) {
   var remarker = remark().use(removeShortListItems).use(removeHeadings).use(removeAdmonitionHeadings).use(removeImageAltText).use(removeCodeBlocks).use(removePageMetadata).use(removeJsItems).use(stripMarkdown);
   return remarker.processSync(markdown).contents // Remove any blank lines
-  .replace(/\n+/g, "\n");
+  .replace(/\n+/g, "\n") // Remove any new lines that are added for manual word wrapping.
+  // Here we just presume these will be preceeded by a normal alphabetical character
+  .replace(/([a-zA-Z])\n/g, '$1 ');
 } // Calculate the readabilty result for all files found in a given path glob.
 // This result contains readability scores for each file, and an overall average
 

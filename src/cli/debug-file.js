@@ -5,7 +5,7 @@ import {preprocessMarkdown} from '../readability'
 const program = new Command();
 program
   .name('debug file')
-  .description('Show what the program parses form a single file, after stripping the junk away')
+  .description('Show what the program parses from a single file, after stripping the junk away')
 
 program
   .argument('<file>', 'the filepath to show the stripped input for')

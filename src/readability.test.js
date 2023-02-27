@@ -114,4 +114,34 @@ Some content. This is paragraph with const items = \\\\[];
 "
 `);
     });
+
+    it('should remove manual linebreaks', () => {
+        const stripped = preprocessMarkdown(
+            `
+This test has lines
+that are manually spaced
+out by their writer.
+It should not remove new lines
+that are from different sentences.
+
+Lists of items should not be affected either:
+- Here is list item number 1.
+- Here is list item number 2.
+- Here is list item number 3.
+
+More text after the list.
+`
+        );
+
+        expect(stripped).toMatchInlineSnapshot(`
+            "This test has lines that are manually spaced out by their writer.
+            It should not remove new lines that are from different sentences.
+            Lists of items should not be affected either:
+            Here is list item number 1.
+            Here is list item number 2.
+            Here is list item number 3.
+            More text after the list.
+            "
+        `);
+    });
 });

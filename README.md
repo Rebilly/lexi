@@ -82,12 +82,13 @@ jobs:
 | `lint`      | Run eslint on all files                                                                                                                                                                                                                         |
 | `format`    | Run prettier on all files                                                                                                                                                                                                                       |
 | `build`     | build the dist file. You are required to run this locally in order to build the dist before opening a PR.                                                                                                                                       |
-| `run:local` | Run the action on two local folders, for testing and development. The first argument is the old ("base branch") folder and the sedcond argument is the new ("head branch") folder. For example `yarn run:local ./test-data/old ./test-data/new` |
+| `run:local:report` | Run the action on two local folders, for testing and development. The first argument is the old ("base branch") folder and the sedcond argument is the new ("head branch") folder. For example `yarn run:local:report ./test-data/old ./test-data/new` |
+| `run:local:debugfile` | Show what the program parses from a single file, after stripping all non-wanted items from the file, and before rating the readability. For example `yarn run:local:debugfile ./test-data/new/test-document.md` |
 
 ### Testing
 
 When developing the action, it can be useful to be able to run it locally rather than pushing a branch and running your development version on GitHub.
 
-You can test the action locally by running the `run:local` command. This will report readability on two different folders, as if they were a pull request.
+You can test the action locally by running the `run:local:report` command. This will report readability on two different folders, as if they were a pull request.
 
-For example: `yarn run:local ./test-data/old ./test-data/new`
+For example: `yarn run:local:report ./test-data/old ./test-data/new`
