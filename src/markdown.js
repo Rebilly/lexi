@@ -57,6 +57,7 @@ const resultToScoreTableRow = (result, nameToLinkFunction) => {
 
     return [
         displayName,
+        roundValue(scores.overallReadabilityScore),
         roundValue(scores.fleschReadingEase),
         roundValue(scores.gunningFog),
         roundValue(scores.smogIndex),
@@ -72,6 +73,7 @@ const resultToDiffTableRow = (result) => {
     const {diff} = result;
     return [
         '&nbsp;',
+        addPositiveDiffMarker(roundValue(diff?.overallReadabilityScore)) ?? '-',
         addPositiveDiffMarker(roundValue(diff?.fleschReadingEase)) ?? '-',
         addNegativeDiffMarker(roundValue(diff?.gunningFog)) ?? '-',
         addNegativeDiffMarker(roundValue(diff?.smogIndex)) ?? '-',
@@ -94,7 +96,7 @@ export const reportToComment = ({
         `https://github.com/${repository}/blob/${commit}/${name}`;
 
     const fileTable = tableToMD({
-        headers: ['Path', 'FRE', 'GF', 'SMOG', 'ARI', 'CLI', 'LWF', 'DCRS'],
+        headers: ['Path', 'Overall', 'FRE', 'GF', 'SMOG', 'ARI', 'CLI', 'LWF', 'DCRS'],
         rows: report.fileResults.flatMap((result) => [
             resultToScoreTableRow(result, nameToLink),
             resultToDiffTableRow(result),
@@ -102,7 +104,7 @@ export const reportToComment = ({
     });
 
     const averageTable = tableToMD({
-        headers: ['&nbsp;', 'FRE', 'GF', 'SMOG', 'ARI', 'CLI', 'LWF', 'DCRS'],
+        headers: ['&nbsp;', 'Overall', 'FRE', 'GF', 'SMOG', 'ARI', 'CLI', 'LWF', 'DCRS'],
         rows: [
             resultToScoreTableRow(report.averageResult[0]),
             resultToDiffTableRow(report.averageResult[0]),
