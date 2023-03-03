@@ -5214,7 +5214,7 @@ var distNode$1 = {};
 
 Object.defineProperty(distNode$1, '__esModule', { value: true });
 
-function ownKeys$3(object, enumerableOnly) {
+function ownKeys$4(object, enumerableOnly) {
   var keys = Object.keys(object);
 
   if (Object.getOwnPropertySymbols) {
@@ -5237,13 +5237,13 @@ function _objectSpread2$1(target) {
     var source = arguments[i] != null ? arguments[i] : {};
 
     if (i % 2) {
-      ownKeys$3(Object(source), true).forEach(function (key) {
+      ownKeys$4(Object(source), true).forEach(function (key) {
         _defineProperty$2(target, key, source[key]);
       });
     } else if (Object.getOwnPropertyDescriptors) {
       Object.defineProperties(target, Object.getOwnPropertyDescriptors(source));
     } else {
-      ownKeys$3(Object(source)).forEach(function (key) {
+      ownKeys$4(Object(source)).forEach(function (key) {
         Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key));
       });
     }
@@ -6473,7 +6473,7 @@ Object.defineProperty(distNode, '__esModule', { value: true });
 
 const VERSION = "2.13.6";
 
-function ownKeys$2(object, enumerableOnly) {
+function ownKeys$3(object, enumerableOnly) {
   var keys = Object.keys(object);
 
   if (Object.getOwnPropertySymbols) {
@@ -6496,13 +6496,13 @@ function _objectSpread2(target) {
     var source = arguments[i] != null ? arguments[i] : {};
 
     if (i % 2) {
-      ownKeys$2(Object(source), true).forEach(function (key) {
+      ownKeys$3(Object(source), true).forEach(function (key) {
         _defineProperty$1(target, key, source[key]);
       });
     } else if (Object.getOwnPropertyDescriptors) {
       Object.defineProperties(target, Object.getOwnPropertyDescriptors(source));
     } else {
-      ownKeys$2(Object(source)).forEach(function (key) {
+      ownKeys$3(Object(source)).forEach(function (key) {
         Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key));
       });
     }
@@ -8033,9 +8033,9 @@ function _defineProperty(obj, key, value) {
   return obj;
 }
 
-function ownKeys$1(object, enumerableOnly) { var keys = Object.keys(object); if (Object.getOwnPropertySymbols) { var symbols = Object.getOwnPropertySymbols(object); if (enumerableOnly) { symbols = symbols.filter(function (sym) { return Object.getOwnPropertyDescriptor(object, sym).enumerable; }); } keys.push.apply(keys, symbols); } return keys; }
+function ownKeys$2(object, enumerableOnly) { var keys = Object.keys(object); if (Object.getOwnPropertySymbols) { var symbols = Object.getOwnPropertySymbols(object); if (enumerableOnly) { symbols = symbols.filter(function (sym) { return Object.getOwnPropertyDescriptor(object, sym).enumerable; }); } keys.push.apply(keys, symbols); } return keys; }
 
-function _objectSpread$1(target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i] != null ? arguments[i] : {}; if (i % 2) { ownKeys$1(Object(source), true).forEach(function (key) { _defineProperty(target, key, source[key]); }); } else if (Object.getOwnPropertyDescriptors) { Object.defineProperties(target, Object.getOwnPropertyDescriptors(source)); } else { ownKeys$1(Object(source)).forEach(function (key) { Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key)); }); } } return target; }
+function _objectSpread$2(target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i] != null ? arguments[i] : {}; if (i % 2) { ownKeys$2(Object(source), true).forEach(function (key) { _defineProperty(target, key, source[key]); }); } else if (Object.getOwnPropertyDescriptors) { Object.defineProperties(target, Object.getOwnPropertyDescriptors(source)); } else { ownKeys$2(Object(source)).forEach(function (key) { Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key)); }); } } return target; }
 
 // Modified from: https://github.com/slavcodev/coverage-monitor-action
 // Every comment written by our action will have this hidden
@@ -8055,7 +8055,7 @@ var listComments = /*#__PURE__*/function () {
           case 0:
             client = _ref.client, context = _ref.context, prNumber = _ref.prNumber, hiddenHeader = _ref.hiddenHeader;
             _context.next = 3;
-            return client.rest.issues.listComments(_objectSpread$1(_objectSpread$1({}, context.repo), {}, {
+            return client.rest.issues.listComments(_objectSpread$2(_objectSpread$2({}, context.repo), {}, {
               issue_number: prNumber
             }));
 
@@ -8085,7 +8085,7 @@ var insertComment = function insertComment(_ref4, hiddenHeader) {
       context = _ref4.context,
       prNumber = _ref4.prNumber,
       body = _ref4.body;
-  return client.rest.issues.createComment(_objectSpread$1(_objectSpread$1({}, context.repo), {}, {
+  return client.rest.issues.createComment(_objectSpread$2(_objectSpread$2({}, context.repo), {}, {
     issue_number: prNumber,
     body: appendHiddenHeaderToComment(body, hiddenHeader)
   }));
@@ -8096,7 +8096,7 @@ var updateComment = function updateComment(_ref5, hiddenHeader) {
       context = _ref5.context,
       body = _ref5.body,
       commentId = _ref5.commentId;
-  return client.rest.issues.updateComment(_objectSpread$1(_objectSpread$1({}, context.repo), {}, {
+  return client.rest.issues.updateComment(_objectSpread$2(_objectSpread$2({}, context.repo), {}, {
     comment_id: commentId,
     body: appendHiddenHeaderToComment(body, hiddenHeader)
   }));
@@ -8108,7 +8108,7 @@ var deleteComments = function deleteComments(_ref6) {
       comments = _ref6.comments;
   return Promise.all(comments.map(function (_ref7) {
     var id = _ref7.id;
-    return client.rest.issues.deleteComment(_objectSpread$1(_objectSpread$1({}, context.repo), {}, {
+    return client.rest.issues.deleteComment(_objectSpread$2(_objectSpread$2({}, context.repo), {}, {
       comment_id: id
     }));
   }));
@@ -8176,7 +8176,7 @@ var getFileStatusesFromPR = /*#__PURE__*/function () {
           case 0:
             client = _ref10.client, context = _ref10.context, prNumber = _ref10.prNumber;
             _context3.next = 3;
-            return client.rest.pulls.listFiles(_objectSpread$1(_objectSpread$1({}, context.repo), {}, {
+            return client.rest.pulls.listFiles(_objectSpread$2(_objectSpread$2({}, context.repo), {}, {
               pull_number: prNumber,
               // Pull the maximum number of files.
               // For PRs with over 100 files, we will have too many files which will create
@@ -30457,6 +30457,9 @@ class Readability {
 const readability = new Readability();
 var main$1 = readability;
 
+function ownKeys$1(object, enumerableOnly) { var keys = Object.keys(object); if (Object.getOwnPropertySymbols) { var symbols = Object.getOwnPropertySymbols(object); if (enumerableOnly) { symbols = symbols.filter(function (sym) { return Object.getOwnPropertyDescriptor(object, sym).enumerable; }); } keys.push.apply(keys, symbols); } return keys; }
+
+function _objectSpread$1(target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i] != null ? arguments[i] : {}; if (i % 2) { ownKeys$1(Object(source), true).forEach(function (key) { _defineProperty(target, key, source[key]); }); } else if (Object.getOwnPropertyDescriptors) { Object.defineProperties(target, Object.getOwnPropertyDescriptors(source)); } else { ownKeys$1(Object(source)).forEach(function (key) { Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key)); }); } } return target; }
 // Generally our headings are short and do not contribute in a
 // meaningful way to our readability scores
 
@@ -30583,6 +30586,55 @@ function scoreText(text) {
     // The CLI index can be NaN for some texts, so ensure it's 0
     colemanLiauIndex: Number.isNaN(colemanLiauIndex) ? 0 : colemanLiauIndex
   };
+} // Returns scores for a given string
+
+
+function normalizeScores(scores) {
+  var ranges = {
+    fleschReadingEase: {
+      min: 0,
+      max: 100
+    },
+    gunningFog: {
+      min: 19,
+      max: 6
+    },
+    automatedReadabilityIndex: {
+      min: 22,
+      max: 6
+    },
+    daleChallReadabilityScore: {
+      min: 11,
+      max: 4.9
+    },
+    colemanLiauIndex: {
+      min: 19,
+      max: 6
+    }
+  };
+
+  var normalize = function normalize(range, value) {
+    return (value - range.min) / (range.max - range.min);
+  };
+
+  return {
+    fleschReadingEase: normalize(ranges.fleschReadingEase, scores.fleschReadingEase),
+    gunningFog: normalize(ranges.gunningFog, scores.gunningFog),
+    automatedReadabilityIndex: normalize(ranges.automatedReadabilityIndex, scores.automatedReadabilityIndex),
+    daleChallReadabilityScore: normalize(ranges.daleChallReadabilityScore, scores.daleChallReadabilityScore),
+    colemanLiauIndex: normalize(ranges.colemanLiauIndex, scores.colemanLiauIndex)
+  };
+}
+
+function createOverallReadabilityScore(normalizeScores) {
+  var weights = {
+    fleschReadingEase: 0.1653977378,
+    gunningFog: 0.2228367277,
+    automatedReadabilityIndex: 0.2325290236,
+    daleChallReadabilityScore: 0.1960641698,
+    colemanLiauIndex: 0.1831723411
+  };
+  return normalizeScores.fleschReadingEase * weights.fleschReadingEase + normalizeScores.gunningFog * weights.gunningFog + normalizeScores.automatedReadabilityIndex * weights.automatedReadabilityIndex + normalizeScores.daleChallReadabilityScore * weights.daleChallReadabilityScore + normalizeScores.colemanLiauIndex * weights.colemanLiauIndex;
 } // Calculates the average of a particular property value, given an array of objects
 
 
@@ -30618,9 +30670,13 @@ function calculateReadability(globPath) {
     var markdown = require$$0__default['default'].readFileSync(filePath);
     var stripped = preprocessMarkdown(markdown);
     var scores = scoreText(stripped);
+    var normalized = normalizeScores(scores);
+    var overallReadabilityScore = createOverallReadabilityScore(normalized);
     return {
       name: filePath,
-      scores: scores
+      scores: _objectSpread$1({
+        overallReadabilityScore: overallReadabilityScore
+      }, scores)
     };
   });
   var averageResult = [{
@@ -30779,15 +30835,15 @@ var resultToScoreTableRow = function resultToScoreTableRow(result, nameToLinkFun
       scores = result.scores;
   var filenameOnly = require$$0__default$1['default'].basename(name);
   var displayName = nameToLinkFunction ? "[".concat(filenameOnly, "](").concat(nameToLinkFunction(name), " \"").concat(name, "\")") : name;
-  return [displayName, roundValue(scores.fleschReadingEase), roundValue(scores.gunningFog), roundValue(scores.smogIndex), roundValue(scores.automatedReadabilityIndex), roundValue(scores.colemanLiauIndex), roundValue(scores.linsearWriteFormula), roundValue(scores.daleChallReadabilityScore)];
+  return [displayName, roundValue(scores.overallReadabilityScore), roundValue(scores.fleschReadingEase), roundValue(scores.gunningFog), roundValue(scores.smogIndex), roundValue(scores.automatedReadabilityIndex), roundValue(scores.colemanLiauIndex), roundValue(scores.linsearWriteFormula), roundValue(scores.daleChallReadabilityScore)];
 }; // Returns a table row showing the difference in scores for a given result object.
 
 
 var resultToDiffTableRow = function resultToDiffTableRow(result) {
-  var _addPositiveDiffMarke, _addNegativeDiffMarke, _addNegativeDiffMarke2, _addNegativeDiffMarke3, _addNegativeDiffMarke4, _addNegativeDiffMarke5, _addNegativeDiffMarke6;
+  var _addPositiveDiffMarke, _addPositiveDiffMarke2, _addNegativeDiffMarke, _addNegativeDiffMarke2, _addNegativeDiffMarke3, _addNegativeDiffMarke4, _addNegativeDiffMarke5, _addNegativeDiffMarke6;
 
   var diff = result.diff;
-  return ['&nbsp;', (_addPositiveDiffMarke = addPositiveDiffMarker(roundValue(diff === null || diff === void 0 ? void 0 : diff.fleschReadingEase))) !== null && _addPositiveDiffMarke !== void 0 ? _addPositiveDiffMarke : '-', (_addNegativeDiffMarke = addNegativeDiffMarker(roundValue(diff === null || diff === void 0 ? void 0 : diff.gunningFog))) !== null && _addNegativeDiffMarke !== void 0 ? _addNegativeDiffMarke : '-', (_addNegativeDiffMarke2 = addNegativeDiffMarker(roundValue(diff === null || diff === void 0 ? void 0 : diff.smogIndex))) !== null && _addNegativeDiffMarke2 !== void 0 ? _addNegativeDiffMarke2 : '-', (_addNegativeDiffMarke3 = addNegativeDiffMarker(roundValue(diff === null || diff === void 0 ? void 0 : diff.automatedReadabilityIndex))) !== null && _addNegativeDiffMarke3 !== void 0 ? _addNegativeDiffMarke3 : '-', (_addNegativeDiffMarke4 = addNegativeDiffMarker(roundValue(diff === null || diff === void 0 ? void 0 : diff.colemanLiauIndex))) !== null && _addNegativeDiffMarke4 !== void 0 ? _addNegativeDiffMarke4 : '-', (_addNegativeDiffMarke5 = addNegativeDiffMarker(roundValue(diff === null || diff === void 0 ? void 0 : diff.linsearWriteFormula))) !== null && _addNegativeDiffMarke5 !== void 0 ? _addNegativeDiffMarke5 : '-', (_addNegativeDiffMarke6 = addNegativeDiffMarker(roundValue(diff === null || diff === void 0 ? void 0 : diff.daleChallReadabilityScore))) !== null && _addNegativeDiffMarke6 !== void 0 ? _addNegativeDiffMarke6 : '-'];
+  return ['&nbsp;', (_addPositiveDiffMarke = addPositiveDiffMarker(roundValue(diff === null || diff === void 0 ? void 0 : diff.overallReadabilityScore))) !== null && _addPositiveDiffMarke !== void 0 ? _addPositiveDiffMarke : '-', (_addPositiveDiffMarke2 = addPositiveDiffMarker(roundValue(diff === null || diff === void 0 ? void 0 : diff.fleschReadingEase))) !== null && _addPositiveDiffMarke2 !== void 0 ? _addPositiveDiffMarke2 : '-', (_addNegativeDiffMarke = addNegativeDiffMarker(roundValue(diff === null || diff === void 0 ? void 0 : diff.gunningFog))) !== null && _addNegativeDiffMarke !== void 0 ? _addNegativeDiffMarke : '-', (_addNegativeDiffMarke2 = addNegativeDiffMarker(roundValue(diff === null || diff === void 0 ? void 0 : diff.smogIndex))) !== null && _addNegativeDiffMarke2 !== void 0 ? _addNegativeDiffMarke2 : '-', (_addNegativeDiffMarke3 = addNegativeDiffMarker(roundValue(diff === null || diff === void 0 ? void 0 : diff.automatedReadabilityIndex))) !== null && _addNegativeDiffMarke3 !== void 0 ? _addNegativeDiffMarke3 : '-', (_addNegativeDiffMarke4 = addNegativeDiffMarker(roundValue(diff === null || diff === void 0 ? void 0 : diff.colemanLiauIndex))) !== null && _addNegativeDiffMarke4 !== void 0 ? _addNegativeDiffMarke4 : '-', (_addNegativeDiffMarke5 = addNegativeDiffMarker(roundValue(diff === null || diff === void 0 ? void 0 : diff.linsearWriteFormula))) !== null && _addNegativeDiffMarke5 !== void 0 ? _addNegativeDiffMarke5 : '-', (_addNegativeDiffMarke6 = addNegativeDiffMarker(roundValue(diff === null || diff === void 0 ? void 0 : diff.daleChallReadabilityScore))) !== null && _addNegativeDiffMarke6 !== void 0 ? _addNegativeDiffMarke6 : '-'];
 }; // Convert a report object to a markdown comment
 
 
@@ -30803,13 +30859,13 @@ var reportToComment = function reportToComment(_ref2) {
   };
 
   var fileTable = tableToMD({
-    headers: ['Path', 'FRE', 'GF', 'SMOG', 'ARI', 'CLI', 'LWF', 'DCRS'],
+    headers: ['Path', 'Overall', 'FRE', 'GF', 'SMOG', 'ARI', 'CLI', 'LWF', 'DCRS'],
     rows: report.fileResults.flatMap(function (result) {
       return [resultToScoreTableRow(result, nameToLink), resultToDiffTableRow(result)];
     })
   });
   var averageTable = tableToMD({
-    headers: ['&nbsp;', 'FRE', 'GF', 'SMOG', 'ARI', 'CLI', 'LWF', 'DCRS'],
+    headers: ['&nbsp;', 'Overall', 'FRE', 'GF', 'SMOG', 'ARI', 'CLI', 'LWF', 'DCRS'],
     rows: [resultToScoreTableRow(report.averageResult[0]), resultToDiffTableRow(report.averageResult[0])]
   });
   return "\nReadability after merging this PR:\n\n<details>\n  <summary>View Metric Targets</summary>\n\nMetric | Range | Ideal score\n--- | --- | ---\nFlesch Reading Ease | 100 (very easy read) to 0 (extremely difficult read) | 60\nGunning Fog | 6 (very easy read) to 17 (extremely difficult read) | 8 or less\nSMOG Index | 6 (very easy read) to 14 (extremely difficult read) | 8 or less\nAuto. Read. Index | 6 (very easy read) to 14 (extremely difficult read) | 8 or less\nColeman Liau Index | 6 (very easy read) to 17 (extremely difficult read) | 8 or less\nLinsear Write | 0 (very easy read) to 11 (extremely difficult read) | 8 or less\nDale-Chall Readability | 4.9 (very easy read) to 9.9 (extremely difficult read) | 6.9 or less\n\n</details>\n\n\uD83D\uDFE2 - Shows an _increase_ in readability\n\uD83D\uDD34 - Shows a _decrease_ in readability\n\n".concat(fileTable, "\n\nOverall average:\n\n").concat(averageTable, "\n");
