@@ -45,6 +45,25 @@ const addNegativeDiffMarker = (value) => {
     return value;
 };
 
+// Returns a table row showing the absolute scores and  for a given result object.
+// If a nameToLinkFunction is passed, the result name will be created
+// as link, using the result of that function as the target
+const resultToOverallReadabilityRowWithDiff = (result, nameToLinkFunction) => {
+    const {name, scores} = result;
+    const filenameOnly = path.basename(name);
+    const displayName = nameToLinkFunction
+        ? `[${filenameOnly}](${nameToLinkFunction(name)} "${name}")`
+        : name;
+
+    const overallScore = roundValue(scores.overallReadabilityScore);
+    const diff = addPositiveDiffMarker(roundValue(result.diff?.overallReadabilityScore)) ?? '-';
+
+    return [
+        displayName,
+        `${overallScore} (${diff})`,
+    ];
+};
+
 // Returns a table row showing the absolute scores for a given result object.
 // If a nameToLinkFunction is passed, the result name will be created
 // as link, using the result of that function as the target
@@ -91,8 +110,15 @@ export const reportToComment = ({
     const nameToLink = (name) =>
         `https://github.com/${repository}/blob/${commit}/${name}`;
 
+    const overallReadabilityTable = tableToMD({
+        headers: ['Path', 'Readability'],
+        rows: report.fileResults.map((result) => 
+            resultToOverallReadabilityRowWithDiff(result, nameToLink),
+        ),
+    });
+
     const fileTable = tableToMD({
-        headers: ['Path', 'Overall', 'FRE', 'GF', 'ARI', 'CLI', 'DCRS'],
+        headers: ['Path', 'Readability', 'FRE', 'GF', 'ARI', 'CLI', 'DCRS'],
         rows: report.fileResults.flatMap((result) => [
             resultToScoreTableRow(result, nameToLink),
             resultToDiffTableRow(result),
@@ -100,15 +126,32 @@ export const reportToComment = ({
     });
 
     const averageTable = tableToMD({
-        headers: ['&nbsp;', 'Overall', 'FRE', 'GF', 'ARI', 'CLI', 'DCRS'],
+        headers: ['&nbsp;', 'Readability', 'FRE', 'GF', 'ARI', 'CLI', 'DCRS'],
         rows: [
             resultToScoreTableRow(report.averageResult[0]),
             resultToDiffTableRow(report.averageResult[0]),
         ],
     });
 
+    const overallReadability = roundValue(report.averageResult[0].scores.overallReadabilityScore);
+    const overallReadabilityDiff = addPositiveDiffMarker(roundValue(report.averageResult[0].diff.overallReadabilityScore));
+
     return `
-Readability after merging this PR:
+Readability after merging this PR: ${overallReadability}/100 (${overallReadabilityDiff})
+
+${overallReadabilityTable}
+
+<details>
+  <summary>View Detailed Metrics</summary>
+
+🟢 - Shows an _increase_ in readability
+🔴 - Shows a _decrease_ in readability
+
+${fileTable}
+
+Overall average:
+
+${averageTable}
 
 <details>
   <summary>View Metric Targets</summary>
@@ -123,13 +166,6 @@ Dale-Chall Readability | 4.9 (very easy read) to 9.9 (extremely difficult read) 
 
 </details>
 
-🟢 - Shows an _increase_ in readability
-🔴 - Shows a _decrease_ in readability
-
-${fileTable}
-
-Overall average:
-
-${averageTable}
+</details>
 `;
 };

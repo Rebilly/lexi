@@ -30633,8 +30633,11 @@ function createOverallReadabilityScore(normalizeScores) {
     automatedReadabilityIndex: 0.2325290236,
     daleChallReadabilityScore: 0.1960641698,
     colemanLiauIndex: 0.1831723411
-  };
-  return normalizeScores.fleschReadingEase * weights.fleschReadingEase + normalizeScores.gunningFog * weights.gunningFog + normalizeScores.automatedReadabilityIndex * weights.automatedReadabilityIndex + normalizeScores.daleChallReadabilityScore * weights.daleChallReadabilityScore + normalizeScores.colemanLiauIndex * weights.colemanLiauIndex;
+  }; // The reability score from 0 to 1.0
+
+  var normalizedReadabilityScore = normalizeScores.fleschReadingEase * weights.fleschReadingEase + normalizeScores.gunningFog * weights.gunningFog + normalizeScores.automatedReadabilityIndex * weights.automatedReadabilityIndex + normalizeScores.daleChallReadabilityScore * weights.daleChallReadabilityScore + normalizeScores.colemanLiauIndex * weights.colemanLiauIndex; // Scale the score from 0 to 100
+
+  return 100 * normalizedReadabilityScore;
 } // Calculates the average of a particular property value, given an array of objects
 
 
@@ -30825,6 +30828,21 @@ var addNegativeDiffMarker = function addNegativeDiffMarker(value) {
   }
 
   return value;
+}; // Returns a table row showing the absolute scores and  for a given result object.
+// If a nameToLinkFunction is passed, the result name will be created
+// as link, using the result of that function as the target
+
+
+var resultToOverallReadabilityRowWithDiff = function resultToOverallReadabilityRowWithDiff(result, nameToLinkFunction) {
+  var _addPositiveDiffMarke, _result$diff;
+
+  var name = result.name,
+      scores = result.scores;
+  var filenameOnly = require$$0__default$1['default'].basename(name);
+  var displayName = nameToLinkFunction ? "[".concat(filenameOnly, "](").concat(nameToLinkFunction(name), " \"").concat(name, "\")") : name;
+  var overallScore = roundValue(scores.overallReadabilityScore);
+  var diff = (_addPositiveDiffMarke = addPositiveDiffMarker(roundValue((_result$diff = result.diff) === null || _result$diff === void 0 ? void 0 : _result$diff.overallReadabilityScore))) !== null && _addPositiveDiffMarke !== void 0 ? _addPositiveDiffMarke : '-';
+  return [displayName, "".concat(overallScore, " (").concat(diff, ")")];
 }; // Returns a table row showing the absolute scores for a given result object.
 // If a nameToLinkFunction is passed, the result name will be created
 // as link, using the result of that function as the target
@@ -30840,10 +30858,10 @@ var resultToScoreTableRow = function resultToScoreTableRow(result, nameToLinkFun
 
 
 var resultToDiffTableRow = function resultToDiffTableRow(result) {
-  var _addPositiveDiffMarke, _addPositiveDiffMarke2, _addNegativeDiffMarke, _addNegativeDiffMarke2, _addNegativeDiffMarke3, _addNegativeDiffMarke4;
+  var _addPositiveDiffMarke2, _addPositiveDiffMarke3, _addNegativeDiffMarke, _addNegativeDiffMarke2, _addNegativeDiffMarke3, _addNegativeDiffMarke4;
 
   var diff = result.diff;
-  return ['&nbsp;', (_addPositiveDiffMarke = addPositiveDiffMarker(roundValue(diff === null || diff === void 0 ? void 0 : diff.overallReadabilityScore))) !== null && _addPositiveDiffMarke !== void 0 ? _addPositiveDiffMarke : '-', (_addPositiveDiffMarke2 = addPositiveDiffMarker(roundValue(diff === null || diff === void 0 ? void 0 : diff.fleschReadingEase))) !== null && _addPositiveDiffMarke2 !== void 0 ? _addPositiveDiffMarke2 : '-', (_addNegativeDiffMarke = addNegativeDiffMarker(roundValue(diff === null || diff === void 0 ? void 0 : diff.gunningFog))) !== null && _addNegativeDiffMarke !== void 0 ? _addNegativeDiffMarke : '-', (_addNegativeDiffMarke2 = addNegativeDiffMarker(roundValue(diff === null || diff === void 0 ? void 0 : diff.automatedReadabilityIndex))) !== null && _addNegativeDiffMarke2 !== void 0 ? _addNegativeDiffMarke2 : '-', (_addNegativeDiffMarke3 = addNegativeDiffMarker(roundValue(diff === null || diff === void 0 ? void 0 : diff.colemanLiauIndex))) !== null && _addNegativeDiffMarke3 !== void 0 ? _addNegativeDiffMarke3 : '-', (_addNegativeDiffMarke4 = addNegativeDiffMarker(roundValue(diff === null || diff === void 0 ? void 0 : diff.daleChallReadabilityScore))) !== null && _addNegativeDiffMarke4 !== void 0 ? _addNegativeDiffMarke4 : '-'];
+  return ['&nbsp;', (_addPositiveDiffMarke2 = addPositiveDiffMarker(roundValue(diff === null || diff === void 0 ? void 0 : diff.overallReadabilityScore))) !== null && _addPositiveDiffMarke2 !== void 0 ? _addPositiveDiffMarke2 : '-', (_addPositiveDiffMarke3 = addPositiveDiffMarker(roundValue(diff === null || diff === void 0 ? void 0 : diff.fleschReadingEase))) !== null && _addPositiveDiffMarke3 !== void 0 ? _addPositiveDiffMarke3 : '-', (_addNegativeDiffMarke = addNegativeDiffMarker(roundValue(diff === null || diff === void 0 ? void 0 : diff.gunningFog))) !== null && _addNegativeDiffMarke !== void 0 ? _addNegativeDiffMarke : '-', (_addNegativeDiffMarke2 = addNegativeDiffMarker(roundValue(diff === null || diff === void 0 ? void 0 : diff.automatedReadabilityIndex))) !== null && _addNegativeDiffMarke2 !== void 0 ? _addNegativeDiffMarke2 : '-', (_addNegativeDiffMarke3 = addNegativeDiffMarker(roundValue(diff === null || diff === void 0 ? void 0 : diff.colemanLiauIndex))) !== null && _addNegativeDiffMarke3 !== void 0 ? _addNegativeDiffMarke3 : '-', (_addNegativeDiffMarke4 = addNegativeDiffMarker(roundValue(diff === null || diff === void 0 ? void 0 : diff.daleChallReadabilityScore))) !== null && _addNegativeDiffMarke4 !== void 0 ? _addNegativeDiffMarke4 : '-'];
 }; // Convert a report object to a markdown comment
 
 
@@ -30858,17 +30876,25 @@ var reportToComment = function reportToComment(_ref2) {
     return "https://github.com/".concat(repository, "/blob/").concat(commit, "/").concat(name);
   };
 
+  var overallReadabilityTable = tableToMD({
+    headers: ['Path', 'Readability'],
+    rows: report.fileResults.map(function (result) {
+      return resultToOverallReadabilityRowWithDiff(result, nameToLink);
+    })
+  });
   var fileTable = tableToMD({
-    headers: ['Path', 'Overall', 'FRE', 'GF', 'ARI', 'CLI', 'DCRS'],
+    headers: ['Path', 'Readability', 'FRE', 'GF', 'ARI', 'CLI', 'DCRS'],
     rows: report.fileResults.flatMap(function (result) {
       return [resultToScoreTableRow(result, nameToLink), resultToDiffTableRow(result)];
     })
   });
   var averageTable = tableToMD({
-    headers: ['&nbsp;', 'Overall', 'FRE', 'GF', 'ARI', 'CLI', 'DCRS'],
+    headers: ['&nbsp;', 'Readability', 'FRE', 'GF', 'ARI', 'CLI', 'DCRS'],
     rows: [resultToScoreTableRow(report.averageResult[0]), resultToDiffTableRow(report.averageResult[0])]
   });
-  return "\nReadability after merging this PR:\n\n<details>\n  <summary>View Metric Targets</summary>\n\nMetric | Range | Ideal score\n--- | --- | ---\nFlesch Reading Ease | 100 (very easy read) to 0 (extremely difficult read) | 60\nGunning Fog | 6 (very easy read) to 17 (extremely difficult read) | 8 or less\nAuto. Read. Index | 6 (very easy read) to 14 (extremely difficult read) | 8 or less\nColeman Liau Index | 6 (very easy read) to 17 (extremely difficult read) | 8 or less\nDale-Chall Readability | 4.9 (very easy read) to 9.9 (extremely difficult read) | 6.9 or less\n\n</details>\n\n\uD83D\uDFE2 - Shows an _increase_ in readability\n\uD83D\uDD34 - Shows a _decrease_ in readability\n\n".concat(fileTable, "\n\nOverall average:\n\n").concat(averageTable, "\n");
+  var overallReadability = roundValue(report.averageResult[0].scores.overallReadabilityScore);
+  var overallReadabilityDiff = addPositiveDiffMarker(roundValue(report.averageResult[0].diff.overallReadabilityScore));
+  return "\nReadability after merging this PR: ".concat(overallReadability, "/100 (").concat(overallReadabilityDiff, ")\n\n").concat(overallReadabilityTable, "\n\n<details>\n  <summary>View Detailed Metrics</summary>\n\n\uD83D\uDFE2 - Shows an _increase_ in readability\n\uD83D\uDD34 - Shows a _decrease_ in readability\n\n").concat(fileTable, "\n\nOverall average:\n\n").concat(averageTable, "\n\n<details>\n  <summary>View Metric Targets</summary>\n\nMetric | Range | Ideal score\n--- | --- | ---\nFlesch Reading Ease | 100 (very easy read) to 0 (extremely difficult read) | 60\nGunning Fog | 6 (very easy read) to 17 (extremely difficult read) | 8 or less\nAuto. Read. Index | 6 (very easy read) to 14 (extremely difficult read) | 8 or less\nColeman Liau Index | 6 (very easy read) to 17 (extremely difficult read) | 8 or less\nDale-Chall Readability | 4.9 (very easy read) to 9.9 (extremely difficult read) | 6.9 or less\n\n</details>\n\n</details>\n");
 };
 
 var main = /*#__PURE__*/function () {

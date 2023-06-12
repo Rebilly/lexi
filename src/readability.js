@@ -159,11 +159,15 @@ function createOverallReadabilityScore(normalizeScores){
         colemanLiauIndex: 0.1831723411,
     };
 
-    return (normalizeScores.fleschReadingEase * weights.fleschReadingEase) +
-        (normalizeScores.gunningFog * weights.gunningFog) +
-        (normalizeScores.automatedReadabilityIndex * weights.automatedReadabilityIndex) +
-        (normalizeScores.daleChallReadabilityScore * weights.daleChallReadabilityScore) +
-        (normalizeScores.colemanLiauIndex * weights.colemanLiauIndex);
+    // The reability score from 0 to 1.0
+    const normalizedReadabilityScore = (normalizeScores.fleschReadingEase * weights.fleschReadingEase) +
+    (normalizeScores.gunningFog * weights.gunningFog) +
+    (normalizeScores.automatedReadabilityIndex * weights.automatedReadabilityIndex) +
+    (normalizeScores.daleChallReadabilityScore * weights.daleChallReadabilityScore) +
+    (normalizeScores.colemanLiauIndex * weights.colemanLiauIndex);
+
+    // Scale the score from 0 to 100
+    return 100 * normalizedReadabilityScore;
 }
 
 // Calculates the average of a particular property value, given an array of objects
