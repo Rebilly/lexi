@@ -35,14 +35,35 @@ const addPositiveDiffMarker = (value) => {
 // Adds an emoji marker to a value.
 // If the value is NEGATIVE, we consider it a good value
 // and add a positive marker, otherwise a negative marker
+// We also flip the value to be positive, so that postive
+// scores always show a + sign.
 const addNegativeDiffMarker = (value) => {
     if (typeof value !== 'undefined') {
         if (value === 0 || value < 0) {
-            return `🟢 ${value}`;
+            return `🟢 +${-value}`;
         }
-        return `🔴 +${value}`;
+        return `🔴 ${-value}`;
     }
     return value;
+};
+
+// Returns a table row showing the absolute scores and  for a given result object.
+// If a nameToLinkFunction is passed, the result name will be created
+// as link, using the result of that function as the target
+const resultToReadabilityRowWithDiff = (result, nameToLinkFunction) => {
+    const {name, scores} = result;
+    const filenameOnly = path.basename(name);
+    const displayName = nameToLinkFunction
+        ? `[${filenameOnly}](${nameToLinkFunction(name)} "${name}")`
+        : name;
+
+    const readabilityScore = roundValue(scores.readabilityScore);
+    const diff = addPositiveDiffMarker(roundValue(result.diff?.readabilityScore)) ?? '-';
+
+    return [
+        displayName,
+        `${readabilityScore} (${diff})`,
+    ];
 };
 
 // Returns a table row showing the absolute scores for a given result object.
@@ -57,12 +78,11 @@ const resultToScoreTableRow = (result, nameToLinkFunction) => {
 
     return [
         displayName,
+        roundValue(scores.readabilityScore),
         roundValue(scores.fleschReadingEase),
         roundValue(scores.gunningFog),
-        roundValue(scores.smogIndex),
         roundValue(scores.automatedReadabilityIndex),
         roundValue(scores.colemanLiauIndex),
-        roundValue(scores.linsearWriteFormula),
         roundValue(scores.daleChallReadabilityScore),
     ];
 };
@@ -72,13 +92,12 @@ const resultToDiffTableRow = (result) => {
     const {diff} = result;
     return [
         '&nbsp;',
+        addPositiveDiffMarker(roundValue(diff?.readabilityScore)) ?? '-',
         addPositiveDiffMarker(roundValue(diff?.fleschReadingEase)) ?? '-',
         addNegativeDiffMarker(roundValue(diff?.gunningFog)) ?? '-',
-        addNegativeDiffMarker(roundValue(diff?.smogIndex)) ?? '-',
         addNegativeDiffMarker(roundValue(diff?.automatedReadabilityIndex)) ??
             '-',
         addNegativeDiffMarker(roundValue(diff?.colemanLiauIndex)) ?? '-',
-        addNegativeDiffMarker(roundValue(diff?.linsearWriteFormula)) ?? '-',
         addNegativeDiffMarker(roundValue(diff?.daleChallReadabilityScore)) ??
             '-',
     ];
@@ -93,8 +112,15 @@ export const reportToComment = ({
     const nameToLink = (name) =>
         `https://github.com/${repository}/blob/${commit}/${name}`;
 
-    const fileTable = tableToMD({
-        headers: ['Path', 'FRE', 'GF', 'SMOG', 'ARI', 'CLI', 'LWF', 'DCRS'],
+    const readabilityTable = tableToMD({
+        headers: ['File', 'Readability'],
+        rows: report.fileResults.map((result) => 
+            resultToReadabilityRowWithDiff(result, nameToLink),
+        ),
+    });
+
+    const detailedFileTable = tableToMD({
+        headers: ['File', 'Readability', 'FRE', 'GF', 'ARI', 'CLI', 'DCRS'],
         rows: report.fileResults.flatMap((result) => [
             resultToScoreTableRow(result, nameToLink),
             resultToDiffTableRow(result),
@@ -102,38 +128,46 @@ export const reportToComment = ({
     });
 
     const averageTable = tableToMD({
-        headers: ['&nbsp;', 'FRE', 'GF', 'SMOG', 'ARI', 'CLI', 'LWF', 'DCRS'],
+        headers: ['&nbsp;', 'Readability', 'FRE', 'GF', 'ARI', 'CLI', 'DCRS'],
         rows: [
             resultToScoreTableRow(report.averageResult[0]),
             resultToDiffTableRow(report.averageResult[0]),
         ],
     });
 
+    const averageReadability = roundValue(report.averageResult[0].scores.readabilityScore);
+    const averageReadabilityDiff = addPositiveDiffMarker(roundValue(report.averageResult[0].diff.readabilityScore));
+
     return `
-Readability after merging this PR:
+**Overall readability score:** ${averageReadability}/100 (${averageReadabilityDiff})
+
+${readabilityTable}
 
 <details>
-  <summary>View Metric Targets</summary>
+  <summary>View detailed metrics</summary>
+
+🟢 - Shows an _increase_ in readability
+🔴 - Shows a _decrease_ in readability
+
+${detailedFileTable}
+
+Averages:
+
+${averageTable}
+
+<details>
+  <summary>View metric targets</summary>
 
 Metric | Range | Ideal score
 --- | --- | ---
 Flesch Reading Ease | 100 (very easy read) to 0 (extremely difficult read) | 60
 Gunning Fog | 6 (very easy read) to 17 (extremely difficult read) | 8 or less
-SMOG Index | 6 (very easy read) to 14 (extremely difficult read) | 8 or less
 Auto. Read. Index | 6 (very easy read) to 14 (extremely difficult read) | 8 or less
 Coleman Liau Index | 6 (very easy read) to 17 (extremely difficult read) | 8 or less
-Linsear Write | 0 (very easy read) to 11 (extremely difficult read) | 8 or less
 Dale-Chall Readability | 4.9 (very easy read) to 9.9 (extremely difficult read) | 6.9 or less
 
 </details>
 
-🟢 - Shows an _increase_ in readability
-🔴 - Shows a _decrease_ in readability
-
-${fileTable}
-
-Overall average:
-
-${averageTable}
+</details>
 `;
 };

@@ -113,6 +113,63 @@ function scoreText(text) {
     };
 }
 
+// Returns each score normalized to a value between 0 and 1
+function normalizeScores(scores) {
+    const ranges = {
+        fleschReadingEase: {
+            min: 0,
+            max: 100,
+        },
+        gunningFog: {
+            min: 19,
+            max: 6,
+        },
+        automatedReadabilityIndex: {
+            min: 22,
+            max: 6
+        },
+        daleChallReadabilityScore: {
+            min: 11,
+            max: 4.9
+        },
+        colemanLiauIndex: {
+            min: 19,
+            max: 6
+        }
+    };
+
+    const normalize = (range, value) =>
+        ((value - range.min) / (range.max - range.min));
+
+    return {
+        fleschReadingEase: normalize(ranges.fleschReadingEase, scores.fleschReadingEase),
+        gunningFog: normalize(ranges.gunningFog, scores.gunningFog),
+        automatedReadabilityIndex: normalize(ranges.automatedReadabilityIndex, scores.automatedReadabilityIndex),
+        daleChallReadabilityScore: normalize(ranges.daleChallReadabilityScore, scores.daleChallReadabilityScore),
+        colemanLiauIndex: normalize(ranges.colemanLiauIndex, scores.colemanLiauIndex)
+    };
+}
+
+function calculateReadabilityScore(normalizedScores){
+    const weights = {
+        fleschReadingEase: 0.1653977378,
+        gunningFog: 0.2228367277,
+        automatedReadabilityIndex: 0.2325290236,
+        daleChallReadabilityScore: 0.1960641698,
+        colemanLiauIndex: 0.1831723411,
+    };
+
+    // The reability score from 0 to 1.0
+    const normalizedReadabilityScore = (normalizedScores.fleschReadingEase * weights.fleschReadingEase) +
+    (normalizedScores.gunningFog * weights.gunningFog) +
+    (normalizedScores.automatedReadabilityIndex * weights.automatedReadabilityIndex) +
+    (normalizedScores.daleChallReadabilityScore * weights.daleChallReadabilityScore) +
+    (normalizedScores.colemanLiauIndex * weights.colemanLiauIndex);
+
+    // Scale the score from 0 to 100
+    return 100 * normalizedReadabilityScore;
+}
+
 // Calculates the average of a particular property value, given an array of objects
 function calcAverage(arrayOfObjects, accessorFn) {
     return (
@@ -161,10 +218,15 @@ export function calculateReadability(globPath) {
         const markdown = fs.readFileSync(filePath);
         const stripped = preprocessMarkdown(markdown);
         const scores = scoreText(stripped);
+        const normalized = normalizeScores(scores);
+        const readabilityScore = calculateReadabilityScore(normalized);
 
         return {
             name: filePath,
-            scores,
+            scores: {
+                readabilityScore, 
+                ...scores
+            }
         };
     });
 

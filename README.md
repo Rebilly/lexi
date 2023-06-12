@@ -4,37 +4,47 @@ This action reports readability scores and their changes for Markdown files in y
 
 <details>
   <summary>See example pull request comment</summary>
+**Overall readability score:** 20.18/100 (🟢 +0.97)
 
-Readability after merging this PR:
+File | Readability
+--- | ---
+[README.md](https://github.com/Rebilly/readability-reporter/blob/cce569da633a092c0a9b09bc1fe6d3df1b4dcb26/README.md "README.md") | 22.36 (🟢 +3.86)
+
 
 <details>
-  <summary>View Metric Targets</summary>
+  <summary>View detailed metrics</summary>
 
-| Metric                 | Range                                                  | Ideal score |
-| ---------------------- |--------------------------------------------------------| ----------- |
-| Flesch Reading Ease    | 100 (very easy read) to 0 (extremely difficult read)   | 60          |
-| Gunning Fog            | 6 (very easy read) to 17 (extremely difficult read)    | 8 or less   |
-| SMOG Index             | 6 (very easy read) to 14 (extremely difficult read)    | 8 or less   |
-| Auto. Read. Index      | 6 (very easy read) to 14 (extremely difficult read)    | 8 or less   |
-| Coleman Liau Index     | 6 (very easy read) to 17 (extremely difficult read)    | 8 or less   |
-| Linsear Write          | 0 (very easy read) to 11 (extremely difficult read)    | 8 or less   |
-| Dale-Chall Readability | 4.9 (very easy read) to 9.9 (extremely difficult read) | 6.9 or less |
+🟢 - Shows an _increase_ in readability
+🔴 - Shows a _decrease_ in readability
+
+File | Readability | FRE | GF | ARI | CLI | DCRS
+--- | --- | --- | --- | --- | --- | ---
+[README.md](https://github.com/Rebilly/readability-reporter/blob/cce569da633a092c0a9b09bc1fe6d3df1b4dcb26/README.md "README.md") | 22.36 | 44.11 | 16.67 | 28.7 | 11.85 | 7.66
+&nbsp; | 🟢 +3.86 | 🟢 +2.03 | 🟢 +0.75 | 🟢 +2.2 | 🔴 -0.7 | 🟢 +0.01
+
+
+Averages:
+
+&nbsp; | Readability | FRE | GF | ARI | CLI | DCRS
+--- | --- | --- | --- | --- | --- | ---
+Average | 20.18 | 14 | 16.94 | 19.17 | 15.11 | 9.52
+&nbsp; | 🟢 +0.97 | 🟢 +0.51 | 🟢 +0.19 | 🟢 +0.55 | 🔴 -0.17 | 🟢 +0
+
+
+<details>
+  <summary>View metric targets</summary>
+
+Metric | Range | Ideal score
+--- | --- | ---
+Flesch Reading Ease | 100 (very easy read) to 0 (extremely difficult read) | 60
+Gunning Fog | 6 (very easy read) to 17 (extremely difficult read) | 8 or less
+Auto. Read. Index | 6 (very easy read) to 14 (extremely difficult read) | 8 or less
+Coleman Liau Index | 6 (very easy read) to 17 (extremely difficult read) | 8 or less
+Dale-Chall Readability | 4.9 (very easy read) to 9.9 (extremely difficult read) | 6.9 or less
 
 </details>
 
-| Path                                 | FRE      | GF       | SMOG    | ARI     | CLI      | LWF     | DCRS     |
-| ------------------------------------ | -------- | -------- | ------- | ------- | -------- | ------- | -------- |
-| [README.md](# 'README.md')           | 45.15    | 10.16    | 13.4    | 21.7    | 11.77    | 15.3    | 7.42     |
-| &nbsp;                               | 🔴 -9.78 | 🟢 -1.26 | 🔴 +2.2 | 🟢 -1.2 | 🔴 +1.04 | 🔴 +1.8 | 🟢 -1.21 |
-| [new-feature.md](# 'new-feature.md') | 5.15     | 14.23    | 0       | 13.7    | 17.35    | 5.5     | 10.75    |
-| &nbsp;                               | -        | -        | -       | -       | -        | -       | -        |
-
-Overall average:
-
-&nbsp; | FRE | GF | SMOG | ARI | CLI | LWF | DCRS
---- | --- | --- | --- | --- | --- | --- | ---
-Average | 17.52 | 13.73 | 12.35 | 16.6 | 14.91 | 12.95 | 8.71
-&nbsp; | 🔴 -37.41 | 🔴 +2.31 | 🔴 +1.15 | 🟢 -6.3 | 🔴 +4.18 | 🟢 -0.55 | 🔴 +0.08
+</details>
 
 </details>
 
