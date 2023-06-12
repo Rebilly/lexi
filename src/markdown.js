@@ -48,19 +48,19 @@ const addNegativeDiffMarker = (value) => {
 // Returns a table row showing the absolute scores and  for a given result object.
 // If a nameToLinkFunction is passed, the result name will be created
 // as link, using the result of that function as the target
-const resultToOverallReadabilityRowWithDiff = (result, nameToLinkFunction) => {
+const resultToReadabilityRowWithDiff = (result, nameToLinkFunction) => {
     const {name, scores} = result;
     const filenameOnly = path.basename(name);
     const displayName = nameToLinkFunction
         ? `[${filenameOnly}](${nameToLinkFunction(name)} "${name}")`
         : name;
 
-    const overallScore = roundValue(scores.overallReadabilityScore);
-    const diff = addPositiveDiffMarker(roundValue(result.diff?.overallReadabilityScore)) ?? '-';
+    const readabilityScore = roundValue(scores.readabilityScore);
+    const diff = addPositiveDiffMarker(roundValue(result.diff?.readabilityScore)) ?? '-';
 
     return [
         displayName,
-        `${overallScore} (${diff})`,
+        `${readabilityScore} (${diff})`,
     ];
 };
 
@@ -76,7 +76,7 @@ const resultToScoreTableRow = (result, nameToLinkFunction) => {
 
     return [
         displayName,
-        roundValue(scores.overallReadabilityScore),
+        roundValue(scores.readabilityScore),
         roundValue(scores.fleschReadingEase),
         roundValue(scores.gunningFog),
         roundValue(scores.automatedReadabilityIndex),
@@ -90,7 +90,7 @@ const resultToDiffTableRow = (result) => {
     const {diff} = result;
     return [
         '&nbsp;',
-        addPositiveDiffMarker(roundValue(diff?.overallReadabilityScore)) ?? '-',
+        addPositiveDiffMarker(roundValue(diff?.readabilityScore)) ?? '-',
         addPositiveDiffMarker(roundValue(diff?.fleschReadingEase)) ?? '-',
         addNegativeDiffMarker(roundValue(diff?.gunningFog)) ?? '-',
         addNegativeDiffMarker(roundValue(diff?.automatedReadabilityIndex)) ??
@@ -110,14 +110,14 @@ export const reportToComment = ({
     const nameToLink = (name) =>
         `https://github.com/${repository}/blob/${commit}/${name}`;
 
-    const overallReadabilityTable = tableToMD({
+    const readabilityTable = tableToMD({
         headers: ['Path', 'Readability'],
         rows: report.fileResults.map((result) => 
-            resultToOverallReadabilityRowWithDiff(result, nameToLink),
+            resultToReadabilityRowWithDiff(result, nameToLink),
         ),
     });
 
-    const fileTable = tableToMD({
+    const detailedFileTable = tableToMD({
         headers: ['Path', 'Readability', 'FRE', 'GF', 'ARI', 'CLI', 'DCRS'],
         rows: report.fileResults.flatMap((result) => [
             resultToScoreTableRow(result, nameToLink),
@@ -133,13 +133,13 @@ export const reportToComment = ({
         ],
     });
 
-    const overallReadability = roundValue(report.averageResult[0].scores.overallReadabilityScore);
-    const overallReadabilityDiff = addPositiveDiffMarker(roundValue(report.averageResult[0].diff.overallReadabilityScore));
+    const averageReadability = roundValue(report.averageResult[0].scores.readabilityScore);
+    const averageReadabilityDiff = addPositiveDiffMarker(roundValue(report.averageResult[0].diff.readabilityScore));
 
     return `
-Readability after merging this PR: ${overallReadability}/100 (${overallReadabilityDiff})
+Readability after merging this PR: ${averageReadability}/100 (${averageReadabilityDiff})
 
-${overallReadabilityTable}
+${readabilityTable}
 
 <details>
   <summary>View Detailed Metrics</summary>
@@ -147,9 +147,9 @@ ${overallReadabilityTable}
 🟢 - Shows an _increase_ in readability
 🔴 - Shows a _decrease_ in readability
 
-${fileTable}
+${detailedFileTable}
 
-Overall average:
+Averages:
 
 ${averageTable}
 

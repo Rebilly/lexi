@@ -113,7 +113,7 @@ function scoreText(text) {
     };
 }
 
-// Returns scores for a given string
+// Returns each score normalized to a value between 0 and 1
 function normalizeScores(scores) {
     const ranges = {
         fleschReadingEase: {
@@ -150,7 +150,7 @@ function normalizeScores(scores) {
     };
 }
 
-function createOverallReadabilityScore(normalizeScores){
+function calculateReadabilityScore(normalizeScores){
     const weights = {
         fleschReadingEase: 0.1653977378,
         gunningFog: 0.2228367277,
@@ -219,12 +219,12 @@ export function calculateReadability(globPath) {
         const stripped = preprocessMarkdown(markdown);
         const scores = scoreText(stripped);
         const normalized = normalizeScores(scores);
-        const overallReadabilityScore = createOverallReadabilityScore(normalized);
+        const readabilityScore = calculateReadabilityScore(normalized);
 
         return {
             name: filePath,
             scores: {
-                overallReadabilityScore, 
+                readabilityScore, 
                 ...scores
             }
         };
