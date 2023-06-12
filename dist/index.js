@@ -30816,15 +30816,17 @@ var addPositiveDiffMarker = function addPositiveDiffMarker(value) {
 }; // Adds an emoji marker to a value.
 // If the value is NEGATIVE, we consider it a good value
 // and add a positive marker, otherwise a negative marker
+// We also flip the value to be positive, so that postive
+// scores always show a + sign.
 
 
 var addNegativeDiffMarker = function addNegativeDiffMarker(value) {
   if (typeof value !== 'undefined') {
     if (value === 0 || value < 0) {
-      return "\uD83D\uDFE2 ".concat(value);
+      return "\uD83D\uDFE2 +".concat(-value);
     }
 
-    return "\uD83D\uDD34 +".concat(value);
+    return "\uD83D\uDD34 ".concat(-value);
   }
 
   return value;
@@ -30877,13 +30879,13 @@ var reportToComment = function reportToComment(_ref2) {
   };
 
   var readabilityTable = tableToMD({
-    headers: ['Path', 'Readability'],
+    headers: ['File', 'Readability'],
     rows: report.fileResults.map(function (result) {
       return resultToReadabilityRowWithDiff(result, nameToLink);
     })
   });
   var detailedFileTable = tableToMD({
-    headers: ['Path', 'Readability', 'FRE', 'GF', 'ARI', 'CLI', 'DCRS'],
+    headers: ['File', 'Readability', 'FRE', 'GF', 'ARI', 'CLI', 'DCRS'],
     rows: report.fileResults.flatMap(function (result) {
       return [resultToScoreTableRow(result, nameToLink), resultToDiffTableRow(result)];
     })
@@ -30894,7 +30896,7 @@ var reportToComment = function reportToComment(_ref2) {
   });
   var averageReadability = roundValue(report.averageResult[0].scores.readabilityScore);
   var averageReadabilityDiff = addPositiveDiffMarker(roundValue(report.averageResult[0].diff.readabilityScore));
-  return "\nReadability after merging this PR: ".concat(averageReadability, "/100 (").concat(averageReadabilityDiff, ")\n\n").concat(readabilityTable, "\n\n<details>\n  <summary>View Detailed Metrics</summary>\n\n\uD83D\uDFE2 - Shows an _increase_ in readability\n\uD83D\uDD34 - Shows a _decrease_ in readability\n\n").concat(detailedFileTable, "\n\nAverages:\n\n").concat(averageTable, "\n\n<details>\n  <summary>View Metric Targets</summary>\n\nMetric | Range | Ideal score\n--- | --- | ---\nFlesch Reading Ease | 100 (very easy read) to 0 (extremely difficult read) | 60\nGunning Fog | 6 (very easy read) to 17 (extremely difficult read) | 8 or less\nAuto. Read. Index | 6 (very easy read) to 14 (extremely difficult read) | 8 or less\nColeman Liau Index | 6 (very easy read) to 17 (extremely difficult read) | 8 or less\nDale-Chall Readability | 4.9 (very easy read) to 9.9 (extremely difficult read) | 6.9 or less\n\n</details>\n\n</details>\n");
+  return "\n**Overall readability score:** ".concat(averageReadability, "/100 (").concat(averageReadabilityDiff, ")\n\n").concat(readabilityTable, "\n\n<details>\n  <summary>View detailed metrics</summary>\n\n\uD83D\uDFE2 - Shows an _increase_ in readability\n\uD83D\uDD34 - Shows a _decrease_ in readability\n\n").concat(detailedFileTable, "\n\nAverages:\n\n").concat(averageTable, "\n\n<details>\n  <summary>View metric targets</summary>\n\nMetric | Range | Ideal score\n--- | --- | ---\nFlesch Reading Ease | 100 (very easy read) to 0 (extremely difficult read) | 60\nGunning Fog | 6 (very easy read) to 17 (extremely difficult read) | 8 or less\nAuto. Read. Index | 6 (very easy read) to 14 (extremely difficult read) | 8 or less\nColeman Liau Index | 6 (very easy read) to 17 (extremely difficult read) | 8 or less\nDale-Chall Readability | 4.9 (very easy read) to 9.9 (extremely difficult read) | 6.9 or less\n\n</details>\n\n</details>\n");
 };
 
 var main = /*#__PURE__*/function () {

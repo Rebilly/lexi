@@ -35,12 +35,14 @@ const addPositiveDiffMarker = (value) => {
 // Adds an emoji marker to a value.
 // If the value is NEGATIVE, we consider it a good value
 // and add a positive marker, otherwise a negative marker
+// We also flip the value to be positive, so that postive
+// scores always show a + sign.
 const addNegativeDiffMarker = (value) => {
     if (typeof value !== 'undefined') {
         if (value === 0 || value < 0) {
-            return `🟢 ${value}`;
+            return `🟢 +${-value}`;
         }
-        return `🔴 +${value}`;
+        return `🔴 ${-value}`;
     }
     return value;
 };
@@ -111,14 +113,14 @@ export const reportToComment = ({
         `https://github.com/${repository}/blob/${commit}/${name}`;
 
     const readabilityTable = tableToMD({
-        headers: ['Path', 'Readability'],
+        headers: ['File', 'Readability'],
         rows: report.fileResults.map((result) => 
             resultToReadabilityRowWithDiff(result, nameToLink),
         ),
     });
 
     const detailedFileTable = tableToMD({
-        headers: ['Path', 'Readability', 'FRE', 'GF', 'ARI', 'CLI', 'DCRS'],
+        headers: ['File', 'Readability', 'FRE', 'GF', 'ARI', 'CLI', 'DCRS'],
         rows: report.fileResults.flatMap((result) => [
             resultToScoreTableRow(result, nameToLink),
             resultToDiffTableRow(result),
@@ -137,12 +139,12 @@ export const reportToComment = ({
     const averageReadabilityDiff = addPositiveDiffMarker(roundValue(report.averageResult[0].diff.readabilityScore));
 
     return `
-Readability after merging this PR: ${averageReadability}/100 (${averageReadabilityDiff})
+**Overall readability score:** ${averageReadability}/100 (${averageReadabilityDiff})
 
 ${readabilityTable}
 
 <details>
-  <summary>View Detailed Metrics</summary>
+  <summary>View detailed metrics</summary>
 
 🟢 - Shows an _increase_ in readability
 🔴 - Shows a _decrease_ in readability
@@ -154,7 +156,7 @@ Averages:
 ${averageTable}
 
 <details>
-  <summary>View Metric Targets</summary>
+  <summary>View metric targets</summary>
 
 Metric | Range | Ideal score
 --- | --- | ---

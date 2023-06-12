@@ -47,9 +47,9 @@ describe('reportToComment', () => {
 
         expect(reportToComment({report})).toMatchInlineSnapshot(`
             "
-            Readability after merging this PR: 1/100 (🟢 +1)
+            **Overall readability score:** 1/100 (🟢 +1)
 
-            Path | Readability
+            File | Readability
             --- | ---
             [file-1.md](https://github.com/repo-name/blob/commit-sha/./folder/file-1.md \\"./folder/file-1.md\\") | 10 (🟢 +1)
             [file-2.md](https://github.com/repo-name/blob/commit-sha/./folder/file-2.md \\"./folder/file-2.md\\") | 5 (🔴 -1)
@@ -58,19 +58,19 @@ describe('reportToComment', () => {
 
 
             <details>
-              <summary>View Detailed Metrics</summary>
+              <summary>View detailed metrics</summary>
 
             🟢 - Shows an _increase_ in readability
             🔴 - Shows a _decrease_ in readability
 
-            Path | Readability | FRE | GF | ARI | CLI | DCRS
+            File | Readability | FRE | GF | ARI | CLI | DCRS
             --- | --- | --- | --- | --- | --- | ---
             [file-1.md](https://github.com/repo-name/blob/commit-sha/./folder/file-1.md \\"./folder/file-1.md\\") | 10 | 10 | 10 | 10 | 10 | 10
-            &nbsp; | 🟢 +1 | 🟢 +1 | 🔴 +1 | 🔴 +1 | 🔴 +1 | 🔴 +1
+            &nbsp; | 🟢 +1 | 🟢 +1 | 🔴 -1 | 🔴 -1 | 🔴 -1 | 🔴 -1
             [file-2.md](https://github.com/repo-name/blob/commit-sha/./folder/file-2.md \\"./folder/file-2.md\\") | 5 | 5 | 5 | 5 | 5 | 5
-            &nbsp; | 🔴 -1 | 🔴 -1 | 🟢 -1 | 🟢 -1 | 🟢 -1 | 🟢 -1
+            &nbsp; | 🔴 -1 | 🔴 -1 | 🟢 +1 | 🟢 +1 | 🟢 +1 | 🟢 +1
             [file-3.md](https://github.com/repo-name/blob/commit-sha/./folder/file-3.md \\"./folder/file-3.md\\") | 15 | 15 | 15 | 15 | 15 | 15
-            &nbsp; | 🟢 +0 | 🟢 +0 | 🟢 0 | 🟢 0 | 🟢 0 | 🟢 0
+            &nbsp; | 🟢 +0 | 🟢 +0 | 🟢 +0 | 🟢 +0 | 🟢 +0 | 🟢 +0
             [new-file.md](https://github.com/repo-name/blob/commit-sha/./folder/new-file.md \\"./folder/new-file.md\\") | 20 | 20 | 20 | 20 | 20 | 20
             &nbsp; | - | - | - | - | - | -
 
@@ -80,11 +80,11 @@ describe('reportToComment', () => {
             &nbsp; | Readability | FRE | GF | ARI | CLI | DCRS
             --- | --- | --- | --- | --- | --- | ---
             Average | 1 | 1 | 1 | 1 | 1 | 1
-            &nbsp; | 🟢 +1 | 🟢 +1 | 🔴 +1 | 🔴 +1 | 🔴 +1 | 🔴 +1
+            &nbsp; | 🟢 +1 | 🟢 +1 | 🔴 -1 | 🔴 -1 | 🔴 -1 | 🔴 -1
 
 
             <details>
-              <summary>View Metric Targets</summary>
+              <summary>View metric targets</summary>
 
             Metric | Range | Ideal score
             --- | --- | ---
