@@ -60,10 +60,8 @@ const resultToScoreTableRow = (result, nameToLinkFunction) => {
         roundValue(scores.overallReadabilityScore),
         roundValue(scores.fleschReadingEase),
         roundValue(scores.gunningFog),
-        roundValue(scores.smogIndex),
         roundValue(scores.automatedReadabilityIndex),
         roundValue(scores.colemanLiauIndex),
-        roundValue(scores.linsearWriteFormula),
         roundValue(scores.daleChallReadabilityScore),
     ];
 };
@@ -76,11 +74,9 @@ const resultToDiffTableRow = (result) => {
         addPositiveDiffMarker(roundValue(diff?.overallReadabilityScore)) ?? '-',
         addPositiveDiffMarker(roundValue(diff?.fleschReadingEase)) ?? '-',
         addNegativeDiffMarker(roundValue(diff?.gunningFog)) ?? '-',
-        addNegativeDiffMarker(roundValue(diff?.smogIndex)) ?? '-',
         addNegativeDiffMarker(roundValue(diff?.automatedReadabilityIndex)) ??
             '-',
         addNegativeDiffMarker(roundValue(diff?.colemanLiauIndex)) ?? '-',
-        addNegativeDiffMarker(roundValue(diff?.linsearWriteFormula)) ?? '-',
         addNegativeDiffMarker(roundValue(diff?.daleChallReadabilityScore)) ??
             '-',
     ];
@@ -96,7 +92,7 @@ export const reportToComment = ({
         `https://github.com/${repository}/blob/${commit}/${name}`;
 
     const fileTable = tableToMD({
-        headers: ['Path', 'Overall', 'FRE', 'GF', 'SMOG', 'ARI', 'CLI', 'LWF', 'DCRS'],
+        headers: ['Path', 'Overall', 'FRE', 'GF', 'ARI', 'CLI', 'DCRS'],
         rows: report.fileResults.flatMap((result) => [
             resultToScoreTableRow(result, nameToLink),
             resultToDiffTableRow(result),
@@ -104,7 +100,7 @@ export const reportToComment = ({
     });
 
     const averageTable = tableToMD({
-        headers: ['&nbsp;', 'Overall', 'FRE', 'GF', 'SMOG', 'ARI', 'CLI', 'LWF', 'DCRS'],
+        headers: ['&nbsp;', 'Overall', 'FRE', 'GF', 'ARI', 'CLI', 'DCRS'],
         rows: [
             resultToScoreTableRow(report.averageResult[0]),
             resultToDiffTableRow(report.averageResult[0]),
@@ -121,10 +117,8 @@ Metric | Range | Ideal score
 --- | --- | ---
 Flesch Reading Ease | 100 (very easy read) to 0 (extremely difficult read) | 60
 Gunning Fog | 6 (very easy read) to 17 (extremely difficult read) | 8 or less
-SMOG Index | 6 (very easy read) to 14 (extremely difficult read) | 8 or less
 Auto. Read. Index | 6 (very easy read) to 14 (extremely difficult read) | 8 or less
 Coleman Liau Index | 6 (very easy read) to 17 (extremely difficult read) | 8 or less
-Linsear Write | 0 (very easy read) to 11 (extremely difficult read) | 8 or less
 Dale-Chall Readability | 4.9 (very easy read) to 9.9 (extremely difficult read) | 6.9 or less
 
 </details>
