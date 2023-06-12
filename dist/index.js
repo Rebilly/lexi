@@ -30626,7 +30626,7 @@ function normalizeScores(scores) {
   };
 }
 
-function calculateReadabilityScore(normalizeScores) {
+function calculateReadabilityScore(normalizedScores) {
   var weights = {
     fleschReadingEase: 0.1653977378,
     gunningFog: 0.2228367277,
@@ -30635,7 +30635,7 @@ function calculateReadabilityScore(normalizeScores) {
     colemanLiauIndex: 0.1831723411
   }; // The reability score from 0 to 1.0
 
-  var normalizedReadabilityScore = normalizeScores.fleschReadingEase * weights.fleschReadingEase + normalizeScores.gunningFog * weights.gunningFog + normalizeScores.automatedReadabilityIndex * weights.automatedReadabilityIndex + normalizeScores.daleChallReadabilityScore * weights.daleChallReadabilityScore + normalizeScores.colemanLiauIndex * weights.colemanLiauIndex; // Scale the score from 0 to 100
+  var normalizedReadabilityScore = normalizedScores.fleschReadingEase * weights.fleschReadingEase + normalizedScores.gunningFog * weights.gunningFog + normalizedScores.automatedReadabilityIndex * weights.automatedReadabilityIndex + normalizedScores.daleChallReadabilityScore * weights.daleChallReadabilityScore + normalizedScores.colemanLiauIndex * weights.colemanLiauIndex; // Scale the score from 0 to 100
 
   return 100 * normalizedReadabilityScore;
 } // Calculates the average of a particular property value, given an array of objects

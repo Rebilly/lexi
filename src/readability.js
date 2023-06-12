@@ -150,7 +150,7 @@ function normalizeScores(scores) {
     };
 }
 
-function calculateReadabilityScore(normalizeScores){
+function calculateReadabilityScore(normalizedScores){
     const weights = {
         fleschReadingEase: 0.1653977378,
         gunningFog: 0.2228367277,
@@ -160,11 +160,11 @@ function calculateReadabilityScore(normalizeScores){
     };
 
     // The reability score from 0 to 1.0
-    const normalizedReadabilityScore = (normalizeScores.fleschReadingEase * weights.fleschReadingEase) +
-    (normalizeScores.gunningFog * weights.gunningFog) +
-    (normalizeScores.automatedReadabilityIndex * weights.automatedReadabilityIndex) +
-    (normalizeScores.daleChallReadabilityScore * weights.daleChallReadabilityScore) +
-    (normalizeScores.colemanLiauIndex * weights.colemanLiauIndex);
+    const normalizedReadabilityScore = (normalizedScores.fleschReadingEase * weights.fleschReadingEase) +
+    (normalizedScores.gunningFog * weights.gunningFog) +
+    (normalizedScores.automatedReadabilityIndex * weights.automatedReadabilityIndex) +
+    (normalizedScores.daleChallReadabilityScore * weights.daleChallReadabilityScore) +
+    (normalizedScores.colemanLiauIndex * weights.colemanLiauIndex);
 
     // Scale the score from 0 to 100
     return 100 * normalizedReadabilityScore;
