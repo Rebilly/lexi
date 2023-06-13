@@ -1,8 +1,13 @@
 import path from 'path';
+import {
+    ReadabilityReport,
+    ReadabilityReportFileResult,
+    SingleReadabilityResultWithDiff,
+} from './report';
 
-const arrayToCells = (array) => `${array.join(' | ')}\n`;
+const arrayToCells = (rows: string[]) => `${rows.join(' | ')}\n`;
 
-const tableToMD = ({headers, rows}) => {
+const tableToMD = ({headers, rows}: {headers: string[]; rows: string[][]}) => {
     let table = arrayToCells(headers);
     table += arrayToCells(Array.from({length: headers.length}, () => '---'));
     table += rows.map((row) => arrayToCells(row)).join('');
@@ -12,7 +17,7 @@ const tableToMD = ({headers, rows}) => {
 
 // Round a number to 2 decimal places, but return a float
 // so that trailing 0's will not be stringified
-const roundValue = (value) => {
+const roundValue = (value?: number) => {
     if (typeof value !== 'undefined') {
         return parseFloat(value.toFixed(2));
     }
@@ -22,7 +27,7 @@ const roundValue = (value) => {
 // Adds an emoji marker to a value.
 // If the value is POSITIVE, we consider it a good value
 // and add a positive marker, otherwise a negative marker
-const addPositiveDiffMarker = (value) => {
+const addPositiveDiffMarker = (value?: number) => {
     if (typeof value !== 'undefined') {
         if (value === 0 || value > 0) {
             return `🟢 +${value}`;
@@ -37,7 +42,7 @@ const addPositiveDiffMarker = (value) => {
 // and add a positive marker, otherwise a negative marker
 // We also flip the value to be positive, so that postive
 // scores always show a + sign.
-const addNegativeDiffMarker = (value) => {
+const addNegativeDiffMarker = (value?: number) => {
     if (typeof value !== 'undefined') {
         if (value === 0 || value < 0) {
             return `🟢 +${-value}`;
@@ -50,7 +55,10 @@ const addNegativeDiffMarker = (value) => {
 // Returns a table row showing the absolute scores and  for a given result object.
 // If a nameToLinkFunction is passed, the result name will be created
 // as link, using the result of that function as the target
-const resultToReadabilityRowWithDiff = (result, nameToLinkFunction) => {
+const resultToReadabilityRowWithDiff = (
+    result: SingleReadabilityResultWithDiff,
+    nameToLinkFunction?: (name: string) => string
+) => {
     const {name, scores} = result;
     const filenameOnly = path.basename(name);
     const displayName = nameToLinkFunction
@@ -58,18 +66,19 @@ const resultToReadabilityRowWithDiff = (result, nameToLinkFunction) => {
         : name;
 
     const readabilityScore = roundValue(scores.readabilityScore);
-    const diff = addPositiveDiffMarker(roundValue(result.diff?.readabilityScore)) ?? '-';
+    const diff =
+        addPositiveDiffMarker(roundValue(result.diff?.readabilityScore)) ?? '-';
 
-    return [
-        displayName,
-        `${readabilityScore} (${diff})`,
-    ];
+    return [displayName, `${readabilityScore} (${diff})`];
 };
 
 // Returns a table row showing the absolute scores for a given result object.
 // If a nameToLinkFunction is passed, the result name will be created
 // as link, using the result of that function as the target
-const resultToScoreTableRow = (result, nameToLinkFunction) => {
+const resultToScoreTableRow = (
+    result: SingleReadabilityResultWithDiff,
+    nameToLinkFunction?: (name: string) => string
+): string[] => {
     const {name, scores} = result;
     const filenameOnly = path.basename(name);
     const displayName = nameToLinkFunction
@@ -78,17 +87,17 @@ const resultToScoreTableRow = (result, nameToLinkFunction) => {
 
     return [
         displayName,
-        roundValue(scores.readabilityScore),
-        roundValue(scores.fleschReadingEase),
-        roundValue(scores.gunningFog),
-        roundValue(scores.automatedReadabilityIndex),
-        roundValue(scores.colemanLiauIndex),
-        roundValue(scores.daleChallReadabilityScore),
+        String(roundValue(scores.readabilityScore) ?? ''),
+        String(roundValue(scores.fleschReadingEase) ?? ''),
+        String(roundValue(scores.gunningFog) ?? ''),
+        String(roundValue(scores.automatedReadabilityIndex) ?? ''),
+        String(roundValue(scores.colemanLiauIndex) ?? ''),
+        String(roundValue(scores.daleChallReadabilityScore) ?? ''),
     ];
 };
 
 // Returns a table row showing the difference in scores for a given result object.
-const resultToDiffTableRow = (result) => {
+const resultToDiffTableRow = (result: SingleReadabilityResultWithDiff) => {
     const {diff} = result;
     return [
         '&nbsp;',
@@ -104,18 +113,18 @@ const resultToDiffTableRow = (result) => {
 };
 
 // Convert a report object to a markdown comment
-export const reportToComment = ({
-    report,
+export const reportToComment = (
+    report: ReadabilityReport,
     repository = 'repo-name',
-    commit = 'commit-sha',
-}) => {
-    const nameToLink = (name) =>
+    commit = 'commit-sha'
+) => {
+    const nameToLink = (name: string) =>
         `https://github.com/${repository}/blob/${commit}/${name}`;
 
     const readabilityTable = tableToMD({
         headers: ['File', 'Readability'],
-        rows: report.fileResults.map((result) => 
-            resultToReadabilityRowWithDiff(result, nameToLink),
+        rows: report.fileResults.map((result) =>
+            resultToReadabilityRowWithDiff(result, nameToLink)
         ),
     });
 
@@ -135,8 +144,12 @@ export const reportToComment = ({
         ],
     });
 
-    const averageReadability = roundValue(report.averageResult[0].scores.readabilityScore);
-    const averageReadabilityDiff = addPositiveDiffMarker(roundValue(report.averageResult[0].diff.readabilityScore));
+    const averageReadability = roundValue(
+        report.averageResult[0].scores.readabilityScore
+    );
+    const averageReadabilityDiff = addPositiveDiffMarker(
+        roundValue(report.averageResult[0].diff?.readabilityScore)
+    );
 
     return `
 **Overall readability score:** ${averageReadability}/100 (${averageReadabilityDiff})

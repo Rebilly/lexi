@@ -6,17 +6,19 @@ import {generateReport} from '../report';
 import {reportToComment} from '../markdown';
 
 const program = new Command();
-program
-  .name('report')
-  .description('Show generated report output in console')
+program.name('report').description('Show generated report output in console');
 
 program
-  .argument('<oldFolder>', 'old folder to compare to')
-  .argument('<newFolder>', 'new folder to compare to')
-  .option('-g, --glob <pattern>', 'The glob to use when matching files', '**/*.{md,mdx}')
+    .argument('<oldFolder>', 'old folder to compare to')
+    .argument('<newFolder>', 'new folder to compare to')
+    .option(
+        '-g, --glob <pattern>',
+        'The glob to use when matching files',
+        '**/*.{md,mdx}'
+    );
 program.parse();
 
-const GLOB = program.opts().glob
+const GLOB = program.opts().glob;
 const [, , oldFolder, newFolder] = process.argv;
 
 const ROOT_DIR = process.cwd();
@@ -36,9 +38,10 @@ const newReadability = calculateReadability(GLOB);
 const fileStatuses = {
     added: allNewFiles.filter((filepath) => !allOldFiles.includes(filepath)),
     modified: allNewFiles.filter((filepath) => allOldFiles.includes(filepath)),
+    renamed: [],
 };
 
-const report = generateReport({newReadability, oldReadability, fileStatuses});
-const comment = reportToComment({report});
+const report = generateReport(newReadability, oldReadability, fileStatuses);
+const comment = reportToComment(report);
 
 console.log(comment);

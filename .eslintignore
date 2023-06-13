@@ -1,5 +1,4 @@
 dist/
 lib/
 node_modules/
-package.json
-yarn.lock
+jest.config.js
