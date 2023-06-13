@@ -12,7 +12,7 @@ jobs:
             - name: Setup node
               uses: actions/setup-node@v1
               with:
-                  node-version: 14
+                  node-version: 18
             - name: Restore node_modules cache
               uses: actions/cache@v2
               with:
@@ -21,7 +21,7 @@ jobs:
             - name: Install packages
               run: yarn
             - name: ESLint
-              run: yarn lint
+              run: yarn lint && yarn format-check
 
     tests:
         name: Unit tests
@@ -32,7 +32,7 @@ jobs:
             - name: Setup node
               uses: actions/setup-node@v1
               with:
-                  node-version: 14
+                  node-version: 18
             - name: Restore node_modules cache
               uses: actions/cache@v2
               with:
@@ -52,7 +52,7 @@ jobs:
             - name: Setup node
               uses: actions/setup-node@v1
               with:
-                  node-version: 14
+                  node-version: 18
             - name: Restore node_modules cache
               uses: actions/cache@v2
               with:
