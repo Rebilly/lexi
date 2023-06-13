@@ -6,6 +6,22 @@ import {
     SingleReadabilityResult,
 } from './readability';
 
+export type SingleReadabilityResultWithDiff = SingleReadabilityResult & {
+    diff: ReadabilityScores | null;
+};
+
+export type ReadabilityReportFileResult = {
+    status: string | null;
+    name: string;
+    scores: ReadabilityScores;
+    diff: ReadabilityScores | null;
+};
+
+export type ReadabilityReport = {
+    fileResults: ReadabilityReportFileResult[];
+    averageResult: SingleReadabilityResultWithDiff[];
+};
+
 // Return a new object where every key is the diff
 // between the objects. For example:
 // diffScores({a: 1, b: 10}, {a: 3, b:10})
@@ -21,10 +37,6 @@ function diffScores(
         return acc;
     }, {});
 }
-
-export type SingleReadabilityResultWithDiff = SingleReadabilityResult & {
-    diff: ReadabilityScores | null;
-};
 
 // Adds a diff property to each result object, showing an increase
 // or decrease in each score
@@ -73,18 +85,6 @@ function addFileStatusToResults(
         };
     });
 }
-
-export type ReadabilityReportFileResult = {
-    status: string | null;
-    name: string;
-    scores: ReadabilityScores;
-    diff: ReadabilityScores | null;
-};
-
-export type ReadabilityReport = {
-    fileResults: ReadabilityReportFileResult[];
-    averageResult: SingleReadabilityResultWithDiff[];
-};
 
 // Creates a report object using the old and new readability
 // scores and files statuses. The report has extra details such

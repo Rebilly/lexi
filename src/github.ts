@@ -4,6 +4,15 @@ import {Context} from '@actions/github/lib/context';
 
 type Octokit = ReturnType<typeof getOctokit>;
 
+export type FileStatuses = {
+    added: string[];
+    modified: string[];
+    renamed: {
+        from: string | undefined;
+        to: string;
+    }[];
+};
+
 // Every comment written by our action will have this hidden
 // header on top, and will be used to identify which comments
 // to update/delete etc
@@ -84,15 +93,6 @@ export const upsertComment = async (
     return last
         ? updateComment(client, context, body, last.id, hiddenHeader)
         : insertComment(client, context, prNumber, body, hiddenHeader);
-};
-
-export type FileStatuses = {
-    added: string[];
-    modified: string[];
-    renamed: {
-        from: string | undefined;
-        to: string;
-    }[];
 };
 
 // Given a PR number, returns 3 arrays: file names modified, added and renamed
