@@ -1,14 +1,12 @@
-import core from '@actions/core';
-import github from '@actions/github';
-import exec from '@actions/exec';
+import * as core from '@actions/core';
+import {context, getOctokit} from '@actions/github';
+import * as exec from '@actions/exec';
 import {upsertComment, getFileStatusesFromPR} from './github';
 import {calculateReadability} from './readability';
 import {generateReport} from './report';
 import {reportToComment} from './markdown';
 
 const main = async () => {
-    const {context} = github;
-
     if (!context.payload.pull_request || !context.payload.repository) {
         core.setFailed('This action can only be run on pull requests');
         return;
@@ -22,7 +20,7 @@ const main = async () => {
     const headBranchRef = context.payload.pull_request.head.ref;
     const prNumber = context.payload.pull_request.number;
 
-    const client = github.getOctokit(token);
+    const client = getOctokit(token);
 
     // Run readability on base branch
     await exec.exec(`git fetch origin ${baseBranchRef}`);

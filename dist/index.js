@@ -82,6 +82,29 @@ exports.getFileStatusesFromPR = getFileStatusesFromPR;
 
 "use strict";
 
+var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    var desc = Object.getOwnPropertyDescriptor(m, k);
+    if (!desc || ("get" in desc ? !m.__esModule : desc.writable || desc.configurable)) {
+      desc = { enumerable: true, get: function() { return m[k]; } };
+    }
+    Object.defineProperty(o, k2, desc);
+}) : (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    o[k2] = m[k];
+}));
+var __setModuleDefault = (this && this.__setModuleDefault) || (Object.create ? (function(o, v) {
+    Object.defineProperty(o, "default", { enumerable: true, value: v });
+}) : function(o, v) {
+    o["default"] = v;
+});
+var __importStar = (this && this.__importStar) || function (mod) {
+    if (mod && mod.__esModule) return mod;
+    var result = {};
+    if (mod != null) for (var k in mod) if (k !== "default" && Object.prototype.hasOwnProperty.call(mod, k)) __createBinding(result, mod, k);
+    __setModuleDefault(result, mod);
+    return result;
+};
 var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
     function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
     return new (P || (P = Promise))(function (resolve, reject) {
@@ -91,52 +114,48 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
-var __importDefault = (this && this.__importDefault) || function (mod) {
-    return (mod && mod.__esModule) ? mod : { "default": mod };
-};
 Object.defineProperty(exports, "__esModule", ({ value: true }));
-const core_1 = __importDefault(__nccwpck_require__(2186));
-const github_1 = __importDefault(__nccwpck_require__(5438));
-const exec_1 = __importDefault(__nccwpck_require__(1514));
+const core = __importStar(__nccwpck_require__(2186));
+const github_1 = __nccwpck_require__(5438);
+const exec = __importStar(__nccwpck_require__(1514));
 const github_2 = __nccwpck_require__(5928);
 const readability_1 = __nccwpck_require__(1212);
 const report_1 = __nccwpck_require__(8269);
 const markdown_1 = __nccwpck_require__(5821);
 const main = () => __awaiter(void 0, void 0, void 0, function* () {
-    const { context } = github_1.default;
-    if (!context.payload.pull_request || !context.payload.repository) {
-        core_1.default.setFailed('This action can only be run on pull requests');
+    if (!github_1.context.payload.pull_request || !github_1.context.payload.repository) {
+        core.setFailed('This action can only be run on pull requests');
         return;
     }
     // action parameters
-    const token = core_1.default.getInput('github-token');
-    const glob = core_1.default.getInput('glob');
-    const baseBranchRef = context.payload.pull_request.base.ref;
-    const headBranchRef = context.payload.pull_request.head.ref;
-    const prNumber = context.payload.pull_request.number;
-    const client = github_1.default.getOctokit(token);
+    const token = core.getInput('github-token');
+    const glob = core.getInput('glob');
+    const baseBranchRef = github_1.context.payload.pull_request.base.ref;
+    const headBranchRef = github_1.context.payload.pull_request.head.ref;
+    const prNumber = github_1.context.payload.pull_request.number;
+    const client = (0, github_1.getOctokit)(token);
     // Run readability on base branch
-    yield exec_1.default.exec(`git fetch origin ${baseBranchRef}`);
-    yield exec_1.default.exec(`git checkout ${baseBranchRef}`);
+    yield exec.exec(`git fetch origin ${baseBranchRef}`);
+    yield exec.exec(`git checkout ${baseBranchRef}`);
     const oldReadability = (0, readability_1.calculateReadability)(glob);
     // Run readability on head branch
-    yield exec_1.default.exec(`git fetch origin ${headBranchRef}`);
-    yield exec_1.default.exec(`git checkout ${headBranchRef}`);
+    yield exec.exec(`git fetch origin ${headBranchRef}`);
+    yield exec.exec(`git checkout ${headBranchRef}`);
     const newReadability = (0, readability_1.calculateReadability)(glob);
-    const fileStatuses = yield (0, github_2.getFileStatusesFromPR)(client, context, prNumber);
+    const fileStatuses = yield (0, github_2.getFileStatusesFromPR)(client, github_1.context, prNumber);
     const report = (0, report_1.generateReport)(newReadability, oldReadability, fileStatuses);
     // Only post a comment if there are results from markdown files
     // changed in this PR
     if (report.fileResults.length) {
-        const repository = context.payload.repository.full_name;
-        const commit = context.payload.pull_request.head.sha;
+        const repository = github_1.context.payload.repository.full_name;
+        const commit = github_1.context.payload.pull_request.head.sha;
         const body = (0, markdown_1.reportToComment)(report, repository, commit);
-        yield (0, github_2.upsertComment)(client, context, context.payload.pull_request.number, body, `<!-- ${glob}-code-coverage-assistant -->`);
+        yield (0, github_2.upsertComment)(client, github_1.context, github_1.context.payload.pull_request.number, body, `<!-- ${glob}-code-coverage-assistant -->`);
     }
 });
 main().catch((err) => {
     console.log(err);
-    core_1.default.setFailed(err.message);
+    core.setFailed(err.message);
 });
 
 
