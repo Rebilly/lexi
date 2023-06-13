@@ -4,7 +4,7 @@
     "description": "Reports the readability scores for a pull request",
     "author": "Rebilly Inc",
     "repository": "https://github.com/Rebilly/readability-reporter",
-    "main": "lib/main.js",
+    "main": "lib/index.js",
     "scripts": {
         "build": "tsc",
         "test": "jest",
