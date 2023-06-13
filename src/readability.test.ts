@@ -8,7 +8,7 @@ describe('averageObjectProperties', () => {
             {a: 0.7, b: 300},
         ];
         expect(averageObjectProperties(testObjects)).toMatchInlineSnapshot(`
-            Object {
+            {
               "a": 0.6,
               "b": 200,
             }
@@ -88,11 +88,11 @@ Test 2.`
         );
 
         expect(stripped).toMatchInlineSnapshot(`
-"Test 1.
-Click the left button 
-Test 2.
-"
-`);
+            "Test 1.
+            Click the left button 
+            Test 2.
+            "
+        `);
     });
 
     it('should strip js code parts from comment block', () => {
@@ -109,10 +109,10 @@ Some content. This is paragraph with const items = [];
 `);
 
         expect(stripped).toMatchInlineSnapshot(`
-"
-Some content. This is paragraph with const items = \\\\[];
-"
-`);
+            "
+            Some content. This is paragraph with const items = \\[];
+            "
+        `);
     });
 
     it('should remove manual linebreaks', () => {

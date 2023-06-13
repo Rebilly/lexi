@@ -1,19 +1,38 @@
 import {FILE_STATUS} from './constants';
+import {FileStatuses} from './github';
+import {
+    ReadabilityResults,
+    ReadabilityScores,
+    SingleReadabilityResult,
+} from './readability';
 
 // Return a new object where every key is the diff
 // between the objects. For example:
 // diffScores({a: 1, b: 10}, {a: 3, b:10})
 // returns: {a:2, b:0}
-function diffScores(newResult, oldResult) {
+function diffScores(
+    newResult: ReadabilityScores,
+    oldResult: ReadabilityScores
+): ReadabilityScores {
+    // @ts-ignore
     return Object.keys(newResult).reduce((acc, key) => {
+        // @ts-ignore
         acc[key] = newResult[key] - oldResult[key];
         return acc;
     }, {});
 }
 
+export type SingleReadabilityResultWithDiff = SingleReadabilityResult & {
+    diff: ReadabilityScores | null;
+};
+
 // Adds a diff property to each result object, showing an increase
 // or decrease in each score
-function addDiffToResults(newResults, oldResults, renamedFiles = []) {
+function addDiffToResults(
+    newResults: SingleReadabilityResult[],
+    oldResults: SingleReadabilityResult[],
+    renamedFiles: FileStatuses['renamed'] = []
+): SingleReadabilityResultWithDiff[] {
     return newResults.map((newResult) => {
         const oldName =
             renamedFiles.find((file) => file.to === newResult.name)?.from ??
@@ -36,7 +55,10 @@ function addDiffToResults(newResults, oldResults, renamedFiles = []) {
 
 // Adds a status property to each result object, showing
 // if that file was added or modified in this PR
-function addFileStatusToResults(results, {added, modified}) {
+function addFileStatusToResults(
+    results: SingleReadabilityResultWithDiff[],
+    {added, modified}: FileStatuses
+) {
     return results.map((result) => {
         let status = null;
         if (added.includes(result.name)) {
@@ -52,14 +74,26 @@ function addFileStatusToResults(results, {added, modified}) {
     });
 }
 
+export type ReadabilityReportFileResult = {
+    status: string | null;
+    name: string;
+    scores: ReadabilityScores;
+    diff: ReadabilityScores | null;
+};
+
+export type ReadabilityReport = {
+    fileResults: ReadabilityReportFileResult[];
+    averageResult: SingleReadabilityResultWithDiff[];
+};
+
 // Creates a report object using the old and new readability
 // scores and files statuses. The report has extra details such
 // as the difference between the old and the new values.
-export const generateReport = ({
-    newReadability,
-    oldReadability,
-    fileStatuses,
-}) => {
+export const generateReport = (
+    newReadability: ReadabilityResults,
+    oldReadability: ReadabilityResults,
+    fileStatuses: FileStatuses
+): ReadabilityReport => {
     const filesWithDiff = addDiffToResults(
         newReadability.fileResults,
         oldReadability.fileResults,

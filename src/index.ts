@@ -7,7 +7,12 @@ import {generateReport} from './report';
 import {reportToComment} from './markdown';
 
 const main = async () => {
-    const {context = {}} = github || {};
+    const {context} = github;
+
+    if (!context.payload.pull_request || !context.payload.repository) {
+        core.setFailed('This action can only be run on pull requests');
+        return;
+    }
 
     // action parameters
     const token = core.getInput('github-token');
@@ -29,17 +34,9 @@ const main = async () => {
     await exec.exec(`git checkout ${headBranchRef}`);
     const newReadability = calculateReadability(glob);
 
-    const fileStatuses = await getFileStatusesFromPR({
-        client,
-        context,
-        prNumber,
-    });
+    const fileStatuses = await getFileStatusesFromPR(client, context, prNumber);
 
-    const report = generateReport({
-        newReadability,
-        oldReadability,
-        fileStatuses,
-    });
+    const report = generateReport(newReadability, oldReadability, fileStatuses);
 
     // Only post a comment if there are results from markdown files
     // changed in this PR
@@ -47,15 +44,15 @@ const main = async () => {
         const repository = context.payload.repository.full_name;
         const commit = context.payload.pull_request.head.sha;
 
-        const body = reportToComment({report, repository, commit});
+        const body = reportToComment(report, repository, commit);
 
-        await upsertComment({
+        await upsertComment(
             client,
             context,
-            prNumber: context.payload.pull_request.number,
+            context.payload.pull_request.number,
             body,
-            hiddenHeader: `<!-- ${glob}-code-coverage-assistant -->`,
-        });
+            `<!-- ${glob}-code-coverage-assistant -->`
+        );
     }
 };
 
