@@ -123,40 +123,47 @@ const readability_1 = __nccwpck_require__(1212);
 const report_1 = __nccwpck_require__(8269);
 const markdown_1 = __nccwpck_require__(5821);
 const main = () => __awaiter(void 0, void 0, void 0, function* () {
-    if (!github_1.context.payload.pull_request || !github_1.context.payload.repository) {
-        core.setFailed('This action can only be run on pull requests');
-        return;
+    try {
+        if (!github_1.context.payload.pull_request || !github_1.context.payload.repository) {
+            core.setFailed('This action can only be run on pull requests');
+            return;
+        }
+        // action parameters
+        const token = core.getInput('github-token');
+        const glob = core.getInput('glob');
+        const baseBranchRef = github_1.context.payload.pull_request.base.ref;
+        const headBranchRef = github_1.context.payload.pull_request.head.ref;
+        const prNumber = github_1.context.payload.pull_request.number;
+        const client = (0, github_1.getOctokit)(token);
+        // Run readability on base branch
+        yield exec.exec(`git fetch origin ${baseBranchRef}`);
+        yield exec.exec(`git checkout ${baseBranchRef}`);
+        const oldReadability = (0, readability_1.calculateReadability)(glob);
+        // Run readability on head branch
+        yield exec.exec(`git fetch origin ${headBranchRef}`);
+        yield exec.exec(`git checkout ${headBranchRef}`);
+        const newReadability = (0, readability_1.calculateReadability)(glob);
+        const fileStatuses = yield (0, github_2.getFileStatusesFromPR)(client, github_1.context, prNumber);
+        const report = (0, report_1.generateReport)(newReadability, oldReadability, fileStatuses);
+        // Only post a comment if there are results from markdown files
+        // changed in this PR
+        if (report.fileResults.length) {
+            const repository = github_1.context.payload.repository.full_name;
+            const commit = github_1.context.payload.pull_request.head.sha;
+            const body = (0, markdown_1.reportToComment)(report, repository, commit);
+            yield (0, github_2.upsertComment)(client, github_1.context, github_1.context.payload.pull_request.number, body, `<!-- ${glob}-code-coverage-assistant -->`);
+        }
     }
-    // action parameters
-    const token = core.getInput('github-token');
-    const glob = core.getInput('glob');
-    const baseBranchRef = github_1.context.payload.pull_request.base.ref;
-    const headBranchRef = github_1.context.payload.pull_request.head.ref;
-    const prNumber = github_1.context.payload.pull_request.number;
-    const client = (0, github_1.getOctokit)(token);
-    // Run readability on base branch
-    yield exec.exec(`git fetch origin ${baseBranchRef}`);
-    yield exec.exec(`git checkout ${baseBranchRef}`);
-    const oldReadability = (0, readability_1.calculateReadability)(glob);
-    // Run readability on head branch
-    yield exec.exec(`git fetch origin ${headBranchRef}`);
-    yield exec.exec(`git checkout ${headBranchRef}`);
-    const newReadability = (0, readability_1.calculateReadability)(glob);
-    const fileStatuses = yield (0, github_2.getFileStatusesFromPR)(client, github_1.context, prNumber);
-    const report = (0, report_1.generateReport)(newReadability, oldReadability, fileStatuses);
-    // Only post a comment if there are results from markdown files
-    // changed in this PR
-    if (report.fileResults.length) {
-        const repository = github_1.context.payload.repository.full_name;
-        const commit = github_1.context.payload.pull_request.head.sha;
-        const body = (0, markdown_1.reportToComment)(report, repository, commit);
-        yield (0, github_2.upsertComment)(client, github_1.context, github_1.context.payload.pull_request.number, body, `<!-- ${glob}-code-coverage-assistant -->`);
+    catch (error) {
+        if (error instanceof Error) {
+            core.setFailed(`Action failed with error: ${error.message}`);
+        }
+        else {
+            core.setFailed(`Action failed.`);
+        }
     }
 });
-main().catch((err) => {
-    console.log(err);
-    core.setFailed(err.message);
-});
+main();
 
 
 /***/ }),
