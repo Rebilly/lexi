@@ -31,7 +31,7 @@ const scores = computed(() => {
 <template>
     <div class="row">
         <div class="column">
-            <h1>Readability Playground</h1>
+            <h1>Readability playground</h1>
         </div>
     </div>
     <div class="row">
