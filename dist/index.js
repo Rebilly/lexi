@@ -397,6 +397,28 @@ const strip_markdown_1 = __importDefault(__nccwpck_require__(1771));
 const remark_1 = __importDefault(__nccwpck_require__(8920));
 const unist_util_visit_1 = __importDefault(__nccwpck_require__(199));
 const text_readability_1 = __importDefault(__nccwpck_require__(8797));
+const METRIC_RANGES = {
+    fleschReadingEase: {
+        min: 0,
+        max: 100,
+    },
+    gunningFog: {
+        min: 19,
+        max: 6,
+    },
+    automatedReadabilityIndex: {
+        min: 22,
+        max: 6,
+    },
+    daleChallReadabilityScore: {
+        min: 11,
+        max: 4.9,
+    },
+    colemanLiauIndex: {
+        min: 19,
+        max: 6,
+    },
+};
 // Remark plugin to remove headings.
 // Generally our headings are short and do not contribute in a
 // meaningful way to our readability scores
@@ -516,35 +538,13 @@ function scoreText(text) {
 exports.scoreText = scoreText;
 // Returns each score normalized to a value between 0 and 1
 function normalizeScores(scores) {
-    const ranges = {
-        fleschReadingEase: {
-            min: 0,
-            max: 100,
-        },
-        gunningFog: {
-            min: 19,
-            max: 6,
-        },
-        automatedReadabilityIndex: {
-            min: 22,
-            max: 6,
-        },
-        daleChallReadabilityScore: {
-            min: 11,
-            max: 4.9,
-        },
-        colemanLiauIndex: {
-            min: 19,
-            max: 6,
-        },
-    };
     const normalize = (range, value) => (value - range.min) / (range.max - range.min);
     return {
-        fleschReadingEase: normalize(ranges.fleschReadingEase, scores.fleschReadingEase),
-        gunningFog: normalize(ranges.gunningFog, scores.gunningFog),
-        automatedReadabilityIndex: normalize(ranges.automatedReadabilityIndex, scores.automatedReadabilityIndex),
-        daleChallReadabilityScore: normalize(ranges.daleChallReadabilityScore, scores.daleChallReadabilityScore),
-        colemanLiauIndex: normalize(ranges.colemanLiauIndex, scores.colemanLiauIndex),
+        fleschReadingEase: normalize(METRIC_RANGES.fleschReadingEase, scores.fleschReadingEase),
+        gunningFog: normalize(METRIC_RANGES.gunningFog, scores.gunningFog),
+        automatedReadabilityIndex: normalize(METRIC_RANGES.automatedReadabilityIndex, scores.automatedReadabilityIndex),
+        daleChallReadabilityScore: normalize(METRIC_RANGES.daleChallReadabilityScore, scores.daleChallReadabilityScore),
+        colemanLiauIndex: normalize(METRIC_RANGES.colemanLiauIndex, scores.colemanLiauIndex),
     };
 }
 function calculateReadabilityScore(normalizedScores) {
@@ -589,6 +589,15 @@ function preprocessMarkdown(markdown) {
 }
 exports.preprocessMarkdown = preprocessMarkdown;
 function calculateReadabilityOfText(text) {
+    if (text.length === 0)
+        return {
+            readabilityScore: 0,
+            fleschReadingEase: METRIC_RANGES.fleschReadingEase.min,
+            gunningFog: METRIC_RANGES.gunningFog.min,
+            automatedReadabilityIndex: METRIC_RANGES.automatedReadabilityIndex.min,
+            daleChallReadabilityScore: METRIC_RANGES.daleChallReadabilityScore.min,
+            colemanLiauIndex: METRIC_RANGES.colemanLiauIndex.min,
+        };
     const stripped = preprocessMarkdown(String(text));
     const scores = scoreText(stripped);
     const normalized = normalizeScores(scores);

@@ -4,6 +4,29 @@ import visit from 'unist-util-visit';
 import readability from 'text-readability';
 import {Plugin} from 'unified';
 
+const METRIC_RANGES = {
+    fleschReadingEase: {
+        min: 0,
+        max: 100,
+    },
+    gunningFog: {
+        min: 19,
+        max: 6,
+    },
+    automatedReadabilityIndex: {
+        min: 22,
+        max: 6,
+    },
+    daleChallReadabilityScore: {
+        min: 11,
+        max: 4.9,
+    },
+    colemanLiauIndex: {
+        min: 19,
+        max: 6,
+    },
+};
+
 type ThirdPartyReadabilityScores = {
     fleschReadingEase: number;
     gunningFog: number;
@@ -149,48 +172,25 @@ export function scoreText(text: string) {
 function normalizeScores(
     scores: ThirdPartyReadabilityScores
 ): ThirdPartyReadabilityScores {
-    const ranges = {
-        fleschReadingEase: {
-            min: 0,
-            max: 100,
-        },
-        gunningFog: {
-            min: 19,
-            max: 6,
-        },
-        automatedReadabilityIndex: {
-            min: 22,
-            max: 6,
-        },
-        daleChallReadabilityScore: {
-            min: 11,
-            max: 4.9,
-        },
-        colemanLiauIndex: {
-            min: 19,
-            max: 6,
-        },
-    };
-
     const normalize = (range: {min: number; max: number}, value: number) =>
         (value - range.min) / (range.max - range.min);
 
     return {
         fleschReadingEase: normalize(
-            ranges.fleschReadingEase,
+            METRIC_RANGES.fleschReadingEase,
             scores.fleschReadingEase
         ),
-        gunningFog: normalize(ranges.gunningFog, scores.gunningFog),
+        gunningFog: normalize(METRIC_RANGES.gunningFog, scores.gunningFog),
         automatedReadabilityIndex: normalize(
-            ranges.automatedReadabilityIndex,
+            METRIC_RANGES.automatedReadabilityIndex,
             scores.automatedReadabilityIndex
         ),
         daleChallReadabilityScore: normalize(
-            ranges.daleChallReadabilityScore,
+            METRIC_RANGES.daleChallReadabilityScore,
             scores.daleChallReadabilityScore
         ),
         colemanLiauIndex: normalize(
-            ranges.colemanLiauIndex,
+            METRIC_RANGES.colemanLiauIndex,
             scores.colemanLiauIndex
         ),
     };
@@ -247,6 +247,18 @@ export function preprocessMarkdown(markdown: string) {
 }
 
 export function calculateReadabilityOfText(text: string): ReadabilityScores {
+    if (text.length === 0)
+        return {
+            readabilityScore: 0,
+            fleschReadingEase: METRIC_RANGES.fleschReadingEase.min,
+            gunningFog: METRIC_RANGES.gunningFog.min,
+            automatedReadabilityIndex:
+                METRIC_RANGES.automatedReadabilityIndex.min,
+            daleChallReadabilityScore:
+                METRIC_RANGES.daleChallReadabilityScore.min,
+            colemanLiauIndex: METRIC_RANGES.colemanLiauIndex.min,
+        };
+
     const stripped = preprocessMarkdown(String(text));
     const scores = scoreText(stripped);
     const normalized = normalizeScores(scores);
