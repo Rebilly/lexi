@@ -4,7 +4,11 @@ import visit from 'unist-util-visit';
 import readability from 'text-readability';
 import {Plugin} from 'unified';
 
-const METRIC_RANGES = {
+export const METRIC_RANGES = {
+    readabilityScore: {
+        min: 0,
+        max: 100,
+    },
     fleschReadingEase: {
         min: 0,
         max: 100,
@@ -159,9 +163,7 @@ export function scoreText(text: string) {
     return {
         fleschReadingEase: readability.fleschReadingEase(text),
         gunningFog: readability.gunningFog(text),
-        smogIndex: readability.smogIndex(text),
         automatedReadabilityIndex: readability.automatedReadabilityIndex(text),
-        linsearWriteFormula: readability.linsearWriteFormula(text),
         daleChallReadabilityScore: readability.daleChallReadabilityScore(text),
         // The CLI index can be NaN for some texts, so ensure it's 0
         colemanLiauIndex: Number.isNaN(colemanLiauIndex) ? 0 : colemanLiauIndex,

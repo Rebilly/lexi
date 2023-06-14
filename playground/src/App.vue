@@ -3,12 +3,28 @@ import {ref, computed} from 'vue';
 import {Codemirror} from 'vue-codemirror';
 import {markdown} from '@codemirror/lang-markdown';
 import {oneDark} from '@codemirror/theme-one-dark';
-import {calculateReadabilityOfText} from '../../src/readability.ts';
+import {
+    calculateReadabilityOfText,
+    METRIC_RANGES,
+} from '../../src/readability.ts';
+import SingleScore from './components/SingleScore.vue';
 
 const codeMirrorExtensions = [markdown(), oneDark];
 const input = ref('');
 const scores = computed(() => {
-    return calculateReadabilityOfText(input.value);
+    const rawScores = calculateReadabilityOfText(input.value);
+    return Object.entries(rawScores).map(([name, value]) => {
+        const {min, max} = METRIC_RANGES[name as keyof typeof METRIC_RANGES];
+        return {
+            // convert from namesLikeThis to Names Like This
+            name: name
+                .replace(/([A-Z])/g, ' $1')
+                .replace(/^./, (str) => str.toUpperCase()),
+            min,
+            max,
+            value,
+        };
+    });
 });
 </script>
 
@@ -30,34 +46,32 @@ const scores = computed(() => {
                 :extensions="codeMirrorExtensions"
             />
         </div>
-        <div class="column size-30">
+        <div class="column size-30 auto-margin">
             <div class="scores">
-                {{ scores }}
+                <SingleScore
+                    v-for="score in scores"
+                    :key="score.name"
+                    :name="score.name"
+                    :min="score.min"
+                    :max="score.max"
+                    :value="score.value"
+                />
             </div>
         </div>
     </div>
 </template>
 
-<style>
-.row {
-    display: flex;
-    flex-direction: row;
-    flex-wrap: wrap;
-    width: 100%;
-}
-.column {
-    display: flex;
-    flex-direction: column;
-    flex-basis: 100%;
-    padding: 25px;
-}
-.size-70 {
-    flex-basis: 60%;
-}
-.size-30 {
-    flex-basis: 25%;
-}
+<style scoped>
 .editor {
-  max-width: 60%;
+    max-width: 60%;
+}
+
+.auto-margin {
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.scores > * {
+  margin-bottom: 16px;
 }
 </style>
