@@ -53,9 +53,7 @@ const progress = computed(() => {
 .progress-bar {
     width: 100%;
     height: 15px;
-    /* background-color: #e0e0de; */
     border: 1px solid #e0e0de;
-    /* border-color: #4caf50; */
     border-radius: 10px;
     overflow: hidden;
 }

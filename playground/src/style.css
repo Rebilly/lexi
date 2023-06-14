@@ -28,15 +28,18 @@ body {
   flex-wrap: wrap;
   width: 100%;
 }
+
 .column {
   display: flex;
   flex-direction: column;
   flex-basis: 100%;
   padding: 25px;
 }
+
 .size-70 {
   flex-basis: 60%;
 }
+
 .size-30 {
   flex-basis: 25%;
 }
