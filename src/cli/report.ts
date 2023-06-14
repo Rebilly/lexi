@@ -1,7 +1,7 @@
 import path from 'path';
 import glob from 'glob';
 import {Command} from 'commander';
-import {calculateReadability} from '../readability';
+import {calculateReadability} from '../readability-files';
 import {generateReport} from '../report';
 import {reportToComment} from '../markdown';
 

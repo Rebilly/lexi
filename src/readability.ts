@@ -1,7 +1,5 @@
-import fs from 'fs';
 import strip from 'strip-markdown';
 import remark from 'remark';
-import glob from 'glob';
 import visit from 'unist-util-visit';
 import readability from 'text-readability';
 import {Plugin} from 'unified';
@@ -17,16 +15,6 @@ type ThirdPartyReadabilityScores = {
 export type ReadabilityScores = {
     readabilityScore: number;
 } & ThirdPartyReadabilityScores;
-
-export type SingleReadabilityResult = {
-    name: string;
-    scores: ReadabilityScores;
-};
-
-export type ReadabilityResults = {
-    fileResults: SingleReadabilityResult[];
-    averageResult: SingleReadabilityResult[];
-};
 
 // Remark plugin to remove headings.
 // Generally our headings are short and do not contribute in a
@@ -233,30 +221,6 @@ function calculateReadabilityScore(
     return 100 * normalizedReadabilityScore;
 }
 
-// Calculates the average of a particular property value, given an array of objects
-function calcAverage(
-    arrayOfObjects: Record<string, number>[],
-    accessorFn: (value: Record<string, number>) => number
-) {
-    return (
-        arrayOfObjects.reduce(
-            (acc: number, value) => acc + accessorFn(value),
-            0
-        ) / arrayOfObjects.length
-    );
-}
-
-// Returns a score object containing the averages, given an array of scores
-export function averageObjectProperties(objects: Record<string, number>[]) {
-    return Object.keys(objects[0]).reduce(
-        (acc: Record<string, number>, key) => {
-            acc[key] = calcAverage(objects, (object) => object[key]);
-            return acc;
-        },
-        {}
-    );
-}
-
 // Take our markdown text and clean and process it to the final
 // text we want to analyze.
 export function preprocessMarkdown(markdown: string) {
@@ -282,39 +246,14 @@ export function preprocessMarkdown(markdown: string) {
     );
 }
 
-// Calculate the readabilty result for all files found in a given path glob.
-// This result contains readability scores for each file, and an overall average
-export function calculateReadability(globPath: string): ReadabilityResults {
-    const filePaths = glob.sync(globPath);
-
-    const fileResults = filePaths.map((filePath) => {
-        const markdown = fs.readFileSync(filePath);
-        const stripped = preprocessMarkdown(String(markdown));
-        const scores = scoreText(stripped);
-        const normalized = normalizeScores(scores);
-        const readabilityScore = calculateReadabilityScore(normalized);
-
-        return {
-            name: filePath,
-            scores: {
-                readabilityScore,
-                ...scores,
-            },
-        };
-    });
-
-    const averageResult = [
-        {
-            name: 'Average',
-            scores: averageObjectProperties(
-                fileResults.map((result) => result.scores)
-            ),
-        },
-    ];
+export function calculateReadabilityOfText(text: string): ReadabilityScores {
+    const stripped = preprocessMarkdown(String(text));
+    const scores = scoreText(stripped);
+    const normalized = normalizeScores(scores);
+    const readabilityScore = calculateReadabilityScore(normalized);
 
     return {
-        fileResults,
-        // @ts-ignore
-        averageResult,
+        readabilityScore,
+        ...scores,
     };
 }

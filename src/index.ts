@@ -2,7 +2,7 @@ import * as core from '@actions/core';
 import {context, getOctokit} from '@actions/github';
 import * as exec from '@actions/exec';
 import {upsertComment, getFileStatusesFromPR} from './github';
-import {calculateReadability} from './readability';
+import {calculateReadability} from './readability-files';
 import {generateReport} from './report';
 import {reportToComment} from './markdown';
 
