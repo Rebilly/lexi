@@ -142,7 +142,7 @@ const removeJsItems: Plugin = () => (tree) => {
 };
 
 // Returns scores for a given string
-function scoreText(text: string) {
+export function scoreText(text: string) {
     const colemanLiauIndex = readability.colemanLiauIndex(text);
 
     return {
