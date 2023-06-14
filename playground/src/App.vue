@@ -1,30 +1,49 @@
 <script setup lang="ts">
-import HelloWorld from './components/HelloWorld.vue'
+import { ref, computed} from "vue";
+import { Codemirror } from 'vue-codemirror'
+import { markdown } from '@codemirror/lang-markdown'
+import { oneDark } from '@codemirror/theme-one-dark'
+import { calculateReadabilityOfText } from '../../src/readability.ts';
+
+const codeMirrorExtensions = [markdown(), oneDark]
+const input = ref('');
+const scores = computed(() => {
+  return calculateReadabilityOfText(input.value);
+});
 </script>
 
 <template>
-  <div>
-    <a href="https://vitejs.dev" target="_blank">
-      <img src="/vite.svg" class="logo" alt="Vite logo" />
-    </a>
-    <a href="https://vuejs.org/" target="_blank">
-      <img src="./assets/vue.svg" class="logo vue" alt="Vue logo" />
-    </a>
+  <div class="root">
+    <div class="editor">
+      <codemirror
+        v-model="input"
+        placeholder="Code goes here..."
+        :style="{ height: '400px' }"
+        :autofocus="true"
+        :indent-with-tab="true"
+        :tab-size="2"
+        :extensions="codeMirrorExtensions"
+      />
+    </div>
+    <div class="scores">
+      {{ scores }}
+    </div>
   </div>
-  <HelloWorld msg="Vite + Vue" />
 </template>
 
-<style scoped>
-.logo {
-  height: 6em;
-  padding: 1.5em;
-  will-change: filter;
-  transition: filter 300ms;
+<style>
+.root {
+  display: flex;
+  flex-grow: 1;
+  padding: 100px;
 }
-.logo:hover {
-  filter: drop-shadow(0 0 2em #646cffaa);
+
+.editor {
+  flex-grow: 1;
+  margin-right: 20px;
 }
-.logo.vue:hover {
-  filter: drop-shadow(0 0 2em #42b883aa);
+
+.scores {
+  width: 400px;
 }
 </style>

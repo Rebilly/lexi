@@ -29,12 +29,15 @@
         "unist-util-visit": "2.0.3"
     },
     "devDependencies": {
+        "@codemirror/lang-markdown": "^6.1.1",
+        "@codemirror/theme-one-dark": "^6.1.2",
         "@types/glob": "^8.1.0",
         "@types/jest": "^29.5.2",
         "@types/node": "^20.2.5",
         "@typescript-eslint/parser": "^5.59.8",
         "@vercel/ncc": "^0.36.1",
         "@vitejs/plugin-vue": "^4.2.3",
+        "codemirror": "^6.0.1",
         "commander": "^9.4.0",
         "eslint": "^8.42.0",
         "eslint-plugin-github": "^4.8.0",
@@ -48,6 +51,7 @@
         "vite": "^4.3.9",
         "vite-plugin-mkcert": "^1.15.0",
         "vue": "^3.3.4",
+        "vue-codemirror": "^6.1.1",
         "vue-tsc": "^1.6.5"
     },
     "prettier": {
