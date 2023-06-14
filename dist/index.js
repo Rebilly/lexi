@@ -392,12 +392,16 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", ({ value: true }));
-exports.calculateReadabilityOfText = exports.preprocessMarkdown = exports.scoreText = void 0;
+exports.calculateReadabilityOfText = exports.preprocessMarkdown = exports.scoreText = exports.METRIC_RANGES = void 0;
 const strip_markdown_1 = __importDefault(__nccwpck_require__(1771));
 const remark_1 = __importDefault(__nccwpck_require__(8920));
 const unist_util_visit_1 = __importDefault(__nccwpck_require__(199));
 const text_readability_1 = __importDefault(__nccwpck_require__(8797));
-const METRIC_RANGES = {
+exports.METRIC_RANGES = {
+    readabilityScore: {
+        min: 0,
+        max: 100,
+    },
     fleschReadingEase: {
         min: 0,
         max: 100,
@@ -527,9 +531,7 @@ function scoreText(text) {
     return {
         fleschReadingEase: text_readability_1.default.fleschReadingEase(text),
         gunningFog: text_readability_1.default.gunningFog(text),
-        smogIndex: text_readability_1.default.smogIndex(text),
         automatedReadabilityIndex: text_readability_1.default.automatedReadabilityIndex(text),
-        linsearWriteFormula: text_readability_1.default.linsearWriteFormula(text),
         daleChallReadabilityScore: text_readability_1.default.daleChallReadabilityScore(text),
         // The CLI index can be NaN for some texts, so ensure it's 0
         colemanLiauIndex: Number.isNaN(colemanLiauIndex) ? 0 : colemanLiauIndex,
@@ -540,11 +542,11 @@ exports.scoreText = scoreText;
 function normalizeScores(scores) {
     const normalize = (range, value) => (value - range.min) / (range.max - range.min);
     return {
-        fleschReadingEase: normalize(METRIC_RANGES.fleschReadingEase, scores.fleschReadingEase),
-        gunningFog: normalize(METRIC_RANGES.gunningFog, scores.gunningFog),
-        automatedReadabilityIndex: normalize(METRIC_RANGES.automatedReadabilityIndex, scores.automatedReadabilityIndex),
-        daleChallReadabilityScore: normalize(METRIC_RANGES.daleChallReadabilityScore, scores.daleChallReadabilityScore),
-        colemanLiauIndex: normalize(METRIC_RANGES.colemanLiauIndex, scores.colemanLiauIndex),
+        fleschReadingEase: normalize(exports.METRIC_RANGES.fleschReadingEase, scores.fleschReadingEase),
+        gunningFog: normalize(exports.METRIC_RANGES.gunningFog, scores.gunningFog),
+        automatedReadabilityIndex: normalize(exports.METRIC_RANGES.automatedReadabilityIndex, scores.automatedReadabilityIndex),
+        daleChallReadabilityScore: normalize(exports.METRIC_RANGES.daleChallReadabilityScore, scores.daleChallReadabilityScore),
+        colemanLiauIndex: normalize(exports.METRIC_RANGES.colemanLiauIndex, scores.colemanLiauIndex),
     };
 }
 function calculateReadabilityScore(normalizedScores) {
@@ -592,11 +594,11 @@ function calculateReadabilityOfText(text) {
     if (text.length === 0)
         return {
             readabilityScore: 0,
-            fleschReadingEase: METRIC_RANGES.fleschReadingEase.min,
-            gunningFog: METRIC_RANGES.gunningFog.min,
-            automatedReadabilityIndex: METRIC_RANGES.automatedReadabilityIndex.min,
-            daleChallReadabilityScore: METRIC_RANGES.daleChallReadabilityScore.min,
-            colemanLiauIndex: METRIC_RANGES.colemanLiauIndex.min,
+            fleschReadingEase: exports.METRIC_RANGES.fleschReadingEase.min,
+            gunningFog: exports.METRIC_RANGES.gunningFog.min,
+            automatedReadabilityIndex: exports.METRIC_RANGES.automatedReadabilityIndex.min,
+            daleChallReadabilityScore: exports.METRIC_RANGES.daleChallReadabilityScore.min,
+            colemanLiauIndex: exports.METRIC_RANGES.colemanLiauIndex.min,
         };
     const stripped = preprocessMarkdown(String(text));
     const scores = scoreText(stripped);
