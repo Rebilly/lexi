@@ -1,19 +1,31 @@
 <script setup lang="ts">
-import { computed } from 'vue';
+import {computed} from 'vue';
 
-const props = defineProps<{name: string; min: number; max: number; value: number}>();
+const props = defineProps<{
+    name: string;
+    description: string;
+    min: number;
+    max: number;
+    value: number;
+}>();
 
 const progress = computed(() => {
-  const range = props.max - props.min;
-  return ((props.value - props.min) / range) * 100;
+    const range = props.max - props.min;
+    return ((props.value - props.min) / range) * 100;
 });
 </script>
 
 <template>
     <div>
         <div class="name-row">
-          <span>{{ name }}</span>
-          <span>{{ value.toFixed(2) }}</span>
+            <span
+                >{{ name
+                }}<r-icon
+                    v-tooltip="{text: description}"
+                    icon="info"
+                    color="on-surface"
+            /></span>
+            <span>{{ value.toFixed(2) }}</span>
         </div>
         <div class="bar-container">
             <span>{{ min }}</span>
@@ -30,8 +42,8 @@ const progress = computed(() => {
 
 <style scoped>
 .name-row {
-  display: flex;
-  justify-content: space-between;
+    display: flex;
+    justify-content: space-between;
 }
 
 .bar-container {
@@ -45,9 +57,9 @@ const progress = computed(() => {
 }
 
 .bar-container span {
-  width: 50px;
-  text-align: center;
-  font-size: 0.8em;
+    width: 50px;
+    text-align: center;
+    font-size: 0.8em;
 }
 
 .progress-bar {
@@ -61,5 +73,11 @@ const progress = computed(() => {
     height: 100%;
     background-color: rgb(0, 68, 212);
     border-radius: 10px;
+}
+
+.r-icon {
+    margin-left: 6px;
+    width: 16px;
+    fill: rgba(255, 255, 255, 0.87);
 }
 </style>

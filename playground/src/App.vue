@@ -8,6 +8,7 @@ import {
     METRIC_RANGES,
 } from '../../src/readability.ts';
 import SingleScore from './components/SingleScore.vue';
+import {metricToDescription} from './metric-descriptions'
 
 const codeMirrorExtensions = [markdown(), oneDark];
 const input = ref('');
@@ -23,6 +24,7 @@ const scores = computed(() => {
             min,
             max,
             value,
+            description: metricToDescription[name as keyof typeof metricToDescription]
         };
     });
 });
@@ -55,6 +57,7 @@ const scores = computed(() => {
                     :min="score.min"
                     :max="score.max"
                     :value="score.value"
+                    :description="score.description"
                 />
             </div>
         </div>
@@ -67,11 +70,11 @@ const scores = computed(() => {
 }
 
 .auto-margin {
-  margin-left: auto;
-  margin-right: auto;
+    margin-left: auto;
+    margin-right: auto;
 }
 
 .scores > * {
-  margin-bottom: 16px;
+    margin-bottom: 16px;
 }
 </style>
