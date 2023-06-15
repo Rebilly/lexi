@@ -9,7 +9,7 @@ export const metricToDescription = {
       The lower the score, the easier the text is to read.`,
     colemanLiauIndex: `The Coleman-Liau index is a number that represents the grade level 
       required to understand a text. It is calculated based on the average number of 
-      characters per word and sentences per word. The lower the score, the easier the text is to read.`,
+      characters per word and sentences per paragraph. The lower the score, the easier the text is to read.`,
     automatedReadabilityIndex: `The automated readability index is a number that represents the grade level 
       required to understand a text. It is calculated based on the average number of 
       characters per word and words per sentence. The lower the score, the easier the text is to read.`,
