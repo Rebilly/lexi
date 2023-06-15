@@ -88,12 +88,13 @@ jobs:
 
 | command     | description                                                                                                                                                                                                                                     |
 | ----------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `test`      | Run the unit tests                                                                                                                                                                                                                              |
-| `lint`      | Run eslint on all files                                                                                                                                                                                                                         |
-| `format`    | Run prettier on all files                                                                                                                                                                                                                       |
+| `test`      | Run the unit tests.                                                                                                                                                                                                                             |
+| `lint`      | Run eslint on all files.                                                                                                                                                                                                                        |
+| `format`    | Run prettier on all files.                                                                                                                                                                                                                      |
 | `build`     | build the dist file. You are required to run this locally in order to build the dist before opening a PR.                                                                                                                                       |
-| `run:local:report` | Run the action on two local folders, for testing and development. The first argument is the old ("base branch") folder and the sedcond argument is the new ("head branch") folder. For example `yarn run:local:report ./test-data/old ./test-data/new` |
-| `run:local:debugfile` | Show what the program parses from a single file, after stripping all non-wanted items from the file, and before rating the readability. For example `yarn run:local:debugfile ./test-data/new/test-document.md` |
+| `run:local:report` | Run the action on two local folders, for testing and development. The first argument is the old ("base branch") folder and the sedcond argument is the new ("head branch") folder. For example `yarn run:local:report ./test-data/old ./test-data/new`. |
+| `run:local:debugfile` | Show what the program parses from a single file, after stripping all non-wanted items from the file, and before rating the readability. For example `yarn run:local:debugfile ./test-data/new/test-document.md`. |
+| `playground:dev` | Open the playground in local development mode for testing readability scores. |
 
 ### Testing
 

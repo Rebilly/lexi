@@ -1,10 +1,7 @@
 import {FILE_STATUS} from './constants';
 import {FileStatuses} from './github';
-import {
-    ReadabilityResults,
-    ReadabilityScores,
-    SingleReadabilityResult,
-} from './readability';
+import {ReadabilityScores} from './readability';
+import {ReadabilityResults, SingleReadabilityResult} from './readability-files';
 
 export type SingleReadabilityResultWithDiff = SingleReadabilityResult & {
     diff: ReadabilityScores | null;
