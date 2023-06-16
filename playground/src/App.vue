@@ -4,14 +4,22 @@ import {Codemirror} from 'vue-codemirror';
 import {markdown} from '@codemirror/lang-markdown';
 import {oneDark} from '@codemirror/theme-one-dark';
 import {
+    preprocessMarkdown,
     calculateReadabilityOfText,
     METRIC_RANGES,
 } from '../../src/readability.ts';
 import SingleScore from './components/SingleScore.vue';
-import {metricToDescription} from './metric-descriptions'
+import {metricToDescription} from './metric-descriptions';
 
 const codeMirrorExtensions = [markdown(), oneDark];
+
 const input = ref('');
+const previewProcessedText = ref(false);
+const processedText = computed(() => {
+    return preprocessMarkdown(input.value);
+});
+
+
 const scores = computed(() => {
     const rawScores = calculateReadabilityOfText(input.value);
     return Object.entries(rawScores).map(([name, value]) => {
@@ -24,7 +32,8 @@ const scores = computed(() => {
             min,
             max,
             value,
-            description: metricToDescription[name as keyof typeof metricToDescription]
+            description:
+                metricToDescription[name as keyof typeof metricToDescription],
         };
     });
 });
@@ -38,13 +47,24 @@ const scores = computed(() => {
     </div>
     <div class="row">
         <div class="column editor size-70">
+            <r-toggle
+                label="Preview processed text"
+                v-model="previewProcessedText"
+            />
             <codemirror
-                v-model="input"
-                placeholder="Code goes here..."
+                v-if="previewProcessedText"
+                v-model="processedText"
+                :disabled="true"
                 :style="{height: '400px'}"
                 :autofocus="true"
-                :indent-with-tab="true"
-                :tab-size="2"
+                :extensions="codeMirrorExtensions"
+            />
+            <codemirror
+                v-else
+                v-model="input"
+                :style="{height: '400px'}"
+                :autofocus="true"
+                placeholder="Enter markdown to score here."
                 :extensions="codeMirrorExtensions"
             />
         </div>
@@ -67,6 +87,10 @@ const scores = computed(() => {
 <style scoped>
 .editor {
     max-width: 60%;
+}
+
+.editor > *:not(:last-child) {
+    margin-bottom: 16px;
 }
 
 .auto-margin {

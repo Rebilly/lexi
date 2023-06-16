@@ -43,3 +43,8 @@ body {
 .size-30 {
   flex-basis: 25%;
 }
+
+body .r-toggle-switch-handle {
+  background-color: transparent;
+  border: 1px solid #e0e0de;
+}
