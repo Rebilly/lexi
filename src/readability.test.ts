@@ -108,7 +108,7 @@ out by their writer.
 It should not remove new lines
 that are from different sentences.
 
-Lists of items should not be affected either:
+Lists of items should not be affected either.
 - Here is list item number 1.
 - Here is list item number 2.
 - Here is list item number 3.
@@ -120,7 +120,7 @@ More text after the list.
         expect(stripped).toMatchInlineSnapshot(`
             "This test has lines that are manually spaced out by their writer.
             It should not remove new lines that are from different sentences.
-            Lists of items should not be affected either:
+            Lists of items should not be affected either.
             Here is list item number 1.
             Here is list item number 2.
             Here is list item number 3.
@@ -144,5 +144,11 @@ More text after the list.
             Here is list item number 3.
             "
         `);
+    });
+
+    it('should convert colons to periods', () => {
+        const stripped = preprocessMarkdown('This includes: a colon');
+
+        expect(stripped).toMatchInlineSnapshot(`"This includes. a colon "`);
     });
 });

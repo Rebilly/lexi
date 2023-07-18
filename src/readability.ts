@@ -113,6 +113,17 @@ const removeImageAltText: Plugin = () => (tree) => {
     });
 };
 
+// Convert colons to periods
+const convertColonsToPeriods: Plugin = () => (tree) => {
+    visit(tree, 'text', (textNode) => {
+        // @ts-ignore
+        if (textNode.value.includes(':')) {
+            // @ts-ignore
+            textNode.value = textNode.value.replace(/:/g, '.');
+        }
+    });
+};
+
 // Remark plugin to remove list items that have less than 4 words.
 // For us these tend to be long lists of values, and throws off
 // readability results.
@@ -247,10 +258,11 @@ function calculateReadabilityScore(
 // text we want to analyze.
 export function preprocessMarkdown(markdown: string) {
     const remarker = remark()
+        .use(removeAdmonitionHeadings)
+        .use(convertColonsToPeriods)
         .use(removeShortListItems)
         .use(addPeriodsToListItems)
         .use(removeHeadings)
-        .use(removeAdmonitionHeadings)
         .use(removeImageAltText)
         .use(removeCodeBlocks)
         .use(removePageMetadata)
