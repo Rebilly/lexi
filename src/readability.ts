@@ -136,6 +136,26 @@ const removeShortListItems: Plugin = () => (tree) => {
     });
 };
 
+// Remark plugin to add periods to the end of all list items.
+const addPeriodsToListItems: Plugin = () => (tree) => {
+    visit(tree, 'listItem', (listItemNode) => {
+        visit(listItemNode, 'paragraph', (paragraphNode) => {
+            // Convert list items to plain text (as they can have children of many
+            // different types, such as italics, bold etc)
+            // @ts-ignore
+            strip()(paragraphNode);
+
+            visit(paragraphNode, 'text', (textNode) => {
+                // @ts-ignore
+                if (textNode.value.length && !textNode.value.endsWith('.')) {
+                    // @ts-ignore
+                    textNode.value += '.';
+                }
+            });
+        });
+    });
+};
+
 const removeJsItems: Plugin = () => (tree) => {
     let visitNexParagraph = false;
     visit(tree, 'root', (listItemNode) => {
@@ -228,6 +248,7 @@ function calculateReadabilityScore(
 export function preprocessMarkdown(markdown: string) {
     const remarker = remark()
         .use(removeShortListItems)
+        .use(addPeriodsToListItems)
         .use(removeHeadings)
         .use(removeAdmonitionHeadings)
         .use(removeImageAltText)

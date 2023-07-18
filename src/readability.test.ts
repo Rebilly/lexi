@@ -128,4 +128,21 @@ More text after the list.
             "
         `);
     });
+
+    it('should add periods to the end of list items', () => {
+        const stripped = preprocessMarkdown(
+            `
+- Here is list item number 1
+- Here is list item number 2
+- Here is list item number 3
+`
+        );
+
+        expect(stripped).toMatchInlineSnapshot(`
+            "Here is list item number 1.
+            Here is list item number 2.
+            Here is list item number 3.
+            "
+        `);
+    });
 });
