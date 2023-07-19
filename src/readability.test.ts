@@ -151,4 +151,22 @@ More text after the list.
 
         expect(stripped).toMatchInlineSnapshot(`"This includes. a colon "`);
     });
+
+    it('should convert tables to text and save cells with more than 4 words', () => {
+        const stripped = preprocessMarkdown(
+            `
+|Value | Gateway | Chance of processing a transaction|
+|---|---|---|
+|70 |Gateway A| 70% |
+|15 |Gateway B| 15% |
+|10 |Gateway C| 10% |
+|5 |Gateway D| 5% |            
+`
+        );
+
+        expect(stripped).toMatchInlineSnapshot(`
+          "Chance of processing a transaction.
+          "
+        `);
+    });
 });

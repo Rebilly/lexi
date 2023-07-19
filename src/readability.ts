@@ -1,5 +1,6 @@
 import strip from 'strip-markdown';
-import remark from 'remark';
+import {remark} from 'remark';
+import remarkGfm from 'remark-gfm';
 import visit from 'unist-util-visit';
 import readability from 'text-readability';
 import {Plugin} from 'unified';
@@ -92,7 +93,7 @@ const removePageMetadata: Plugin = () => (tree) => {
                 type === 'thematicBreak' && index > 0
         );
         // @ts-ignore
-        if (node.children[0].type !== 'thematicBreak' || secondBreak < 1) {
+        if (node.children[0]?.type !== 'thematicBreak' || secondBreak < 1) {
             return;
         }
         for (let i = 1; i < secondBreak; i += 1) {
@@ -121,6 +122,44 @@ const convertColonsToPeriods: Plugin = () => (tree) => {
             // @ts-ignore
             textNode.value = textNode.value.replace(/:/g, '.');
         }
+    });
+};
+
+// Iterate through all the table nodes and move their cell contents to the
+// top level parent
+const convertTableToText: Plugin = () => (tree) => {
+    visit(tree, 'table', (tableNode, index, parent) => {
+        const cells: [][] = [];
+        visit(tableNode, 'tableCell', (cellNode) => {
+            // @ts-ignore
+            cells.push([...cellNode.children]);
+        });
+
+        // Add a period to the end of each cell grouping if it doesnt already exsit
+        cells.forEach((cellChildren) => {
+            const lastNode = cellChildren[cellChildren.length - 1];
+            // @ts-ignore
+            if (lastNode.type === 'text' && !lastNode.value.endsWith('.')) {
+                // @ts-ignore
+                lastNode.value += '.';
+            }
+        });
+
+        const replacementNodes = [
+            ...cells.map((cellChildren) => ({
+                type: 'paragraph',
+                children: cellChildren,
+            })),
+        ].filter((node) => {
+            // Remove any cells with < 4 words
+            // @ts-ignore
+            const text = node.children.map(({value}) => value).join(' ');
+            return text.split(' ').length >= 4;
+        });
+
+        // Replace the top level table node with the text nodes
+        // @ts-ignore
+        parent.children.splice(index, 1, replacementNodes);
     });
 };
 
@@ -258,6 +297,8 @@ function calculateReadabilityScore(
 // text we want to analyze.
 export function preprocessMarkdown(markdown: string) {
     const remarker = remark()
+        .use(remarkGfm)
+        .use(convertTableToText)
         .use(removeAdmonitionHeadings)
         .use(convertColonsToPeriods)
         .use(removeShortListItems)
@@ -269,12 +310,12 @@ export function preprocessMarkdown(markdown: string) {
         .use(removeJsItems)
         .use(strip);
 
+    console.log(remarker.parse(markdown));
     return (
         remarker
             .processSync(markdown)
-            .contents // Remove any blank lines
             .toString()
-            .replace(/\n+/g, `\n`)
+            .replace(/\n+/g, `\n`) // Remove any blank lines
             // Remove any new lines that are added for manual word wrapping.
             // Here we just presume these will be preceeded by a normal alphabetical character
             .replace(/([a-zA-Z])\n/g, '$1 ')
