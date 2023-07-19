@@ -72,10 +72,10 @@ Test 2.`
         );
 
         expect(stripped).toMatchInlineSnapshot(`
-            "Test 1.
-            Click the left button 
-            Test 2.
-            "
+          "Test 1.
+          Click the left button&#x20;
+          Test 2.
+          "
         `);
     });
 
@@ -93,9 +93,8 @@ Some content. This is paragraph with const items = [];
 `);
 
         expect(stripped).toMatchInlineSnapshot(`
-            "
-            Some content. This is paragraph with const items = \\[];
-            "
+          "Some content. This is paragraph with const items = \\\\[];
+          "
         `);
     });
 

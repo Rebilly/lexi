@@ -310,7 +310,6 @@ export function preprocessMarkdown(markdown: string) {
         .use(removeJsItems)
         .use(strip);
 
-    console.log(remarker.parse(markdown));
     return (
         remarker
             .processSync(markdown)
