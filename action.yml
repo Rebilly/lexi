@@ -1,5 +1,5 @@
-name: Readability Reporter
-description: Comments readability scores on a pull request
+name: Lexi
+description: Report a readability score for Markdown files in your pull requests
 author: 'Rebilly Inc'
 branding:
   icon: edit
