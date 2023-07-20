@@ -81,6 +81,18 @@ const removeCodeBlocks: Plugin = () => (tree) => {
     });
 };
 
+// Remove URLs in backticks, for example: `https://example.com`
+const removeURLsInBackticks: Plugin = () => (tree) => {
+    visit(tree, 'inlineCode', (node) => {
+        // @ts-ignore
+        // Remove text if the value is a URL
+        if (node.value.match(/https?:\/\/[^\s]+/)) {
+            // @ts-ignore
+            node.value = '';
+        }
+    });
+};
+
 // Remove page metadata between thematic breaks at the begining of the page. For example
 // ---
 // ...
@@ -299,6 +311,7 @@ export function preprocessMarkdown(markdown: string) {
     const remarker = remark()
         .use(remarkGfm)
         .use(convertTableToText)
+        .use(removeURLsInBackticks)
         .use(removeAdmonitionHeadings)
         .use(convertColonsToPeriods)
         .use(removeShortListItems)
