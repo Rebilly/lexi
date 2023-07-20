@@ -72,10 +72,10 @@ Test 2.`
         );
 
         expect(stripped).toMatchInlineSnapshot(`
-            "Test 1.
-            Click the left button 
-            Test 2.
-            "
+          "Test 1.
+          Click the left button&#x20;
+          Test 2.
+          "
         `);
     });
 
@@ -93,9 +93,8 @@ Some content. This is paragraph with const items = [];
 `);
 
         expect(stripped).toMatchInlineSnapshot(`
-            "
-            Some content. This is paragraph with const items = \\[];
-            "
+          "Some content. This is paragraph with const items = \\\\[];
+          "
         `);
     });
 
@@ -108,7 +107,7 @@ out by their writer.
 It should not remove new lines
 that are from different sentences.
 
-Lists of items should not be affected either:
+Lists of items should not be affected either.
 - Here is list item number 1.
 - Here is list item number 2.
 - Here is list item number 3.
@@ -120,12 +119,53 @@ More text after the list.
         expect(stripped).toMatchInlineSnapshot(`
             "This test has lines that are manually spaced out by their writer.
             It should not remove new lines that are from different sentences.
-            Lists of items should not be affected either:
+            Lists of items should not be affected either.
             Here is list item number 1.
             Here is list item number 2.
             Here is list item number 3.
             More text after the list.
             "
+        `);
+    });
+
+    it('should add periods to the end of list items', () => {
+        const stripped = preprocessMarkdown(
+            `
+- Here is list item number 1
+- Here is list item number 2
+- Here is list item number 3
+`
+        );
+
+        expect(stripped).toMatchInlineSnapshot(`
+            "Here is list item number 1.
+            Here is list item number 2.
+            Here is list item number 3.
+            "
+        `);
+    });
+
+    it('should convert colons to periods', () => {
+        const stripped = preprocessMarkdown('This includes: a colon');
+
+        expect(stripped).toMatchInlineSnapshot(`"This includes. a colon "`);
+    });
+
+    it('should convert tables to text and save cells with more than 4 words', () => {
+        const stripped = preprocessMarkdown(
+            `
+|Value | Gateway | Chance of processing a transaction|
+|---|---|---|
+|70 |Gateway A| 70% |
+|15 |Gateway B| 15% |
+|10 |Gateway C| 10% |
+|5 |Gateway D| 5% |            
+`
+        );
+
+        expect(stripped).toMatchInlineSnapshot(`
+          "Chance of processing a transaction.
+          "
         `);
     });
 });
