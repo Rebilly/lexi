@@ -168,4 +168,15 @@ More text after the list.
           "
         `);
     });
+
+    it('should remove URLs in backticks', () => {
+        const stripped = preprocessMarkdown(
+            'This includes `https://example.com` a URL.'
+        );
+
+        expect(stripped).toMatchInlineSnapshot(`
+          "This includes  a URL.
+          "
+        `);
+    });
 });

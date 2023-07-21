@@ -458,6 +458,17 @@ const removeCodeBlocks = () => (tree) => {
         node.value = '';
     });
 };
+// Remove URLs in backticks, for example: `https://example.com`
+const removeURLsInBackticks = () => (tree) => {
+    (0, unist_util_visit_1.default)(tree, 'inlineCode', (node) => {
+        // @ts-ignore
+        // Remove text if the value is a URL
+        if (node.value.match(/https?:\/\/[^\s]+/)) {
+            // @ts-ignore
+            node.value = '';
+        }
+    });
+};
 // Remove page metadata between thematic breaks at the begining of the page. For example
 // ---
 // ...
@@ -638,6 +649,7 @@ function preprocessMarkdown(markdown) {
     const remarker = (0, remark_1.remark)()
         .use(remark_gfm_1.default)
         .use(convertTableToText)
+        .use(removeURLsInBackticks)
         .use(removeAdmonitionHeadings)
         .use(convertColonsToPeriods)
         .use(removeShortListItems)
