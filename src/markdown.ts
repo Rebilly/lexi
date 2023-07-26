@@ -152,7 +152,7 @@ export const reportToComment = (
     );
 
     return `
-**Overall readability score:** ${averageReadability}/100 (${averageReadabilityDiff})
+**Overall readability score:** ${averageReadability} (${averageReadabilityDiff})
 
 ${readabilityTable}
 

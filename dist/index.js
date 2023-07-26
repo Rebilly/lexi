@@ -293,7 +293,7 @@ const reportToComment = (report, repository = 'repo-name', commit = 'commit-sha'
     const averageReadability = roundValue(report.averageResult[0].scores.readabilityScore);
     const averageReadabilityDiff = addPositiveDiffMarker(roundValue((_a = report.averageResult[0].diff) === null || _a === void 0 ? void 0 : _a.readabilityScore));
     return `
-**Overall readability score:** ${averageReadability}/100 (${averageReadabilityDiff})
+**Overall readability score:** ${averageReadability} (${averageReadabilityDiff})
 
 ${readabilityTable}
 
