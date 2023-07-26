@@ -20,6 +20,7 @@ const wordWrap = ref(true);
 // See: https://microsoft.github.io/monaco-editor/typedoc/interfaces/editor.IStandaloneEditorConstructionOptions.html
 const monaco_options = computed(() => ({
     wordWrap: wordWrap.value,
+    scrollBeyondLastLine: false,
 }));
 const monaco_options_processed_text = computed(() => ({
     ...monaco_options.value,
