@@ -4,7 +4,8 @@ Report a readability score for Markdown files in your pull requests, allowing yo
 
 <details>
   <summary>See example pull request comment</summary>
-**Overall readability score:** 20.18/100 (🟢 +0.97)
+
+**Overall readability score:** 20.18 (🟢 +0.97)
 
 File | Readability
 --- | ---

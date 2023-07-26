@@ -77,7 +77,8 @@ const progress = computed(() => {
 
 .r-icon {
     margin-left: 6px;
+    margin-top: 3px;
     width: 16px;
-    fill: rgba(255, 255, 255, 0.87);
+    fill: rgba(255, 255, 255, 0.60);
 }
 </style>

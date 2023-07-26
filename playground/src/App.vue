@@ -19,24 +19,33 @@ const processedText = computed(() => {
     return preprocessMarkdown(input.value);
 });
 
+const rawScores = computed(() => calculateReadabilityOfText(input.value));
 
 const scores = computed(() => {
-    const rawScores = calculateReadabilityOfText(input.value);
-    return Object.entries(rawScores).map(([name, value]) => {
-        const {min, max} = METRIC_RANGES[name as keyof typeof METRIC_RANGES];
-        return {
-            // convert from namesLikeThis to Names Like This
-            name: name
-                .replace(/([A-Z])/g, ' $1')
-                .replace(/^./, (str) => str.toUpperCase()),
-            min,
-            max,
-            value,
-            description:
-                metricToDescription[name as keyof typeof metricToDescription],
-        };
-    });
+    return Object.entries(rawScores.value)
+        .filter(([name]) => name !== 'readabilityScore')
+        .map(([name, value]) => {
+            const {min, max} =
+                METRIC_RANGES[name as keyof typeof METRIC_RANGES];
+            return {
+                // convert from namesLikeThis to Names Like This
+                name: name
+                    .replace(/([A-Z])/g, ' $1')
+                    .replace(/^./, (str) => str.toUpperCase()),
+                min,
+                max,
+                value,
+                description:
+                    metricToDescription[
+                        name as keyof typeof metricToDescription
+                    ],
+            };
+        });
 });
+
+const readabilityScore = computed(() =>
+    rawScores.value.readabilityScore.toFixed(2)
+);
 </script>
 
 <template>
@@ -70,6 +79,10 @@ const scores = computed(() => {
         </div>
         <div class="column size-30 auto-margin">
             <div class="scores">
+                <div class="readability-score">
+                    <h3>Readability score</h3>
+                    <span>{{ readabilityScore }}</span>
+                </div>
                 <SingleScore
                     v-for="score in scores"
                     :key="score.name"
@@ -100,5 +113,20 @@ const scores = computed(() => {
 
 .scores > * {
     margin-bottom: 16px;
+    font-weight: 300;
+}
+
+.readability-score {
+    text-align: center;
+    margin-bottom: 32px;
+    font-weight: 100;
+
+    > h3 {
+        margin-bottom: 0;
+    }
+
+    > span {
+        font-size: 2rem;
+    }
 }
 </style>

@@ -51,7 +51,7 @@ describe('reportToComment', () => {
 
         expect(reportToComment(report)).toMatchInlineSnapshot(`
           "
-          **Overall readability score:** 1/100 (🟢 +1)
+          **Overall readability score:** 1 (🟢 +1)
 
           File | Readability
           --- | ---
