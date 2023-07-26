@@ -80,7 +80,7 @@ const readabilityScore = computed(() =>
         <div class="column size-30 auto-margin">
             <div class="scores">
                 <div class="readability-score">
-                    <h3>Readability Score</h3>
+                    <h3>Readability score</h3>
                     <span>{{ readabilityScore }}</span>
                 </div>
                 <SingleScore
