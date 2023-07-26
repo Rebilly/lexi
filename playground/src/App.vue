@@ -1,8 +1,5 @@
 <script setup lang="ts">
 import {ref, computed} from 'vue';
-import {Codemirror} from 'vue-codemirror';
-import {markdown} from '@codemirror/lang-markdown';
-import {oneDark} from '@codemirror/theme-one-dark';
 import {
     preprocessMarkdown,
     calculateReadabilityOfText,
@@ -10,14 +7,25 @@ import {
 } from '../../src/readability.ts';
 import SingleScore from './components/SingleScore.vue';
 import {metricToDescription} from './metric-descriptions';
+import {defaultText} from './default-text';
 
-const codeMirrorExtensions = [markdown(), oneDark];
-
-const input = ref('');
-const previewProcessedText = ref(false);
+const input = ref(defaultText);
 const processedText = computed(() => {
     return preprocessMarkdown(input.value);
 });
+
+const previewProcessedText = ref(false);
+const wordWrap = ref(true);
+
+// See: https://microsoft.github.io/monaco-editor/typedoc/interfaces/editor.IStandaloneEditorConstructionOptions.html
+const monaco_options = computed(() => ({
+    wordWrap: wordWrap.value,
+    scrollBeyondLastLine: false,
+}));
+const monaco_options_processed_text = computed(() => ({
+    ...monaco_options.value,
+    readOnly: true,
+}));
 
 const rawScores = computed(() => calculateReadabilityOfText(input.value));
 
@@ -49,35 +57,8 @@ const readabilityScore = computed(() =>
 </script>
 
 <template>
-    <div class="row">
-        <div class="column">
-            <h1>Lexi playground</h1>
-        </div>
-    </div>
-    <div class="row">
-        <div class="column editor size-70">
-            <r-toggle
-                label="Preview processed text"
-                v-model="previewProcessedText"
-            />
-            <codemirror
-                v-if="previewProcessedText"
-                v-model="processedText"
-                :disabled="true"
-                :style="{height: '400px'}"
-                :autofocus="true"
-                :extensions="codeMirrorExtensions"
-            />
-            <codemirror
-                v-else
-                v-model="input"
-                :style="{height: '400px'}"
-                :autofocus="true"
-                placeholder="Enter markdown to score here."
-                :extensions="codeMirrorExtensions"
-            />
-        </div>
-        <div class="column size-30 auto-margin">
+    <div class="container">
+        <div class="info-column">
             <div class="scores">
                 <div class="readability-score">
                     <h3>Readability score</h3>
@@ -93,22 +74,54 @@ const readabilityScore = computed(() =>
                     :description="score.description"
                 />
             </div>
+            <div class="options">
+                <r-toggle
+                    label="Preview processed text"
+                    v-model="previewProcessedText"
+                />
+                <r-toggle label="Word wrap" v-model="wordWrap" />
+            </div>
+        </div>
+        <div class="editor-column">
+            <vue-monaco-editor
+                v-if="previewProcessedText"
+                v-model:value="processedText"
+                :options="monaco_options_processed_text"
+                theme="vs-dark"
+            />
+            <vue-monaco-editor
+                v-else
+                v-model:value="input"
+                :options="monaco_options"
+                theme="vs-dark"
+                language="markdown"
+            />
         </div>
     </div>
 </template>
 
 <style scoped>
-.editor {
-    max-width: 60%;
+.container {
+    width: 100vw;
+    height: 100vh;
+    display: flex;
+    flex-direction: row;
 }
 
-.editor > *:not(:last-child) {
+.info-column {
+    width: 25%;
+    padding: 32px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+.options > *:not(:last-child) {
     margin-bottom: 16px;
 }
 
-.auto-margin {
-    margin-left: auto;
-    margin-right: auto;
+.editor-column {
+    flex-grow: 1;
 }
 
 .scores > * {
