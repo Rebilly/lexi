@@ -1,9 +1,9 @@
 {
-    "name": "readability-reporter",
+    "name": "lexi",
     "version": "0.1",
-    "description": "Reports the readability scores for a pull request",
+    "description": "Report a readability score for Markdown files in your pull requests",
     "author": "Rebilly Inc",
-    "repository": "https://github.com/Rebilly/readability-reporter",
+    "repository": "https://github.com/Rebilly/lexi",
     "main": "lib/index.js",
     "scripts": {
         "build": "tsc",

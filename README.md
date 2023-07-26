@@ -1,6 +1,6 @@
-# readability-reporter
+# Lexi
 
-This action reports readability scores and their changes for Markdown files in your pull requests, allowing you to quantify and track documentation improvements.
+Report a readability score for Markdown files in your pull requests, allowing you to quantify and track documentation improvements.
 
 <details>
   <summary>See example pull request comment</summary>
@@ -8,7 +8,7 @@ This action reports readability scores and their changes for Markdown files in y
 
 File | Readability
 --- | ---
-[README.md](https://github.com/Rebilly/readability-reporter/blob/cce569da633a092c0a9b09bc1fe6d3df1b4dcb26/README.md "README.md") | 22.36 (🟢 +3.86)
+[README.md](https://github.com/Rebilly/lexi/blob/cce569da633a092c0a9b09bc1fe6d3df1b4dcb26/README.md "README.md") | 22.36 (🟢 +3.86)
 
 
 <details>
@@ -19,7 +19,7 @@ File | Readability
 
 File | Readability | FRE | GF | ARI | CLI | DCRS
 --- | --- | --- | --- | --- | --- | ---
-[README.md](https://github.com/Rebilly/readability-reporter/blob/cce569da633a092c0a9b09bc1fe6d3df1b4dcb26/README.md "README.md") | 22.36 | 44.11 | 16.67 | 28.7 | 11.85 | 7.66
+[README.md](https://github.com/Rebilly/lexi/blob/cce569da633a092c0a9b09bc1fe6d3df1b4dcb26/README.md "README.md") | 22.36 | 44.11 | 16.67 | 28.7 | 11.85 | 7.66
 &nbsp; | 🟢 +3.86 | 🟢 +2.03 | 🟢 +0.75 | 🟢 +2.2 | 🔴 -0.7 | 🟢 +0.01
 
 
@@ -48,9 +48,16 @@ Dale-Chall Readability | 4.9 (very easy read) to 9.9 (extremely difficult read) 
 
 </details>
 
-## Readability scores
+## Readability score
 
-The [text-readability](https://github.com/clearnote01/readability) library is used to determine the complexity and ease of reading for your documentation files. These scores can be used as a guide to help you understand how changes may impact the readability of your documentation.
+Lexi calculates a readability score to estimate the complexity and ease of reading for your documentation files. The score can be used as a guide to help you understand how changes may impact the readability of your documentation.
+
+The score is a scaled combination of several readability tests:
+- [Flesch Reading Ease](https://en.wikipedia.org/wiki/Flesch_reading_ease)
+- [Gunning Fog Index](https://en.wikipedia.org/wiki/Gunning_fog_index)
+- [Automated Readability Index (ARI)](https://en.wikipedia.org/wiki/Automated_readability_index)
+- [Dale-Chall Readability Score](https://en.wikipedia.org/wiki/Dale%E2%80%93Chall_readability_formula)
+- [Coleman–Liau Index](https://en.wikipedia.org/wiki/Coleman%E2%80%93Liau_index)
 
 ## Usage
 
@@ -76,7 +83,7 @@ jobs:
         steps:
             - name: Checkout repo
               uses: actions/checkout@v2
-            - uses: Rebilly/readability-reporter@v1
+            - uses: Rebilly/lexi@v1
               with:
                   github-token: ${{ secrets.GITHUB_TOKEN }}
                   glob: '**/*.md'
