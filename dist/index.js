@@ -521,7 +521,7 @@ const convertTableToText = () => (tree) => {
         cells.forEach((cellChildren) => {
             const lastNode = cellChildren[cellChildren.length - 1];
             // @ts-ignore
-            if (lastNode.type === 'text' && !lastNode.value.endsWith('.')) {
+            if ((lastNode === null || lastNode === void 0 ? void 0 : lastNode.type) === 'text' && !(lastNode === null || lastNode === void 0 ? void 0 : lastNode.value.endsWith('.'))) {
                 // @ts-ignore
                 lastNode.value += '.';
             }
