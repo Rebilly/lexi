@@ -7,8 +7,9 @@ import {
 } from '../../src/readability.ts';
 import SingleScore from './components/SingleScore.vue';
 import {metricToDescription} from './metric-descriptions';
+import {defaultText} from './default-text';
 
-const input = ref('');
+const input = ref(defaultText);
 const processedText = computed(() => {
     return preprocessMarkdown(input.value);
 });
