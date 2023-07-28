@@ -120,20 +120,12 @@ const removeURLsInBackticks: Plugin = () => (tree) => {
 const removePageMetadata: Plugin = () => (tree) => {
     visit(tree, 'root', (node) => {
         // @ts-ignore
-        const secondBreak = node.children.findIndex(
-            ({type}: {type: string}, index: number) =>
-                type === 'thematicBreak' && index > 0
-        );
-        // @ts-ignore
-        if (node.children[0]?.type !== 'thematicBreak' || secondBreak < 1) {
+        if (node.children[0]?.type !== 'thematicBreak') {
+            // There is no frontmatter
             return;
         }
-        for (let i = 1; i < secondBreak; i += 1) {
-            // @ts-ignore
-            node.children[i].value = '';
-            // @ts-ignore
-            node.children[i].children = [];
-        }
+        // @ts-ignore
+        node?.children.splice(0, 1);
     });
 };
 
@@ -333,6 +325,8 @@ export function preprocessMarkdown(markdown: string) {
         .use(removeImageAltText)
         .use(removePageMetadata)
         .use(replaceNodesWithTheirTextContent)
+
+    console.log(remark.parse(markdown));
 
     return (
         remarker

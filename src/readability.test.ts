@@ -180,4 +180,20 @@ More text after the list.
           "
         `);
     });
+
+    it('should remove yaml frontmatter', () => {
+        const stripped = preprocessMarkdown(
+            `---
+title: "Cashier strategies"
+description: "Cashier strategies"
+---
+This is the only content.
+`
+        );
+
+        expect(stripped).toMatchInlineSnapshot(`
+          "This is the only content.
+          "
+        `);
+    });
 });
