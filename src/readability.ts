@@ -50,14 +50,14 @@ const removeUnwantedNodeTypes: Plugin = () => (tree) => {
         'code',
         'html',
         'image',
-        'imageReference'
+        'imageReference',
     ];
 
     visit(tree, nodeTypesToRemove, (node, index, parent) => {
         parent?.children.splice(index, 1);
 
         // Do not traverse `node`, continue at the node *now* at `index`.
-        return [SKIP, index]
+        return [SKIP, index];
     });
 };
 
@@ -79,9 +79,9 @@ const replaceNodesWithTheirTextContent: Plugin = () => (tree) => {
 
     visit(tree, nodeTypesToReplace, (node, index, parent) => {
         // @ts-ignore
-        parent?.children.splice(index, 1, ...node.children)
+        parent?.children.splice(index, 1, ...node.children);
         // Do not traverse `node`, continue at the node *now* at `index`.
-        return [SKIP, index]
+        return [SKIP, index];
     });
 };
 
@@ -108,7 +108,7 @@ const removeURLsInBackticks: Plugin = () => (tree) => {
             // @ts-ignore
             parent?.children.splice(index, 1);
             // Do not traverse `node`, continue at the node *now* at `index`.
-            return [SKIP, index]
+            return [SKIP, index];
         }
     });
 };
@@ -160,8 +160,9 @@ const convertTableToText: Plugin = () => (tree) => {
 
     // Add a period to the end of each cell grouping if it doesnt already exsit
     visit(tree, 'tableCell', (tableCellNode, index, parent) => {
-        // @ts-ignore
-        const lastNode = tableCellNode.children[tableCellNode.children.length - 1];
+        const lastNode =
+            // @ts-ignore
+            tableCellNode.children[tableCellNode.children.length - 1];
         if (lastNode?.type === 'text' && !lastNode?.value.endsWith('.')) {
             lastNode.value += '.';
         }
@@ -171,7 +172,7 @@ const convertTableToText: Plugin = () => (tree) => {
     visit(tree, 'tableCell', (tableCellNode, index, parent) => {
         // @ts-ignore
         const text = tableCellNode.children.map(({value}) => value).join(' ');
-        if(text.split(' ').length < 4) {
+        if (text.split(' ').length < 4) {
             // @ts-ignore
             tableCellNode.children = [];
         }
@@ -195,7 +196,7 @@ const removeShortListItems: Plugin = () => (tree) => {
                 if (textNode.value.split(' ').length < 4) {
                     parent?.children.splice(index, 1);
                     // Do not traverse `node`, continue at the node *now* at `index`.
-                    return [SKIP, index]
+                    return [SKIP, index];
                 }
             });
         });
@@ -324,9 +325,7 @@ export function preprocessMarkdown(markdown: string) {
         .use(removeUnwantedNodeTypes)
         .use(removeImageAltText)
         .use(removePageMetadata)
-        .use(replaceNodesWithTheirTextContent)
-
-    console.log(remark.parse(markdown));
+        .use(replaceNodesWithTheirTextContent);
 
     return (
         remarker
