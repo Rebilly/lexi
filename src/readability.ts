@@ -53,7 +53,7 @@ const removeUnwantedNodeTypes: Plugin = () => (tree) => {
         'imageReference',
     ];
 
-    visit(tree, nodeTypesToRemove, (node, index, parent) => {
+    visit(tree, nodeTypesToRemove, (_node, index, parent) => {
         parent?.children.splice(index, 1);
 
         // Do not traverse `node`, continue at the node *now* at `index`.
@@ -153,13 +153,13 @@ const convertColonsToPeriods: Plugin = () => (tree) => {
 // top level parent
 const convertTableToText: Plugin = () => (tree) => {
     // flatten all table cells
-    visit(tree, 'tableCell', (tableCellNode, index, parent) => {
+    visit(tree, 'tableCell', (tableCellNode) => {
         // @ts-ignore
         replaceNodesWithTheirTextContent(tableCellNode);
     });
 
     // Add a period to the end of each cell grouping if it doesnt already exsit
-    visit(tree, 'tableCell', (tableCellNode, index, parent) => {
+    visit(tree, 'tableCell', (tableCellNode) => {
         const lastNode =
             // @ts-ignore
             tableCellNode.children[tableCellNode.children.length - 1];
@@ -169,7 +169,7 @@ const convertTableToText: Plugin = () => (tree) => {
     });
 
     // Remove any cells with < 4 words
-    visit(tree, 'tableCell', (tableCellNode, index, parent) => {
+    visit(tree, 'tableCell', (tableCellNode) => {
         // @ts-ignore
         const text = tableCellNode.children.map(({value}) => value).join(' ');
         if (text.split(' ').length < 4) {
