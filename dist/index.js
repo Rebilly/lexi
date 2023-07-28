@@ -455,7 +455,7 @@ const removeUnwantedNodeTypes = () => (tree) => {
         'image',
         'imageReference',
     ];
-    (0, unist_util_visit_1.default)(tree, nodeTypesToRemove, (node, index, parent) => {
+    (0, unist_util_visit_1.default)(tree, nodeTypesToRemove, (_node, index, parent) => {
         parent === null || parent === void 0 ? void 0 : parent.children.splice(index, 1);
         // Do not traverse `node`, continue at the node *now* at `index`.
         return [unist_util_visit_1.SKIP, index];
@@ -547,12 +547,12 @@ const convertColonsToPeriods = () => (tree) => {
 // top level parent
 const convertTableToText = () => (tree) => {
     // flatten all table cells
-    (0, unist_util_visit_1.default)(tree, 'tableCell', (tableCellNode, index, parent) => {
+    (0, unist_util_visit_1.default)(tree, 'tableCell', (tableCellNode) => {
         // @ts-ignore
         replaceNodesWithTheirTextContent(tableCellNode);
     });
     // Add a period to the end of each cell grouping if it doesnt already exsit
-    (0, unist_util_visit_1.default)(tree, 'tableCell', (tableCellNode, index, parent) => {
+    (0, unist_util_visit_1.default)(tree, 'tableCell', (tableCellNode) => {
         const lastNode = 
         // @ts-ignore
         tableCellNode.children[tableCellNode.children.length - 1];
@@ -561,7 +561,7 @@ const convertTableToText = () => (tree) => {
         }
     });
     // Remove any cells with < 4 words
-    (0, unist_util_visit_1.default)(tree, 'tableCell', (tableCellNode, index, parent) => {
+    (0, unist_util_visit_1.default)(tree, 'tableCell', (tableCellNode) => {
         // @ts-ignore
         const text = tableCellNode.children.map(({ value }) => value).join(' ');
         if (text.split(' ').length < 4) {
