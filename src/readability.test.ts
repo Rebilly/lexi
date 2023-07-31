@@ -106,7 +106,8 @@ Some content. This is paragraph with const items = [];
 `);
 
         expect(stripped).toMatchInlineSnapshot(`
-          "Some content. This is paragraph with const items = \\\\[];
+          "
+          Some content. This is paragraph with const items = \\\\[];
           "
         `);
     });
@@ -189,6 +190,22 @@ More text after the list.
 
         expect(stripped).toMatchInlineSnapshot(`
           "This includes  a URL.
+          "
+        `);
+    });
+
+    it('should remove yaml frontmatter', () => {
+        const stripped = preprocessMarkdown(
+            `---
+title: "Cashier strategies"
+description: "Cashier strategies"
+---
+This is the only content.
+`
+        );
+
+        expect(stripped).toMatchInlineSnapshot(`
+          "This is the only content.
           "
         `);
     });
