@@ -1,7 +1,7 @@
 import strip from 'strip-markdown';
 import {remark} from 'remark';
 import remarkGfm from 'remark-gfm';
-import visit from 'unist-util-visit';
+import visit, {SKIP} from 'unist-util-visit';
 import readability from 'text-readability';
 import {Plugin} from 'unified';
 
@@ -44,15 +44,44 @@ export type ReadabilityScores = {
     readabilityScore: number;
 } & ThirdPartyReadabilityScores;
 
-// Remark plugin to remove headings.
-// Generally our headings are short and do not contribute in a
-// meaningful way to our readability scores
-const removeHeadings: Plugin = () => (tree) => {
-    visit(tree, 'heading', (headingNode) => {
-        visit(headingNode, 'text', (textNode) => {
-            // @ts-ignore
-            textNode.value = '';
-        });
+const removeUnwantedNodeTypes: Plugin = () => (tree) => {
+    const nodeTypesToRemove = [
+        'heading',
+        'code',
+        'html',
+        'image',
+        'imageReference',
+    ];
+
+    visit(tree, nodeTypesToRemove, (_node, index, parent) => {
+        parent?.children.splice(index, 1);
+
+        // Do not traverse `node`, continue at the node *now* at `index`.
+        return [SKIP, index];
+    });
+};
+
+// Replace nodes with their text content. For example, replace
+// **text** with text
+const replaceNodesWithTheirTextContent: Plugin = () => (tree) => {
+    const nodeTypesToReplace = [
+        'emphasis',
+        'strong',
+        'inlineCode',
+        'list',
+        'listItem',
+        'link',
+        'linkReference',
+        'table',
+        'tableRow',
+        'tableCell',
+    ];
+
+    visit(tree, nodeTypesToReplace, (node, index, parent) => {
+        // @ts-ignore
+        parent?.children.splice(index, 1, ...(node?.children ?? []));
+        // Do not traverse `node`, continue at the node *now* at `index`.
+        return [SKIP, index];
     });
 };
 
@@ -70,25 +99,16 @@ const removeAdmonitionHeadings: Plugin = () => (tree) => {
     });
 };
 
-// Remove code blocks. For example
-// ```json
-// ...
-// ```
-const removeCodeBlocks: Plugin = () => (tree) => {
-    visit(tree, 'code', (node) => {
-        // @ts-ignore
-        node.value = '';
-    });
-};
-
 // Remove URLs in backticks, for example: `https://example.com`
 const removeURLsInBackticks: Plugin = () => (tree) => {
-    visit(tree, 'inlineCode', (node) => {
+    visit(tree, 'inlineCode', (node, index, parent) => {
         // @ts-ignore
         // Remove text if the value is a URL
         if (node.value.match(/https?:\/\/[^\s]+/)) {
             // @ts-ignore
-            node.value = '';
+            parent?.children.splice(index, 1);
+            // Do not traverse `node`, continue at the node *now* at `index`.
+            return [SKIP, index];
         }
     });
 };
@@ -100,20 +120,12 @@ const removeURLsInBackticks: Plugin = () => (tree) => {
 const removePageMetadata: Plugin = () => (tree) => {
     visit(tree, 'root', (node) => {
         // @ts-ignore
-        const secondBreak = node.children.findIndex(
-            ({type}: {type: string}, index: number) =>
-                type === 'thematicBreak' && index > 0
-        );
-        // @ts-ignore
-        if (node.children[0]?.type !== 'thematicBreak' || secondBreak < 1) {
+        if (node.children[0]?.type !== 'thematicBreak') {
+            // There is no frontmatter
             return;
         }
-        for (let i = 1; i < secondBreak; i += 1) {
-            // @ts-ignore
-            node.children[i].value = '';
-            // @ts-ignore
-            node.children[i].children = [];
-        }
+        // @ts-ignore
+        node?.children.splice(0, 1);
     });
 };
 
@@ -140,38 +152,30 @@ const convertColonsToPeriods: Plugin = () => (tree) => {
 // Iterate through all the table nodes and move their cell contents to the
 // top level parent
 const convertTableToText: Plugin = () => (tree) => {
-    visit(tree, 'table', (tableNode, index, parent) => {
-        const cells: [][] = [];
-        visit(tableNode, 'tableCell', (cellNode) => {
-            // @ts-ignore
-            cells.push([...cellNode.children]);
-        });
-
-        // Add a period to the end of each cell grouping if it doesnt already exsit
-        cells.forEach((cellChildren) => {
-            const lastNode = cellChildren[cellChildren.length - 1];
-            // @ts-ignore
-            if (lastNode?.type === 'text' && !lastNode?.value.endsWith('.')) {
-                // @ts-ignore
-                lastNode.value += '.';
-            }
-        });
-
-        const replacementNodes = [
-            ...cells.map((cellChildren) => ({
-                type: 'paragraph',
-                children: cellChildren,
-            })),
-        ].filter((node) => {
-            // Remove any cells with < 4 words
-            // @ts-ignore
-            const text = node.children.map(({value}) => value).join(' ');
-            return text.split(' ').length >= 4;
-        });
-
-        // Replace the top level table node with the text nodes
+    // flatten all table cells
+    visit(tree, 'tableCell', (tableCellNode) => {
         // @ts-ignore
-        parent.children.splice(index, 1, replacementNodes);
+        replaceNodesWithTheirTextContent(tableCellNode);
+    });
+
+    // Add a period to the end of each cell grouping if it doesnt already exsit
+    visit(tree, 'tableCell', (tableCellNode) => {
+        const lastNode =
+            // @ts-ignore
+            tableCellNode.children[tableCellNode.children.length - 1];
+        if (lastNode?.type === 'text' && !lastNode?.value.endsWith('.')) {
+            lastNode.value += '.';
+        }
+    });
+
+    // Remove any cells with < 4 words
+    visit(tree, 'tableCell', (tableCellNode) => {
+        // @ts-ignore
+        const text = tableCellNode.children.map(({value}) => value).join(' ');
+        if (text.split(' ').length < 4) {
+            // @ts-ignore
+            tableCellNode.children = [];
+        }
     });
 };
 
@@ -186,12 +190,13 @@ const removeShortListItems: Plugin = () => (tree) => {
             // @ts-ignore
             strip()(paragraphNode);
 
-            visit(paragraphNode, 'text', (textNode) => {
+            visit(paragraphNode, 'text', (textNode, index, parent) => {
                 // Only keep the list item if it is at least 4 words long
                 // @ts-ignore
                 if (textNode.value.split(' ').length < 4) {
-                    // @ts-ignore
-                    textNode.value = '';
+                    parent?.children.splice(index, 1);
+                    // Do not traverse `node`, continue at the node *now* at `index`.
+                    return [SKIP, index];
                 }
             });
         });
@@ -316,12 +321,11 @@ export function preprocessMarkdown(markdown: string) {
         .use(convertColonsToPeriods)
         .use(removeShortListItems)
         .use(addPeriodsToListItems)
-        .use(removeHeadings)
-        .use(removeImageAltText)
-        .use(removeCodeBlocks)
-        .use(removePageMetadata)
         .use(removeJsItems)
-        .use(strip);
+        .use(removeUnwantedNodeTypes)
+        .use(removeImageAltText)
+        .use(removePageMetadata)
+        .use(replaceNodesWithTheirTextContent);
 
     return (
         remarker
