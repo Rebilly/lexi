@@ -79,7 +79,7 @@ const replaceNodesWithTheirTextContent: Plugin = () => (tree) => {
 
     visit(tree, nodeTypesToReplace, (node, index, parent) => {
         // @ts-ignore
-        parent?.children.splice(index, 1, ...node.children);
+        parent?.children.splice(index, 1, ...(node?.children ?? []));
         // Do not traverse `node`, continue at the node *now* at `index`.
         return [SKIP, index];
     });

@@ -477,8 +477,9 @@ const replaceNodesWithTheirTextContent = () => (tree) => {
         'tableCell',
     ];
     (0, unist_util_visit_1.default)(tree, nodeTypesToReplace, (node, index, parent) => {
+        var _a;
         // @ts-ignore
-        parent === null || parent === void 0 ? void 0 : parent.children.splice(index, 1, ...node.children);
+        parent === null || parent === void 0 ? void 0 : parent.children.splice(index, 1, ...((_a = node === null || node === void 0 ? void 0 : node.children) !== null && _a !== void 0 ? _a : []));
         // Do not traverse `node`, continue at the node *now* at `index`.
         return [unist_util_visit_1.SKIP, index];
     });
