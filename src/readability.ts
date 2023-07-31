@@ -239,10 +239,10 @@ const removeJsItems: Plugin = () => (tree) => {
 };
 
 // Returns scores for a given string
-export function scoreText(text: string) {
+export function scoreText(text: string): ThirdPartyReadabilityScores {
     const colemanLiauIndex = readability.colemanLiauIndex(text);
 
-    return {
+    const scores = {
         fleschReadingEase: readability.fleschReadingEase(text),
         gunningFog: readability.gunningFog(text),
         automatedReadabilityIndex: readability.automatedReadabilityIndex(text),
@@ -250,6 +250,27 @@ export function scoreText(text: string) {
         // The CLI index can be NaN for some texts, so ensure it's 0
         colemanLiauIndex: Number.isNaN(colemanLiauIndex) ? 0 : colemanLiauIndex,
     };
+
+    const capBetween = (min: number, max: number, value: number) => {
+        if (max < min) {
+            // Swap min and max if max is lower than min
+            [min, max] = [max, min];
+        }
+        return Math.min(Math.max(value, min), max);
+    };
+
+    // Cap all the scores
+    return Object.entries(scores).reduce(
+        (acc, [key, value]) => ({
+            ...acc,
+            [key]: capBetween(
+                METRIC_RANGES[key as keyof typeof METRIC_RANGES].min,
+                METRIC_RANGES[key as keyof typeof METRIC_RANGES].max,
+                value
+            ),
+        }),
+        {}
+    ) as ThirdPartyReadabilityScores;
 }
 
 // Returns each score normalized to a value between 0 and 1
