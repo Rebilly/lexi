@@ -1,4 +1,17 @@
-import {preprocessMarkdown} from './readability';
+import {describe} from 'node:test';
+import {preprocessMarkdown, calculateReadabilityOfText} from './readability';
+import readability from 'text-readability';
+
+// Mock the text-readability library
+vi.mock('text-readability', () => ({
+    default: {
+        automatedReadabilityIndex: vi.fn().mockReturnValue(22),
+        colemanLiauIndex: vi.fn().mockReturnValue(19),
+        daleChallReadabilityScore: vi.fn().mockReturnValue(11),
+        fleschReadingEase: vi.fn().mockReturnValue(0),
+        gunningFog: vi.fn().mockReturnValue(19),
+    },
+}));
 
 describe('markdown preprocessing', () => {
     it('should strip headers', () => {
@@ -160,7 +173,7 @@ More text after the list.
 |70 |Gateway A| 70% |
 |15 |Gateway B| 15% |
 |10 |Gateway C| 10% |
-|5 |Gateway D| 5% |            
+|5 |Gateway D| 5% |
 `
         );
 
@@ -195,5 +208,50 @@ This is the only content.
           "This is the only content.
           "
         `);
+    });
+});
+
+describe('scoring', () => {
+    it('should return minimum values for empty text', () => {
+        expect(calculateReadabilityOfText('')).toMatchInlineSnapshot(`
+          {
+            "automatedReadabilityIndex": 22,
+            "colemanLiauIndex": 19,
+            "daleChallReadabilityScore": 11,
+            "fleschReadingEase": 0,
+            "gunningFog": 19,
+            "readabilityScore": 0,
+          }
+        `);
+    });
+
+    it('should cap min and max scores', () => {
+        readability.automatedReadabilityIndex.mockReturnValue(-1);
+        readability.colemanLiauIndex.mockReturnValue(-1);
+        readability.daleChallReadabilityScore.mockReturnValue(-1);
+        readability.fleschReadingEase.mockReturnValue(-1);
+        readability.gunningFog.mockReturnValue(-1);
+
+        expect(calculateReadabilityOfText('dummy text')).toMatchObject({
+            automatedReadabilityIndex: 6,
+            colemanLiauIndex: 6,
+            daleChallReadabilityScore: 4.9,
+            fleschReadingEase: 0,
+            gunningFog: 6,
+        });
+
+        readability.automatedReadabilityIndex.mockReturnValue(1000);
+        readability.colemanLiauIndex.mockReturnValue(1000);
+        readability.daleChallReadabilityScore.mockReturnValue(1000);
+        readability.fleschReadingEase.mockReturnValue(1000);
+        readability.gunningFog.mockReturnValue(1000);
+
+        expect(calculateReadabilityOfText('dummy text')).toMatchObject({
+            automatedReadabilityIndex: 22,
+            colemanLiauIndex: 19,
+            daleChallReadabilityScore: 11,
+            fleschReadingEase: 100,
+            gunningFog: 19,
+        });
     });
 });

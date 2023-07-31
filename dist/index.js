@@ -633,7 +633,7 @@ const removeJsItems = () => (tree) => {
 // Returns scores for a given string
 function scoreText(text) {
     const colemanLiauIndex = text_readability_1.default.colemanLiauIndex(text);
-    return {
+    const scores = {
         fleschReadingEase: text_readability_1.default.fleschReadingEase(text),
         gunningFog: text_readability_1.default.gunningFog(text),
         automatedReadabilityIndex: text_readability_1.default.automatedReadabilityIndex(text),
@@ -641,6 +641,15 @@ function scoreText(text) {
         // The CLI index can be NaN for some texts, so ensure it's 0
         colemanLiauIndex: Number.isNaN(colemanLiauIndex) ? 0 : colemanLiauIndex,
     };
+    const capBetween = (min, max, value) => {
+        if (max < min) {
+            // Swap min and max if max is lower than min
+            [min, max] = [max, min];
+        }
+        return Math.min(Math.max(value, min), max);
+    };
+    // Cap all the scores
+    return Object.entries(scores).reduce((acc, [key, value]) => (Object.assign(Object.assign({}, acc), { [key]: capBetween(exports.METRIC_RANGES[key].min, exports.METRIC_RANGES[key].max, value) })), {});
 }
 exports.scoreText = scoreText;
 // Returns each score normalized to a value between 0 and 1
