@@ -117,15 +117,31 @@ const removeURLsInBackticks: Plugin = () => (tree) => {
 // ---
 // ...
 // ---
-const removePageMetadata: Plugin = () => (tree) => {
+const removeFrontmatter: Plugin = () => (tree) => {
     visit(tree, 'root', (node) => {
         // @ts-ignore
         if (node.children[0]?.type !== 'thematicBreak') {
             // There is no frontmatter
             return;
         }
+
         // @ts-ignore
-        node?.children.splice(0, 1);
+        const secondThematicBreakIndex = node.children.findIndex(
+            (childNode: any, index: number) => {
+                // @ts-ignore
+                return index > 0 && childNode.type === 'thematicBreak';
+            }
+        );
+
+        if (secondThematicBreakIndex === -1) {
+            // There is only 1 thematic break, so remove it and the first child
+            // @ts-ignore
+            node?.children.splice(0, 1);
+        } else {
+            // Remove the two thematic breaks and all children
+            // @ts-ignore
+            node?.children.splice(0, secondThematicBreakIndex + 1);
+        }
     });
 };
 
@@ -345,7 +361,7 @@ export function preprocessMarkdown(markdown: string) {
         .use(removeJsItems)
         .use(removeUnwantedNodeTypes)
         .use(removeImageAltText)
-        .use(removePageMetadata)
+        .use(removeFrontmatter)
         .use(replaceNodesWithTheirTextContent);
 
     return (
