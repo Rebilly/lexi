@@ -209,6 +209,25 @@ This is the only content.
           "
         `);
     });
+
+    it('should remove more complicated yaml frontmatter', () => {
+        const stripped = preprocessMarkdown(
+            `---
+nested:
+  title: "Cashier strategies"
+  description: "Cashier strategies"
+another:
+- /some/path/
+---
+This is the only content.
+`
+        );
+
+        expect(stripped).toMatchInlineSnapshot(`
+          "This is the only content.
+          "
+        `);
+    });
 });
 
 describe('scoring', () => {

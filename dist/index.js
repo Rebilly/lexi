@@ -514,7 +514,7 @@ const removeURLsInBackticks = () => (tree) => {
 // ---
 // ...
 // ---
-const removePageMetadata = () => (tree) => {
+const removeFrontmatter = () => (tree) => {
     (0, unist_util_visit_1.default)(tree, 'root', (node) => {
         var _a;
         // @ts-ignore
@@ -523,7 +523,20 @@ const removePageMetadata = () => (tree) => {
             return;
         }
         // @ts-ignore
-        node === null || node === void 0 ? void 0 : node.children.splice(0, 1);
+        const secondThematicBreakIndex = node.children.findIndex((childNode, index) => {
+            // @ts-ignore
+            return index > 0 && childNode.type === 'thematicBreak';
+        });
+        if (secondThematicBreakIndex === -1) {
+            // There is only 1 thematic break, so remove it and the first child
+            // @ts-ignore
+            node === null || node === void 0 ? void 0 : node.children.splice(0, 1);
+        }
+        else {
+            // Remove the two thematic breaks and all children
+            // @ts-ignore
+            node === null || node === void 0 ? void 0 : node.children.splice(0, secondThematicBreakIndex + 1);
+        }
     });
 };
 // Alt text is not a part of the sentence structure, so we should
@@ -696,7 +709,7 @@ function preprocessMarkdown(markdown) {
         .use(removeJsItems)
         .use(removeUnwantedNodeTypes)
         .use(removeImageAltText)
-        .use(removePageMetadata)
+        .use(removeFrontmatter)
         .use(replaceNodesWithTheirTextContent);
     return (remarker
         .processSync(markdown)
