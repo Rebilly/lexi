@@ -74,7 +74,6 @@ const replaceNodesWithTheirTextContent: Plugin = () => (tree) => {
         'linkReference',
         'table',
         'tableRow',
-        'tableCell',
     ];
 
     visit(tree, nodeTypesToReplace, (node, index, parent) => {
@@ -192,6 +191,21 @@ const convertTableToText: Plugin = () => (tree) => {
             // @ts-ignore
             tableCellNode.children = [];
         }
+    });
+
+    // Encapsulate with a paragraph, replacing the table cell
+    visit(tree, 'tableCell', (node, index, parent) => {
+        const newNode = {
+            type: 'paragraph',
+            // @ts-ignore
+            children: node.children,
+        };
+
+        // @ts-ignore
+        parent?.children.splice(index, 1, newNode);
+
+        // Do not traverse `node`, continue at the node *now* at `index`.
+        return [SKIP, index];
     });
 };
 
