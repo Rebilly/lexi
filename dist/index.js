@@ -474,7 +474,6 @@ const replaceNodesWithTheirTextContent = () => (tree) => {
         'linkReference',
         'table',
         'tableRow',
-        'tableCell',
     ];
     (0, unist_util_visit_1.default)(tree, nodeTypesToReplace, (node, index, parent) => {
         var _a;
@@ -582,6 +581,18 @@ const convertTableToText = () => (tree) => {
             // @ts-ignore
             tableCellNode.children = [];
         }
+    });
+    // Encapsulate with a paragraph, replacing the table cell
+    (0, unist_util_visit_1.default)(tree, 'tableCell', (node, index, parent) => {
+        const newNode = {
+            type: 'paragraph',
+            // @ts-ignore
+            children: node.children,
+        };
+        // @ts-ignore
+        parent === null || parent === void 0 ? void 0 : parent.children.splice(index, 1, newNode);
+        // Do not traverse `node`, continue at the node *now* at `index`.
+        return [unist_util_visit_1.SKIP, index];
     });
 };
 // Remark plugin to remove list items that have less than 4 words.

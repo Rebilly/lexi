@@ -178,8 +178,34 @@ More text after the list.
         );
 
         expect(stripped).toMatchInlineSnapshot(`
-          "Chance of processing a transaction.
           "
+          Chance of processing a transaction.
+          "
+        `);
+    });
+
+    it('should convert tables without compressing surrounding text', () => {
+        const stripped = preprocessMarkdown(
+            `
+### Some heading text here
+
+Some content text.
+
+|A table header here|A table header here|
+|---|---|
+|Cell contents goes here|Cell contents goes here|
+
+This content comes after the table
+`
+        );
+
+        expect(stripped).toMatchInlineSnapshot(`
+          "Some content text.
+          A table header here.
+          A table header here.
+          Cell contents goes here.
+          Cell contents goes here.
+          This content comes after the table "
         `);
     });
 
