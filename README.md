@@ -1,5 +1,8 @@
 <p align="center">
-  <img width="250" src="./logo_b&w.png">
+  <picture>
+    <source srcset="/logo_b&w_dark.png" media="(prefers-color-scheme: dark)">
+    <img width="250" src="/logo_b&w.png">
+  </picture>
 </p>
 
 Report a readability score for Markdown files in your pull requests, allowing you to quantify and track documentation improvements.
