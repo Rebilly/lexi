@@ -8,6 +8,7 @@ import {
 import SingleScore from './components/SingleScore.vue';
 import {metricToDescription} from './metric-descriptions';
 import {defaultText} from './default-text';
+import GitHubLogoImg from './github-logo.png';
 
 const input = ref(defaultText);
 const processedText = computed(() => {
@@ -74,12 +75,17 @@ const readabilityScore = computed(() =>
                     :description="score.description"
                 />
             </div>
-            <div class="options">
-                <r-toggle
-                    label="Preview processed text"
-                    v-model="previewProcessedText"
-                />
-                <r-toggle label="Word wrap" v-model="wordWrap" />
+            <div class="options-group">
+                <div class="options">
+                    <r-toggle
+                        label="Preview processed text"
+                        v-model="previewProcessedText"
+                    />
+                    <r-toggle label="Word wrap" v-model="wordWrap" />
+                </div>
+                <a href="https://github.com/Rebilly/lexi" class="github-link">
+                    <img :src="GitHubLogoImg" />
+                </a>
             </div>
         </div>
         <div class="editor-column">
@@ -116,6 +122,12 @@ const readabilityScore = computed(() =>
     justify-content: space-between;
 }
 
+.options-group {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
 .options > *:not(:last-child) {
     margin-bottom: 16px;
 }
@@ -140,6 +152,12 @@ const readabilityScore = computed(() =>
 
     > span {
         font-size: 2rem;
+    }
+}
+
+.github-link {
+    > img {
+        width: 36px;
     }
 }
 </style>
