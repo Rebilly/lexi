@@ -1,4 +1,6 @@
-# Lexi
+<p align="center">
+  <img width="250" src="./logo_b&w.png">
+</p>
 
 Report a readability score for Markdown files in your pull requests, allowing you to quantify and track documentation improvements.
 
