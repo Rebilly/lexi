@@ -13,7 +13,7 @@ RedirectFrom:
     <img width="250" src="/logo_b&w.png">
   </picture>
 </p>
-Use Lexi to reduce the complexity of the lanuage in your documentation, and to quantify and track improvements overtime.
+Use Lexi to reduce the complexity of the language in your documentation, and to quantify and track improvements overtime.
 </br></br>
 
 Lexi is a GitHub action that reports readability metrics for Markdown files in your pull requests. Use these merics to help you understand how changes impact the readability of your documentation. Lexi reports an overall readability score that is calculated based on a scaled combination of the following readability metrics: 
@@ -81,8 +81,8 @@ Reports describe the overall change to each file in a pull request, and also the
 
 | Name           | Necessity | Description                                                                                                                                                                                                                                               |
 | -------------- | --------- |-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| `github-token` | Required  | The GitHub token used to post the report comment to the pull request. The [GitHub Actions token](https://docs.github.com/en/actions/reference/authentication-in-a-workflow#about-the-github_token-secret) can be used with `${{ secrets.GITHUB_TOKEN }}`. |
-| `glob`         | Required  | The glob pattern to use for matching Markdown files you want analysed                                                                                                                                                                                     |
+| `github-token` | Required  | Use this token to post the report comment to pull requests. The [GitHub Actions token](https://docs.github.com/en/actions/reference/authentication-in-a-workflow#about-the-github_token-secret) can be used with `${{ secrets.GITHUB_TOKEN }}`. |
+| `glob`         | Required  | Use this pattern to match Markdown files you want to analyse.                                                                                                                                                                                    |
 
 ### Example workflow
 
@@ -114,9 +114,9 @@ jobs:
 | `test`      | Run the unit tests.                                                                                                                                                                                                                             |
 | `lint`      | Run eslint on all files.                                                                                                                                                                                                                        |
 | `format`    | Run prettier on all files.                                                                                                                                                                                                                      |
-| `build`     | build the dist file. You are required to run this locally in order to build the dist before opening a PR.                                                                                                                                       |
+| `build`     | Build the dist file. You are required to run this locally in order to build the dist before opening a PR.                                                                                                                                       |
 | `run:local:report` | Run the action on two local folders, for testing and development. The first argument is the old ("base branch") folder and the sedcond argument is the new ("head branch") folder. For example `yarn run:local:report ./test-data/old ./test-data/new`. |
-| `run:local:debugfile` | Show what the program parses from a single file, after stripping all non-wanted items from the file, and before rating the readability. For example `yarn run:local:debugfile ./test-data/new/test-document.md`. |
+| `run:local:debugfile` | Display what the program parses from a single file, after stripping all non-wanted items from the file, and before rating the readability. For example `yarn run:local:debugfile ./test-data/new/test-document.md`. |
 | `playground:dev` | Open the playground in local development mode for testing readability scores. |
 
 ### Testing
@@ -129,4 +129,4 @@ For example: `yarn run:local:report ./test-data/old ./test-data/new`
 
 ## Playground
 
-To experiment with this tool in your web browser, and get real-time readability metric data as you edit a Markdown file, check out the [playground](https://rebilly.github.io/lexi/).
+To experiment with this tool in your web browser, and get real-time readability metric data as you edit a Markdown file, try out the [playground](https://rebilly.github.io/lexi/).
