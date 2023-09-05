@@ -1,12 +1,3 @@
----
-seo:
-  title: Release notes
-  description: Rebilly release notes.
-  lang: en-US
-RedirectFrom:
-- /docs/content/release-notes/
----
-
 <p align="center">
   <picture>
     <source srcset="/logo_b&w_dark.png" media="(prefers-color-scheme: dark)">
@@ -28,7 +19,7 @@ Lexi is a GitHub action that reports readability metrics for Markdown files in y
 Reports describe the overall change to each file in a pull request, and also the impact the edits make to the documentation set as a whole.
 
 - **Overall readability**: describes the readability of all the documentation in your repository, along with the scores and degree of change for each file that was edited in the pull request.
-- **Detailed metrics**: describes on all available metrics for each file that was edited in the pull request.
+- **Detailed metrics**: describes all available metrics for each file that was edited in the pull request.
 - **Averages**: describes the overall readability of all the documentation in your repository for each available metric.
 - **Metrics targets**: describes the range and ideal score for each readability metric.
 
