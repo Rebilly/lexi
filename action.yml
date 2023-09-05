@@ -1,4 +1,4 @@
-name: Lexi
+name: Lexi readability report
 description: Report a readability score for Markdown files in your pull requests
 author: 'Rebilly Inc'
 branding:
