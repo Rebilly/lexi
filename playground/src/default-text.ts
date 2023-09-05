@@ -2,7 +2,7 @@ export const defaultText = `# Lexi playground
 
 Welcome to the Lexi playground.
 
-Lexi is a **GitHub action** which will report a readability score for Markdown files in your pull requests, allowing you to quantify and track documentation improvements.
+Lexi is a **GitHub action** which reports a readability score for Markdown files in your pull requests, allowing you to quantify and track documentation improvements.
 
 This playground is a place to experiment with Lexi and see how it works.
 
@@ -16,7 +16,7 @@ Write or paste text into the editor to see the results of the readability analys
 
 ### Results
 
-The results section shows the results of the readability analysis of the text in the editor. The results are updated automatically as you type.
+The results section shows the results of the readability analysis of the text in the editor. The results update automatically as you type.
 
 ## How does Lexi work?
 
