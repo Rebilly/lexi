@@ -1,7 +1,7 @@
 <p align="center">
   <picture>
-    <source srcset="/logo_b&w_dark.png" media="(prefers-color-scheme: dark)">
-    <img width="250" src="/logo_b&w.png">
+    <source srcset="images/logo_b&w_dark.png" media="(prefers-color-scheme: dark)">
+    <img width="250" src="images/logo_b&w.png">
   </picture>
 </p>
 Use Lexi to reduce the complexity of the language in your documentation, and to quantify and track improvements overtime.
