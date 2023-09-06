@@ -7,6 +7,13 @@
 Use Lexi to reduce the complexity of the language in your documentation, and to quantify and track improvements overtime.
 </br></br>
 
+<p align="center">
+  <picture>
+    <source srcset="images/example_comment_dark.png" media="(prefers-color-scheme: dark)">
+    <img src="images/example_comment.png">
+  </picture>
+</p>
+
 Lexi is a GitHub action that reports readability metrics for Markdown files in your pull requests. Use these merics to help you understand how changes impact the readability of your documentation. Lexi reports an overall readability score that is calculated based on a scaled combination of the following readability metrics: 
 - [Flesch Reading Ease](https://en.wikipedia.org/wiki/Flesch_reading_ease)
 - [Gunning Fog Index](https://en.wikipedia.org/wiki/Gunning_fog_index)
