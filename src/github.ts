@@ -23,7 +23,7 @@ const listComments = async (
     client: Octokit,
     context: Context,
     prNumber: number,
-    hiddenHeader: string
+    hiddenHeader: string,
 ) => {
     const {data: existingComments} = await client.rest.issues.listComments({
         ...context.repo,
@@ -38,7 +38,7 @@ const insertComment = (
     context: Context,
     prNumber: number,
     body: string,
-    hiddenHeader: string
+    hiddenHeader: string,
 ) =>
     client.rest.issues.createComment({
         ...context.repo,
@@ -51,7 +51,7 @@ const updateComment = (
     context: Context,
     body: string,
     commentId: number,
-    hiddenHeader: string
+    hiddenHeader: string,
 ) =>
     client.rest.issues.updateComment({
         ...context.repo,
@@ -62,15 +62,15 @@ const updateComment = (
 const deleteComments = (
     client: Octokit,
     context: Context,
-    comments: {id: number}[]
+    comments: {id: number}[],
 ) =>
     Promise.all(
         comments.map(({id}) =>
             client.rest.issues.deleteComment({
                 ...context.repo,
                 comment_id: id,
-            })
-        )
+            }),
+        ),
     );
 
 export const upsertComment = async (
@@ -78,13 +78,13 @@ export const upsertComment = async (
     context: Context,
     prNumber: number,
     body: string,
-    hiddenHeader: string
+    hiddenHeader: string,
 ) => {
     const existingComments = await listComments(
         client,
         context,
         prNumber,
-        hiddenHeader
+        hiddenHeader,
     );
     const last = existingComments.pop();
 
@@ -99,7 +99,7 @@ export const upsertComment = async (
 export const getFileStatusesFromPR = async (
     client: Octokit,
     context: Context,
-    prNumber: number
+    prNumber: number,
 ): Promise<FileStatuses> => {
     const {data: files} = await client.rest.pulls.listFiles({
         ...context.repo,
@@ -118,7 +118,7 @@ export const getFileStatusesFromPR = async (
             .filter(
                 (file) =>
                     file.status === 'modified' ||
-                    (file.status === 'renamed' && file.changes > 0)
+                    (file.status === 'renamed' && file.changes > 0),
             )
             .map((file) => file.filename),
         renamed: files

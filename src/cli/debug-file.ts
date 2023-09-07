@@ -6,7 +6,7 @@ const program = new Command();
 program
     .name('debug file')
     .description(
-        'Show what the program parses from a single file, after stripping the junk away'
+        'Show what the program parses from a single file, after stripping the junk away',
     );
 
 program.argument('<file>', 'the filepath to show the stripped input for');

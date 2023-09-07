@@ -36,13 +36,13 @@ const main = async () => {
         const fileStatuses = await getFileStatusesFromPR(
             client,
             context,
-            prNumber
+            prNumber,
         );
 
         const report = generateReport(
             newReadability,
             oldReadability,
-            fileStatuses
+            fileStatuses,
         );
 
         // Only post a comment if there are results from markdown files
@@ -58,7 +58,7 @@ const main = async () => {
                 context,
                 context.payload.pull_request.number,
                 body,
-                `<!-- ${glob}-code-coverage-assistant -->`
+                `<!-- ${glob}-code-coverage-assistant -->`,
             );
         }
     } catch (error) {

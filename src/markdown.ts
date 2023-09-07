@@ -57,7 +57,7 @@ const addNegativeDiffMarker = (value?: number) => {
 // as link, using the result of that function as the target
 const resultToReadabilityRowWithDiff = (
     result: SingleReadabilityResultWithDiff,
-    nameToLinkFunction?: (name: string) => string
+    nameToLinkFunction?: (name: string) => string,
 ) => {
     const {name, scores} = result;
     const filenameOnly = path.basename(name);
@@ -77,7 +77,7 @@ const resultToReadabilityRowWithDiff = (
 // as link, using the result of that function as the target
 const resultToScoreTableRow = (
     result: SingleReadabilityResultWithDiff,
-    nameToLinkFunction?: (name: string) => string
+    nameToLinkFunction?: (name: string) => string,
 ): string[] => {
     const {name, scores} = result;
     const filenameOnly = path.basename(name);
@@ -116,7 +116,7 @@ const resultToDiffTableRow = (result: SingleReadabilityResultWithDiff) => {
 export const reportToComment = (
     report: ReadabilityReport,
     repository = 'repo-name',
-    commit = 'commit-sha'
+    commit = 'commit-sha',
 ) => {
     const nameToLink = (name: string) =>
         `https://github.com/${repository}/blob/${commit}/${name}`;
@@ -124,7 +124,7 @@ export const reportToComment = (
     const readabilityTable = tableToMD({
         headers: ['File', 'Readability'],
         rows: report.fileResults.map((result) =>
-            resultToReadabilityRowWithDiff(result, nameToLink)
+            resultToReadabilityRowWithDiff(result, nameToLink),
         ),
     });
 
@@ -145,10 +145,10 @@ export const reportToComment = (
     });
 
     const averageReadability = roundValue(
-        report.averageResult[0].scores.readabilityScore
+        report.averageResult[0].scores.readabilityScore,
     );
     const averageReadabilityDiff = addPositiveDiffMarker(
-        roundValue(report.averageResult[0].diff?.readabilityScore)
+        roundValue(report.averageResult[0].diff?.readabilityScore),
     );
 
     return `

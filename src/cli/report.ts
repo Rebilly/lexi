@@ -14,7 +14,7 @@ program
     .option(
         '-g, --glob <pattern>',
         'The glob to use when matching files',
-        '**/*.{md,mdx}'
+        '**/*.{md,mdx}',
     );
 program.parse();
 
