@@ -22,7 +22,7 @@ Test 1.
 ## Header 2
 ### Header 3
 Test 2.
-`
+`,
         );
 
         expect(stripped).toMatchInlineSnapshot(`
@@ -41,7 +41,7 @@ Test 2.
 - Or this.
 - Deleted.
 - This item also has many words.
-`
+`,
         );
 
         expect(stripped).toMatchInlineSnapshot(`
@@ -63,7 +63,7 @@ Admonition content.
 
 :::
 
-Test 2.`
+Test 2.`,
         );
 
         expect(stripped).toMatchInlineSnapshot(`
@@ -81,7 +81,7 @@ Test 1.
 
 Click the left button ![Left Button Icon](../path-to-left/button.png)
 
-Test 2.`
+Test 2.`,
         );
 
         expect(stripped).toMatchInlineSnapshot(`
@@ -127,7 +127,7 @@ Lists of items should not be affected either.
 - Here is list item number 3.
 
 More text after the list.
-`
+`,
         );
 
         expect(stripped).toMatchInlineSnapshot(`
@@ -148,7 +148,7 @@ More text after the list.
 - Here is list item number 1
 - Here is list item number 2
 - Here is list item number 3
-`
+`,
         );
 
         expect(stripped).toMatchInlineSnapshot(`
@@ -174,7 +174,7 @@ More text after the list.
 |15 |Gateway B| 15% |
 |10 |Gateway C| 10% |
 |5 |Gateway D| 5% |
-`
+`,
         );
 
         expect(stripped).toMatchInlineSnapshot(`
@@ -196,7 +196,7 @@ Some content text.
 |Cell contents goes here|Cell contents goes here|
 
 This content comes after the table
-`
+`,
         );
 
         expect(stripped).toMatchInlineSnapshot(`
@@ -211,7 +211,7 @@ This content comes after the table
 
     it('should remove URLs in backticks', () => {
         const stripped = preprocessMarkdown(
-            'This includes `https://example.com` a URL.'
+            'This includes `https://example.com` a URL.',
         );
 
         expect(stripped).toMatchInlineSnapshot(`
@@ -227,7 +227,7 @@ title: "Cashier strategies"
 description: "Cashier strategies"
 ---
 This is the only content.
-`
+`,
         );
 
         expect(stripped).toMatchInlineSnapshot(`
@@ -246,7 +246,7 @@ another:
 - /some/path/
 ---
 This is the only content.
-`
+`,
         );
 
         expect(stripped).toMatchInlineSnapshot(`

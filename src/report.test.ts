@@ -36,7 +36,7 @@ describe('generateReport', () => {
         const report = generateReport(
             newReadability,
             oldReadability,
-            fileStatuses
+            fileStatuses,
         );
 
         expect(report.fileResults.find((result) => result.name === '1')?.diff)
@@ -112,7 +112,7 @@ describe('generateReport', () => {
         const report = generateReport(
             newReadability,
             oldReadability,
-            fileStatuses
+            fileStatuses,
         );
 
         expect(report.fileResults.find((result) => result.name === '2')?.diff)

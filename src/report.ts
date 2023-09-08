@@ -25,7 +25,7 @@ export type ReadabilityReport = {
 // returns: {a:2, b:0}
 function diffScores(
     newResult: ReadabilityScores,
-    oldResult: ReadabilityScores
+    oldResult: ReadabilityScores,
 ): ReadabilityScores {
     // @ts-ignore
     return Object.keys(newResult).reduce((acc, key) => {
@@ -40,7 +40,7 @@ function diffScores(
 function addDiffToResults(
     newResults: SingleReadabilityResult[],
     oldResults: SingleReadabilityResult[],
-    renamedFiles: FileStatuses['renamed'] = []
+    renamedFiles: FileStatuses['renamed'] = [],
 ): SingleReadabilityResultWithDiff[] {
     return newResults.map((newResult) => {
         const oldName =
@@ -48,7 +48,7 @@ function addDiffToResults(
             newResult.name;
 
         const matchingOldResult = oldResults.find(
-            (oldResult) => oldResult.name === oldName
+            (oldResult) => oldResult.name === oldName,
         );
 
         const diff = matchingOldResult
@@ -66,7 +66,7 @@ function addDiffToResults(
 // if that file was added or modified in this PR
 function addFileStatusToResults(
     results: SingleReadabilityResultWithDiff[],
-    {added, modified}: FileStatuses
+    {added, modified}: FileStatuses,
 ) {
     return results.map((result) => {
         let status = null;
@@ -89,26 +89,26 @@ function addFileStatusToResults(
 export const generateReport = (
     newReadability: ReadabilityResults,
     oldReadability: ReadabilityResults,
-    fileStatuses: FileStatuses
+    fileStatuses: FileStatuses,
 ): ReadabilityReport => {
     const filesWithDiff = addDiffToResults(
         newReadability.fileResults,
         oldReadability.fileResults,
-        fileStatuses.renamed
+        fileStatuses.renamed,
     );
     const filesWithStatuses = addFileStatusToResults(
         filesWithDiff,
-        fileStatuses
+        fileStatuses,
     );
     const onlyTouchedFiles = filesWithStatuses.filter(
-        (result) => result.status !== null
+        (result) => result.status !== null,
     );
 
     return {
         fileResults: onlyTouchedFiles,
         averageResult: addDiffToResults(
             newReadability.averageResult,
-            oldReadability.averageResult
+            oldReadability.averageResult,
         ),
     };
 };

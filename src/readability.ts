@@ -129,7 +129,7 @@ const removeFrontmatter: Plugin = () => (tree) => {
             (childNode: any, index: number) => {
                 // @ts-ignore
                 return index > 0 && childNode.type === 'thematicBreak';
-            }
+            },
         );
 
         if (secondThematicBreakIndex === -1) {
@@ -301,16 +301,16 @@ export function scoreText(text: string): ThirdPartyReadabilityScores {
             [key]: capBetween(
                 METRIC_RANGES[key as keyof typeof METRIC_RANGES].min,
                 METRIC_RANGES[key as keyof typeof METRIC_RANGES].max,
-                value
+                value,
             ),
         }),
-        {}
+        {},
     ) as ThirdPartyReadabilityScores;
 }
 
 // Returns each score normalized to a value between 0 and 1
 function normalizeScores(
-    scores: ThirdPartyReadabilityScores
+    scores: ThirdPartyReadabilityScores,
 ): ThirdPartyReadabilityScores {
     const normalize = (range: {min: number; max: number}, value: number) =>
         (value - range.min) / (range.max - range.min);
@@ -318,26 +318,26 @@ function normalizeScores(
     return {
         fleschReadingEase: normalize(
             METRIC_RANGES.fleschReadingEase,
-            scores.fleschReadingEase
+            scores.fleschReadingEase,
         ),
         gunningFog: normalize(METRIC_RANGES.gunningFog, scores.gunningFog),
         automatedReadabilityIndex: normalize(
             METRIC_RANGES.automatedReadabilityIndex,
-            scores.automatedReadabilityIndex
+            scores.automatedReadabilityIndex,
         ),
         daleChallReadabilityScore: normalize(
             METRIC_RANGES.daleChallReadabilityScore,
-            scores.daleChallReadabilityScore
+            scores.daleChallReadabilityScore,
         ),
         colemanLiauIndex: normalize(
             METRIC_RANGES.colemanLiauIndex,
-            scores.colemanLiauIndex
+            scores.colemanLiauIndex,
         ),
     };
 }
 
 function calculateReadabilityScore(
-    normalizedScores: ThirdPartyReadabilityScores
+    normalizedScores: ThirdPartyReadabilityScores,
 ) {
     const weights = {
         fleschReadingEase: 0.1653977378,
