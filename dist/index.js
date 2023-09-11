@@ -131,16 +131,14 @@ const main = () => __awaiter(void 0, void 0, void 0, function* () {
         // action parameters
         const token = core.getInput('github-token');
         const glob = core.getInput('glob');
-        const baseBranchRef = github_1.context.payload.pull_request.base.ref;
-        const headBranchRef = github_1.context.payload.pull_request.head.ref;
+        const baseBranchRef = github_1.context.payload.pull_request.base.sha;
+        const headBranchRef = github_1.context.payload.pull_request.head.sha;
         const prNumber = github_1.context.payload.pull_request.number;
         const client = (0, github_1.getOctokit)(token);
         // Run readability on base branch
-        yield exec.exec(`git fetch origin ${baseBranchRef}`);
         yield exec.exec(`git checkout ${baseBranchRef}`);
         const oldReadability = (0, readability_files_1.calculateReadability)(glob);
         // Run readability on head branch
-        yield exec.exec(`git fetch origin ${headBranchRef}`);
         yield exec.exec(`git checkout ${headBranchRef}`);
         const newReadability = (0, readability_files_1.calculateReadability)(glob);
         const fileStatuses = yield (0, github_2.getFileStatusesFromPR)(client, github_1.context, prNumber);
