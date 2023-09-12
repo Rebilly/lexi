@@ -95,8 +95,10 @@ jobs:
         name: Report readability
         runs-on: ubuntu-latest
         steps:
-            - name: Checkout repo
-              uses: actions/checkout@v2
+            - name: Checkout repo with history
+              uses: actions/checkout@v4
+              with:
+                  fetch-depth: 0
             - uses: Rebilly/lexi@v1
               with:
                   github-token: ${{ secrets.GITHUB_TOKEN }}
