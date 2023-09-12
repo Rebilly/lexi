@@ -17,20 +17,20 @@ const main = async () => {
         const token = core.getInput('github-token');
         const glob = core.getInput('glob');
 
-        const baseBranchRef = context.payload.pull_request.base.ref;
-        const headBranchRef = context.payload.pull_request.head.ref;
+        const baseBranchSha = context.payload.pull_request.base.sha;
+        const headBranchSha = context.payload.pull_request.head.sha;
         const prNumber = context.payload.pull_request.number;
 
         const client = getOctokit(token);
 
         // Run readability on base branch
-        await exec.exec(`git fetch origin ${baseBranchRef}`);
-        await exec.exec(`git checkout ${baseBranchRef}`);
+        console.log(`Checking out ${baseBranchSha}`);
+        await exec.exec(`git checkout ${baseBranchSha}`);
         const oldReadability = calculateReadability(glob);
 
         // Run readability on head branch
-        await exec.exec(`git fetch origin ${headBranchRef}`);
-        await exec.exec(`git checkout ${headBranchRef}`);
+        console.log(`Checking out ${headBranchSha}`);
+        await exec.exec(`git checkout ${headBranchSha}`);
         const newReadability = calculateReadability(glob);
 
         const fileStatuses = await getFileStatusesFromPR(
