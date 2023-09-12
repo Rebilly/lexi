@@ -25,13 +25,13 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
       - name: Setup node
         uses: actions/setup-node@v1
         with:
             node-version: 18
       - name: Restore node_modules cache
-        uses: actions/cache@v2
+        uses: actions/cache@v3
         with:
             path: '**/node_modules'
             key: ${{ runner.os }}-modules-${{ hashFiles('**/yarn.lock') }}
