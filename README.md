@@ -99,7 +99,7 @@ jobs:
               uses: actions/checkout@v4
               with:
                   fetch-depth: 0
-            - uses: Rebilly/lexi@v1
+            - uses: Rebilly/lexi@v2
               with:
                   github-token: ${{ secrets.GITHUB_TOKEN }}
                   glob: '**/*.md'
