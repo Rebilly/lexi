@@ -37,7 +37,7 @@
         "@vercel/ncc": "^0.38.0",
         "@vitejs/plugin-vue": "^4.2.3",
         "commander": "^11.0.0",
-        "eslint": "^8.42.0",
+        "eslint": "^8.49.0",
         "eslint-plugin-github": "^4.8.0",
         "eslint-plugin-prettier": "^5.0.0",
         "js-yaml": "^4.1.0",
