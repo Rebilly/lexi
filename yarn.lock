@@ -668,10 +668,10 @@
     picocolors "^1.0.0"
     tslib "^2.6.0"
 
-"@rebilly/revel@^5.10.0":
-  version "5.10.0"
-  resolved "https://registry.yarnpkg.com/@rebilly/revel/-/revel-5.10.0.tgz#acd881c308fe54d2f4217d28fb59fdf8edfb4c1c"
-  integrity sha512-+CFtnNIpjLSgJJlqyxGZuhAvZBEtdDQwRUuB5+6fF7gf08PM7D4HQmrzp741zMfQJb1vkerNF+WRpwzw372/ng==
+"@rebilly/revel@^5.11.0":
+  version "5.11.0"
+  resolved "https://registry.yarnpkg.com/@rebilly/revel/-/revel-5.11.0.tgz#65e7618be6feb52d1df64185d74e3e4e2d9f7c13"
+  integrity sha512-a4T0Ba4mqqIYTluyCJz2NICBwspQVP8wHjShngtohvZgLXTTA6O242ZJeXzl4ccRaweI4Ufc9nrGmEqNDFDlLQ==
 
 "@sinclair/typebox@^0.27.8":
   version "0.27.8"
