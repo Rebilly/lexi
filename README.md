@@ -136,7 +136,7 @@ For example: `yarn run:local:report ./test-data/old ./test-data/new`
     1. Set the title to the version number, for example `v1.0.0`.
     1. Click "Generate release notes" to automatically generate the description since the last release.
     1. Click "Publish release".
-1. The release will be published to the Marketplace, and a [workflow automatically](./.github/workflows/update-tags-post-release.yml) updates the major and minor tags.
+1. The release is published to the Marketplace, and a [workflow automatically](./.github/workflows/update-tags-post-release.yml) updates the major and minor tags.
 
 ## Playground
 
