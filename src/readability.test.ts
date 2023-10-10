@@ -254,6 +254,77 @@ This is the only content.
           "
         `);
     });
+
+    it('should remove markdoc tags', () => {
+        const stripped = preprocessMarkdown(
+            `# This is the first heading
+
+Here is the first paragraph text.
+
+
+{% tabs %}
+
+\`\`\`HTML {% label="HTML" %}
+<span>Removed</span>
+\`\`\`
+
+\`\`\`CSS {% label="CSS" %}
+.removed { }
+\`\`\`
+
+{% /tabs %}
+
+Here is the second paragraph text.
+
+{% admonition type="info" %}
+This text should be scored by lexi.
+{% /admonition %}
+
+Here is the third paragraph text.
+
+{% custom-component
+    property=[]
+/%}
+
+Here is the fourth paragraph text.
+
+{% custom-component %}
+  {% custom-component-2 %}
+    The first sub text paragraph.
+    {% custom-component-3 %}
+      The second sub text paragraph.
+    {% /custom-component-3 %}
+
+    {% custom-component-3 %}
+      The third sub text paragraph.
+    {% /custom-component-3 %}
+  {% /step-group %}
+
+  \`\`\`HTML {% label="checkout.html" %}
+    <span>Nested code, gone.</span>
+  \`\`\`
+
+  \`\`\`JavaScript {% label="server.js" %}
+    // Nested code, gone.
+  \`\`\`
+{% /custom-component %}
+
+Here is the fifth paragraph text.
+`,
+        );
+
+        expect(stripped).toMatchInlineSnapshot(`
+              "Here is the first paragraph text.
+              Here is the second paragraph text.
+              This text should be scored by lexi.
+              Here is the third paragraph text.
+              Here is the fourth paragraph text.
+              The first sub text paragraph.
+              The second sub text paragraph.
+              Here is the fifth paragraph text.
+              "
+            `);
+    });
 });
 
 describe('scoring', () => {

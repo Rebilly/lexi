@@ -556,6 +556,13 @@ const convertColonsToPeriods = () => (tree) => {
         }
     });
 };
+// Remove markdoc tags
+const removeMarkdocTags = () => (tree) => {
+    (0, unist_util_visit_1.default)(tree, 'text', (textNode) => {
+        // @ts-ignore
+        textNode.value = textNode.value.replace(/{%[\s\S]*?%}/g, '');
+    });
+};
 // Iterate through all the table nodes and move their cell contents to the
 // top level parent
 const convertTableToText = () => (tree) => {
@@ -721,7 +728,8 @@ function preprocessMarkdown(markdown) {
         .use(removeUnwantedNodeTypes)
         .use(removeImageAltText)
         .use(removeFrontmatter)
-        .use(replaceNodesWithTheirTextContent);
+        .use(replaceNodesWithTheirTextContent)
+        .use(removeMarkdocTags);
     return (remarker
         .processSync(markdown)
         .toString()
