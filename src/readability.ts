@@ -164,6 +164,14 @@ const convertColonsToPeriods: Plugin = () => (tree) => {
     });
 };
 
+// Remove markdoc tags
+const removeMarkdocTags: Plugin = () => (tree) => {
+    visit(tree, 'text', (textNode) => {
+        // @ts-ignore
+        textNode.value = textNode.value.replace(/{%[\s\S]*?%}/g, '');
+    });
+};
+
 // Iterate through all the table nodes and move their cell contents to the
 // top level parent
 const convertTableToText: Plugin = () => (tree) => {
@@ -376,7 +384,8 @@ export function preprocessMarkdown(markdown: string) {
         .use(removeUnwantedNodeTypes)
         .use(removeImageAltText)
         .use(removeFrontmatter)
-        .use(replaceNodesWithTheirTextContent);
+        .use(replaceNodesWithTheirTextContent)
+        .use(removeMarkdocTags);
 
     return (
         remarker
