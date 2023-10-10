@@ -127,6 +127,17 @@ To test the action locally, execute the `run:local:report` command. This reports
 
 For example: `yarn run:local:report ./test-data/old ./test-data/new`
 
+### Release process
+
+1. Merge all changes into the `main` branch.
+1. Create a new [GitHub release](https://github.com/Rebilly/lexi/releases/new):
+    1. Enter the new tag in the release form, and choose "Create a new tag on publish". The tag must be prefixed with a `v`, for example `v1.0.0`. \
+    The version number must follow [semantic versioning](https://semver.org/).
+    1. Set the title to the version number, for example `v1.0.0`.
+    1. Click "Generate release notes" to automatically generate the description since the last release.
+    1. Click "Publish release".
+1. The release is published to the Marketplace, and a [workflow automatically](./.github/workflows/update-tags-post-release.yml) updates the major and minor tags.
+
 ## Playground
 
 To experiment with this tool in your web browser, and get real-time readability metric data as you edit a Markdown file, try out the [playground](https://rebilly.github.io/lexi/).
