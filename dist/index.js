@@ -556,13 +556,6 @@ const convertColonsToPeriods = () => (tree) => {
         }
     });
 };
-// Remove markdoc tags
-const removeMarkdocTags = () => (tree) => {
-    (0, unist_util_visit_1.default)(tree, 'text', (textNode) => {
-        // @ts-ignore
-        textNode.value = textNode.value.replace(/{%[\s\S]*?%}/g, '');
-    });
-};
 // Iterate through all the table nodes and move their cell contents to the
 // top level parent
 const convertTableToText = () => (tree) => {
@@ -728,12 +721,14 @@ function preprocessMarkdown(markdown) {
         .use(removeUnwantedNodeTypes)
         .use(removeImageAltText)
         .use(removeFrontmatter)
-        .use(replaceNodesWithTheirTextContent)
-        .use(removeMarkdocTags);
+        .use(replaceNodesWithTheirTextContent);
     return (remarker
         .processSync(markdown)
         .toString()
-        .replace(/\n+/g, `\n`) // Remove any blank lines
+        // Remove any markdoc tags
+        .replace(/{%[\s\S]*?%}/g, '')
+        // Remove any blank lines
+        .replace(/\n+/g, `\n`)
         // Remove any new lines that are added for manual word wrapping.
         // Here we just presume these will be preceeded by a normal alphabetical character
         .replace(/([a-zA-Z])\n/g, '$1 '));
