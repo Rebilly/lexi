@@ -309,21 +309,29 @@ Here is the fourth paragraph text.
   \`\`\`
 {% /custom-component %}
 
-Here is the fifth paragraph text.
+Special characters should not break markdoc parsing:
+{% custom-component options=[
+    {
+        "type": "excluded<object>",
+    }
+] /%}
+
+Here is the sixth paragraph text.
 `,
         );
 
         expect(stripped).toMatchInlineSnapshot(`
-              "Here is the first paragraph text.
-              Here is the second paragraph text.
-              This text should be scored by lexi.
-              Here is the third paragraph text.
-              Here is the fourth paragraph text.
-              The first sub text paragraph.
-              The second sub text paragraph.
-              Here is the fifth paragraph text.
-              "
-            `);
+          "Here is the first paragraph text.
+          Here is the second paragraph text.
+          This text should be scored by lexi.
+          Here is the third paragraph text.
+          Here is the fourth paragraph text.
+          The first sub text paragraph.
+          The second sub text paragraph.
+          Special characters should not break markdoc parsing.
+          Here is the sixth paragraph text.
+          "
+        `);
     });
 });
 
