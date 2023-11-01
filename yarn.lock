@@ -534,10 +534,10 @@
     picocolors "^1.0.0"
     tslib "^2.6.0"
 
-"@rebilly/revel@^5.14.2":
-  version "5.14.2"
-  resolved "https://registry.yarnpkg.com/@rebilly/revel/-/revel-5.14.2.tgz#328322f8b59760412fb588a8776ff50396a78faf"
-  integrity sha512-AI84z2A2kEkXGBwrrm6KySilChwzVl8zQ6EauRX10/h5YQqgKN+tUvOZ8FesBNg33sIi+hyBh8DLlA+I2SBPLA==
+"@rebilly/revel@^5.14.5":
+  version "5.14.5"
+  resolved "https://registry.yarnpkg.com/@rebilly/revel/-/revel-5.14.5.tgz#8e53d0d7acc60c03e9bba914446e8c792c1a086c"
+  integrity sha512-7hgL8iqPen8wxUGC3KA1IvGT8Ddt+DH63+cVKLIzzWmvQ8jgE3CNnffUxYCv1XEnmw3nHcV1vF0UIYfQocFo7w==
 
 "@sinclair/typebox@^0.27.8":
   version "0.27.8"
