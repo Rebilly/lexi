@@ -416,7 +416,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.calculateReadabilityOfText = exports.preprocessMarkdown = exports.scoreText = exports.METRIC_RANGES = void 0;
-const strip_markdown_1 = __importDefault(__nccwpck_require__(1082));
+const strip_markdown_1 = __importDefault(__nccwpck_require__(4654));
 const remark_1 = __nccwpck_require__(5745);
 const remark_gfm_1 = __importDefault(__nccwpck_require__(8103));
 const unist_util_visit_1 = __importStar(__nccwpck_require__(199));
@@ -42612,32 +42612,49 @@ const remark = unified().use(remarkParse).use(remarkStringify).freeze()
 
 /***/ }),
 
-/***/ 1082:
+/***/ 4654:
 /***/ ((__unused_webpack___webpack_module__, __webpack_exports__, __nccwpck_require__) => {
 
 "use strict";
+// ESM COMPAT FLAG
 __nccwpck_require__.r(__webpack_exports__);
-/* harmony export */ __nccwpck_require__.d(__webpack_exports__, {
-/* harmony export */   "default": () => (/* binding */ stripMarkdown)
-/* harmony export */ });
+
+// EXPORTS
+__nccwpck_require__.d(__webpack_exports__, {
+  "default": () => (/* reexport */ stripMarkdown)
+});
+
+;// CONCATENATED MODULE: ./node_modules/strip-markdown/lib/index.js
 /**
- * @typedef {import('mdast').Content} Content
+ * @typedef {import('mdast').Heading} Heading
+ * @typedef {import('mdast').Image} Image
+ * @typedef {import('mdast').ImageReference} ImageReference
+ * @typedef {import('mdast').InlineCode} InlineCode
+ * @typedef {import('mdast').Nodes} Nodes
+ * @typedef {import('mdast').Paragraph} Paragraph
+ * @typedef {import('mdast').Parents} Parents
  * @typedef {import('mdast').Root} Root
- * @typedef {Root|Content} Node
- * @typedef {Node['type']} Type
- *
+ * @typedef {import('mdast').RootContent} RootContent
+ * @typedef {import('mdast').Text} Text
+ */
+
+/**
  * @callback Handler
+ *   Transform a node.
  * @param {any} node
- * @returns {Node|Node[]|undefined} node
+ *   Node.
+ * @returns {Array<Nodes> | Nodes | null | undefined}
+ *   Result.
  *
- * @typedef {Partial<Record<Type, Handler>>} Handlers
+ * @typedef {Partial<Record<Nodes['type'], Handler>>} Handlers
+ *   Handlers.
  *
  * @typedef Options
  *   Configuration.
- * @property {Array.<Type>|undefined} [keep]
- *   List of node types to leave unchanged.
- * @property {Array.<Type|[Type, Handler]>|undefined} [remove]
- *   List of additional node types to remove or replace.
+ * @property {ReadonlyArray<Nodes['type']> | null | undefined} [keep]
+ *   List of node types to leave unchanged (optional).
+ * @property {ReadonlyArray<readonly [Nodes['type'], Handler] | Nodes['type']> | null | undefined} [remove]
+ *   List of node types to remove (or replace, with handlers) (optional).
  */
 
 /**
@@ -42647,59 +42664,67 @@ __nccwpck_require__.r(__webpack_exports__);
  * @type {Handlers}
  */
 const defaults = {
-  heading: paragraph,
-  text,
-  inlineCode: text,
-  image,
-  imageReference: image,
-  break: lineBreak,
-
   blockquote: children,
+  break: lineBreak,
+  code: empty,
+  definition: empty,
+  delete: children,
+  emphasis: children,
+  footnoteReference: empty,
+  footnoteDefinition: empty,
+  heading: paragraph,
+  html: empty,
+  image: lib_image,
+  imageReference: lib_image,
+  inlineCode: lib_text,
   list: children,
   listItem: children,
-  strong: children,
-  emphasis: children,
-  delete: children,
   link: children,
   linkReference: children,
-
-  code: empty,
-  thematicBreak: empty,
-  html: empty,
+  strong: children,
   table: empty,
   tableCell: empty,
-  definition: empty,
-  yaml: empty,
-
-  // @ts-expect-error: custom frontmatter node.
+  text: lib_text,
+  thematicBreak: empty,
+  // @ts-expect-error: custom frontmatter, sometimes defined with
+  // `remark-frontmatter`.
   toml: empty,
-
-  footnoteReference: empty,
-  footnoteDefinition: empty
+  yaml: empty
 }
 
-const own = {}.hasOwnProperty
+/** @type {Readonly<Options>} */
+const emptyOptions = {}
+/** @type {ReadonlyArray<Nodes['type']>} */
+const emptyTypes = []
 
 /**
- * Plugin to remove markdown formatting.
+ * Remove markdown formatting.
  *
- * @type {import('unified').Plugin<[Options?] | void[], Root>}
- * @returns {import('unified').Transformer<Root>}
+ * * remove `code`, `html`, `horizontalRule`, `table`, `toml`, `yaml`, and
+ *   their content
+ * * render everything else as simple paragraphs without formatting
+ * * uses `alt` text for images
+ *
+ * @param {Readonly<Options> | null | undefined} [options]
+ *   Configuration (optional).
+ * @returns
+ *   Transform.
  */
-function stripMarkdown(options = {}) {
-  const handlers = Object.assign({}, defaults)
-  const remove = options.remove || []
-  const keep = options.keep || []
+function stripMarkdown(options) {
+  const handlers = {...defaults}
+  const settings = options || emptyOptions
+  const keep = settings.keep || emptyTypes
+  const remove = settings.remove || emptyTypes
 
   let index = -1
 
   while (++index < remove.length) {
     const value = remove[index]
 
-    if (Array.isArray(value)) {
-      handlers[value[0]] = value[1]
-    } else {
+    if (typeof value === 'string') {
       handlers[value] = empty
+    } else {
+      handlers[value[0]] = value[1]
     }
   }
 
@@ -42709,7 +42734,7 @@ function stripMarkdown(options = {}) {
   if (keep.length === 0) {
     map = handlers
   } else {
-    /** @type {Type} */
+    /** @type {Nodes['type']} */
     let key
 
     for (key in handlers) {
@@ -42724,32 +42749,45 @@ function stripMarkdown(options = {}) {
     while (++index < keep.length) {
       key = keep[index]
 
-      if (!own.call(handlers, key)) {
+      if (!Object.hasOwn(handlers, key)) {
         throw new Error(
-          'Invalid `keep` option: No modifier is defined for node type `' +
+          'Unknown node type `' +
             key +
-            '`'
+            "` in `keep`, use a replace tuple with a handle instead: `remove: [['" +
+            key +
+            "', handle]]`"
         )
       }
     }
   }
 
-  // @ts-expect-error: assume content model (for root) matches.
-  return one
+  /**
+   * @param {Root} tree
+   *   Current tree.
+   * @returns {Root}
+   *   New tree.
+   */
+  return function (tree) {
+    // Cast as we assume root in -> root out.
+    const result = /** @type {Root} */ (one(tree))
+    return result
+  }
 
   /**
-   * @param {Node} node
-   * @returns {Node|Node[]|undefined}
+   * @param {Nodes} node
+   *   Node.
+   * @returns {Array<Nodes> | Nodes | undefined}
+   *   Result.
    */
   function one(node) {
-    /** @type {Type} */
+    /** @type {Nodes['type']} */
     const type = node.type
-    /** @type {Node|Node[]|undefined} */
+    /** @type {Array<Nodes> | Nodes | undefined} */
     let result = node
 
-    if (type in map) {
+    if (Object.hasOwn(map, type)) {
       const handler = map[type]
-      if (handler) result = handler(result)
+      if (handler) result = handler(result) || undefined
     }
 
     result = Array.isArray(result) ? all(result) : result
@@ -42763,12 +42801,14 @@ function stripMarkdown(options = {}) {
   }
 
   /**
-   * @param {Node[]} nodes
-   * @returns {Node[]}
+   * @param {Array<Nodes>} nodes
+   *   Nodes.
+   * @returns {Array<Nodes>}
+   *   Result.
    */
   function all(nodes) {
     let index = -1
-    /** @type {Node[]} */
+    /** @type {Array<Nodes>} */
     const result = []
 
     while (++index < nodes.length) {
@@ -42788,21 +42828,27 @@ function stripMarkdown(options = {}) {
 /**
  * Clean nodes: merges literals.
  *
- * @param {Node[]} values
- * @returns {Node[]}
+ * @param {Array<Nodes>} values
+ *   Nodes.
+ * @returns {Array<Nodes>}
+ *   Results.
  */
 function clean(values) {
   let index = -1
-  /** @type {Node[]} */
+  /** @type {Array<Nodes>} */
   const result = []
-  /** @type {Node|undefined} */
+  /** @type {Nodes | undefined} */
   let previous
 
   while (++index < values.length) {
     const value = values[index]
 
-    if (previous && value.type === previous.type && 'value' in value) {
-      // @ts-expect-error: we just checked that they’re the same node.
+    if (
+      previous &&
+      value.type === previous.type &&
+      'value' in value &&
+      'value' in previous
+    ) {
       previous.value += value.value
     } else {
       result.push(value)
@@ -42814,52 +42860,76 @@ function clean(values) {
 }
 
 /**
- * @type {Handler}
- * @param {import('mdast').Image|import('mdast').ImageReference} node
+ * @param {Image | ImageReference} node
+ *   Node.
+ * @returns {Text | undefined}
+ *   Result.
+ * @satisfies {Handler}
  */
-function image(node) {
+function lib_image(node) {
   const title = 'title' in node ? node.title : ''
   const value = node.alt || title || ''
   return value ? {type: 'text', value} : undefined
 }
 
 /**
- * @type {Handler}
- * @param {import('mdast').Text} node
+ * @param {InlineCode | Text} node
+ *   Node.
+ * @returns {Text}
+ *   Result.
+ * @satisfies {Handler}
  */
-function text(node) {
+function lib_text(node) {
   return {type: 'text', value: node.value}
 }
 
 /**
- * @type {Handler}
- * @param {import('mdast').Paragraph} node
+ * @param {Heading | Paragraph} node
+ *   Node.
+ * @returns {Paragraph}
+ *   Result.
+ * @satisfies {Handler}
  */
 function paragraph(node) {
   return {type: 'paragraph', children: node.children}
 }
 
 /**
- * @type {Handler}
- * @param {Extract<Node, import('unist').Parent>} node
+ * @param {Parents} node
+ *   Parent.
+ * @returns {Array<RootContent>}
+ *   Node.
+ * @satisfies {Handler}
  */
 function children(node) {
   return node.children
 }
 
 /**
- * @type {Handler}
+ * @returns {Text}
+ *   Node.
+ * @satisfies {Handler}
  */
 function lineBreak() {
   return {type: 'text', value: '\n'}
 }
 
 /**
- * @type {Handler}
+ * @returns {undefined}
+ *   Nothing.
+ * @satisfies {Handler}
  */
 function empty() {
   return undefined
 }
+
+;// CONCATENATED MODULE: ./node_modules/strip-markdown/index.js
+/**
+ * @typedef {import('./lib/index.js').Handler} Handler
+ * @typedef {import('./lib/index.js').Options} Options
+ */
+
+
 
 
 /***/ }),
