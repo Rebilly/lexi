@@ -32,10 +32,10 @@
         "@guolao/vue-monaco-editor": "^1.4.0",
         "@rebilly/revel": "^5.15.0",
         "@types/glob": "^8.1.0",
-        "@types/node": "^20.8.8",
+        "@types/node": "^20.10.4",
         "@typescript-eslint/parser": "^6.10.0",
         "@vercel/ncc": "^0.38.1",
-        "@vitejs/plugin-vue": "^4.4.0",
+        "@vitejs/plugin-vue": "^4.5.2",
         "commander": "^11.1.0",
         "eslint": "^8.53.0",
         "eslint-plugin-github": "^4.10.1",
@@ -50,7 +50,7 @@
         "vitest": "^0.34.6",
         "vue": "^3.3.8",
         "vue-codemirror": "^6.1.1",
-        "vue-tsc": "^1.8.19"
+        "vue-tsc": "^1.8.25"
     },
     "prettier": {
         "tabWidth": 4,
