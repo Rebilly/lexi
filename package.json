@@ -29,7 +29,7 @@
         "unist-util-visit": "2.0.3"
     },
     "devDependencies": {
-        "@guolao/vue-monaco-editor": "^1.4.0",
+        "@guolao/vue-monaco-editor": "^1.4.1",
         "@rebilly/revel": "^5.15.0",
         "@types/glob": "^8.1.0",
         "@types/node": "^20.10.4",
