@@ -107,7 +107,7 @@ Some content. This is paragraph with const items = [];
 
         expect(stripped).toMatchInlineSnapshot(`
           "
-          Some content. This is paragraph with const items = \\\\[];
+          Some content. This is paragraph with const items = \\[];
           "
         `);
     });

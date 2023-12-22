@@ -55,10 +55,10 @@ describe('reportToComment', () => {
 
           File | Readability
           --- | ---
-          [file-1.md](https://github.com/repo-name/blob/commit-sha/./folder/file-1.md \\"./folder/file-1.md\\") | 10 (🟢 +1)
-          [file-2.md](https://github.com/repo-name/blob/commit-sha/./folder/file-2.md \\"./folder/file-2.md\\") | 5 (🔴 -1)
-          [file-3.md](https://github.com/repo-name/blob/commit-sha/./folder/file-3.md \\"./folder/file-3.md\\") | 15 (🟢 +0)
-          [new-file.md](https://github.com/repo-name/blob/commit-sha/./folder/new-file.md \\"./folder/new-file.md\\") | 20 (-)
+          [file-1.md](https://github.com/repo-name/blob/commit-sha/./folder/file-1.md "./folder/file-1.md") | 10 (🟢 +1)
+          [file-2.md](https://github.com/repo-name/blob/commit-sha/./folder/file-2.md "./folder/file-2.md") | 5 (🔴 -1)
+          [file-3.md](https://github.com/repo-name/blob/commit-sha/./folder/file-3.md "./folder/file-3.md") | 15 (🟢 +0)
+          [new-file.md](https://github.com/repo-name/blob/commit-sha/./folder/new-file.md "./folder/new-file.md") | 20 (-)
 
 
           <details>
@@ -69,13 +69,13 @@ describe('reportToComment', () => {
 
           File | Readability | FRE | GF | ARI | CLI | DCRS
           --- | --- | --- | --- | --- | --- | ---
-          [file-1.md](https://github.com/repo-name/blob/commit-sha/./folder/file-1.md \\"./folder/file-1.md\\") | 10 | 10 | 10 | 10 | 10 | 10
+          [file-1.md](https://github.com/repo-name/blob/commit-sha/./folder/file-1.md "./folder/file-1.md") | 10 | 10 | 10 | 10 | 10 | 10
           &nbsp; | 🟢 +1 | 🟢 +1 | 🔴 -1 | 🔴 -1 | 🔴 -1 | 🔴 -1
-          [file-2.md](https://github.com/repo-name/blob/commit-sha/./folder/file-2.md \\"./folder/file-2.md\\") | 5 | 5 | 5 | 5 | 5 | 5
+          [file-2.md](https://github.com/repo-name/blob/commit-sha/./folder/file-2.md "./folder/file-2.md") | 5 | 5 | 5 | 5 | 5 | 5
           &nbsp; | 🔴 -1 | 🔴 -1 | 🟢 +1 | 🟢 +1 | 🟢 +1 | 🟢 +1
-          [file-3.md](https://github.com/repo-name/blob/commit-sha/./folder/file-3.md \\"./folder/file-3.md\\") | 15 | 15 | 15 | 15 | 15 | 15
+          [file-3.md](https://github.com/repo-name/blob/commit-sha/./folder/file-3.md "./folder/file-3.md") | 15 | 15 | 15 | 15 | 15 | 15
           &nbsp; | 🟢 +0 | 🟢 +0 | 🟢 +0 | 🟢 +0 | 🟢 +0 | 🟢 +0
-          [new-file.md](https://github.com/repo-name/blob/commit-sha/./folder/new-file.md \\"./folder/new-file.md\\") | 20 | 20 | 20 | 20 | 20 | 20
+          [new-file.md](https://github.com/repo-name/blob/commit-sha/./folder/new-file.md "./folder/new-file.md") | 20 | 20 | 20 | 20 | 20 | 20
           &nbsp; | - | - | - | - | - | -
 
 
