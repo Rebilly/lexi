@@ -355,10 +355,10 @@
   resolved "https://registry.yarnpkg.com/@github/browserslist-config/-/browserslist-config-1.0.0.tgz#952fe6da3e6b8ed6a368f3a1a08a9d2ef84e8d04"
   integrity sha512-gIhjdJp/c2beaIWWIlsXdqXVRUz3r2BxBCpfz/F3JXHvSAQ1paMYjLH+maEATtENg+k5eLV7gA+9yPp762ieuw==
 
-"@guolao/vue-monaco-editor@^1.4.0":
-  version "1.4.0"
-  resolved "https://registry.yarnpkg.com/@guolao/vue-monaco-editor/-/vue-monaco-editor-1.4.0.tgz#7aea3d616fbed2fbc8ef1170cc7696b3c8ef6811"
-  integrity sha512-aQ4S9U2TWUNpOl1hArsvcwEZt6IHWFMfRMpHlqXHVJ1RUXoVUvQGhDfDdr/4z3pOGjgecS0/mBf1DGGz35D/fQ==
+"@guolao/vue-monaco-editor@^1.4.1":
+  version "1.4.1"
+  resolved "https://registry.yarnpkg.com/@guolao/vue-monaco-editor/-/vue-monaco-editor-1.4.1.tgz#2f64db555694ed98b8c23dcda535c1c518c1ede3"
+  integrity sha512-qJKn0AcxCO5vBENh0dA5j47eaaOxX5gT9Tt7adWhOAPcPZUDFWy+ZJjcGVfmXkUMXOoWNyP78TuK8l3olSRoew==
   dependencies:
     "@monaco-editor/loader" "^1.4.0"
     vue-demi latest
