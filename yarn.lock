@@ -714,10 +714,10 @@
   resolved "https://registry.yarnpkg.com/@vercel/ncc/-/ncc-0.38.1.tgz#13f08738111e1d9e8a22fd6141f3590e54d9a60e"
   integrity sha512-IBBb+iI2NLu4VQn3Vwldyi2QwaXt5+hTyh58ggAMoCGE6DJmPvwL3KPBWcJl1m9LYPChBLE980Jw+CS4Wokqxw==
 
-"@vitejs/plugin-vue@^4.5.2":
-  version "4.5.2"
-  resolved "https://registry.yarnpkg.com/@vitejs/plugin-vue/-/plugin-vue-4.5.2.tgz#1212d81bc83680e14448fefe55abd9fe1ed49ed1"
-  integrity sha512-UGR3DlzLi/SaVBPX0cnSyE37vqxU3O6chn8l0HJNzQzDia6/Au2A4xKv+iIJW8w2daf80G7TYHhi1pAUjdZ0bQ==
+"@vitejs/plugin-vue@^5.0.0":
+  version "5.0.0"
+  resolved "https://registry.yarnpkg.com/@vitejs/plugin-vue/-/plugin-vue-5.0.0.tgz#8e8946548e6dfd9eb0391bbc282ec8e52103e0dd"
+  integrity sha512-7x5e8X4J1Wi4NxudGjJBd2OFerAi/0nzF80ojCzvfj347WVr0YSn82C8BSsgwSHzlk9Kw5xnZfj0/7RLnNwP5w==
 
 "@vitest/expect@1.1.0":
   version "1.1.0"
