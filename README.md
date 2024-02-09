@@ -39,12 +39,10 @@ To view metrics from previous commits in a pull request:
 1. At the top right of the GitHub action, click **edited**.
 1. Select the commit report that you want to view.
 
-#### Example
-
 <p align="center">
   <picture>
     <source srcset="images/dialogue_dark.png" media="(prefers-color-scheme: dark)">
-    <img src="images/dialogue.png">
+    <img width="250" src="images/dialogue.png">
   </picture>
 </p>
 
