@@ -14,7 +14,7 @@ Use Lexi to reduce the complexity of the language in your documentation, and to 
   </picture>
 </p>
 
-Lexi is a GitHub action that reports readability metrics for Markdown files in your pull requests. Use these metrics to help you understand how changes impact the readability of your documentation. Lexi reports an overall readability score that is calculated based on a scaled combination of the following readability metrics: 
+Lexi is a GitHub action that reports readability metrics for Markdown files in your pull requests. Use these metrics to help you understand how changes impact the readability of your documentation. Lexi reports an overall readability score that is calculated based on a scaled combination of the following readability metrics:
 - [Flesch Reading Ease](https://en.wikipedia.org/wiki/Flesch_reading_ease)
 - [Gunning Fog Index](https://en.wikipedia.org/wiki/Gunning_fog_index)
 - [Automated Readability Index (ARI)](https://en.wikipedia.org/wiki/Automated_readability_index)
@@ -30,10 +30,26 @@ Reports describe the overall change to each file in a pull request, and also the
 - **Averages**: describes the overall readability of all the documentation in your repository for each available metric.
 - **Metrics targets**: describes the range and ideal score for each readability metric.
 
+#### View reports from previous commits
+
+Lexi displays a report for each commit. The scores displayed in the GitHub action represent the metrics from the most recent commit.
+
+To view metrics from previous commits in a pull request:
+
+1. At the top right of the GitHub action, click **edited**.
+1. Select the commit report that you want to view.
+
+<p align="left">
+  <picture>
+    <source srcset="images/dialogue_dark.png" media="(prefers-color-scheme: dark)">
+    <img width="500" src="images/dialogue.png">
+  </picture>
+</p>
+
 ### Example report
 
 > **Overall readability score:** 20.18 (🟢 +0.97)
-> 
+>
 > File | Readability
 > --- | ---
 > [README.md](https://github.com/Rebilly/lexi/blob/cce569da633a092c0a9b09bc1fe6d3df1b4dcb26/README.md "README.md") | 22.36 (🟢 +3.86)
@@ -43,7 +59,7 @@ Reports describe the overall change to each file in a pull request, and also the
 >
 > 🟢 - Shows an _increase_ in readability
 > 🔴 - Shows a _decrease_ in readability
-> 
+>
 > File | Readability | FRE | GF | ARI | CLI | DCRS
 > --- | --- | --- | --- | --- | --- | ---
 > [README.md](https://github.com/Rebilly/lexi/blob/cce569da633a092c0a9b09bc1fe6d3df1b4dcb26/README.md "README.md") | 22.36 | 44.11 | 16.67 | 28.7 | 11.85 | 7.66
