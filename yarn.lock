@@ -443,10 +443,10 @@
     picocolors "^1.0.0"
     tslib "^2.6.0"
 
-"@rebilly/revel@^6.12.1":
-  version "6.12.1"
-  resolved "https://registry.yarnpkg.com/@rebilly/revel/-/revel-6.12.1.tgz#dca8526254c7be04626c63661db8f555ee09af62"
-  integrity sha512-tT85c2uX9AK0FyundFndJk7udOLiHQUEI7C1eGHhvFPBo9h/J2/u1qVE5WhLB6Ihxysz4zY96WI8+jAjwVrnHw==
+"@rebilly/revel@^6.16.0":
+  version "6.16.0"
+  resolved "https://registry.yarnpkg.com/@rebilly/revel/-/revel-6.16.0.tgz#cfd20ec9513f89f7705123ba107ae60f838ac0bb"
+  integrity sha512-C0okXv1g/vIiIGmAopnmPcLZo7N+AKCuXxUe3oWmimjW3V9hHdoYzcBC3pqfAIKKJq4zEX84zI3qoAKVtFAYmw==
 
 "@rollup/rollup-android-arm-eabi@4.9.1":
   version "4.9.1"
