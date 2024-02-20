@@ -579,6 +579,11 @@
   dependencies:
     undici-types "~5.26.4"
 
+"@types/pluralize@^0.0.29":
+  version "0.0.29"
+  resolved "https://registry.yarnpkg.com/@types/pluralize/-/pluralize-0.0.29.tgz#6ffa33ed1fc8813c469b859681d09707eb40d03c"
+  integrity sha512-BYOID+l2Aco2nBik+iYS4SZX0Lf20KPILP5RGmM1IgzdwNdTs0eebiFriOPcej1sX9mLnSoiNte5zcFxssgpGA==
+
 "@types/semver@^7.5.0":
   version "7.5.1"
   resolved "https://registry.yarnpkg.com/@types/semver/-/semver-7.5.1.tgz#0480eeb7221eb9bc398ad7432c9d7e14b1a5a367"
@@ -3146,11 +3151,6 @@ pkg-types@^1.0.3:
     mlly "^1.2.0"
     pathe "^1.1.0"
 
-pluralize@^7.0.0:
-  version "7.0.0"
-  resolved "https://registry.yarnpkg.com/pluralize/-/pluralize-7.0.0.tgz#298b89df8b93b0221dbf421ad2b1b1ea23fc6777"
-  integrity sha512-ARhBOdzS3e41FbkW/XWrTEtukqqLoK5+Z/4UeDaLuSW+39JPeFgs4gCGqsrJHVZX0fUrx//4OF0K1CUGwlIFow==
-
 pluralize@^8.0.0:
   version "8.0.0"
   resolved "https://registry.yarnpkg.com/pluralize/-/pluralize-8.0.0.tgz#1a6fa16a38d12a1901e0320fa017051c539ce3b1"
@@ -3517,14 +3517,14 @@ svg-element-attributes@^1.3.1:
   resolved "https://registry.yarnpkg.com/svg-element-attributes/-/svg-element-attributes-1.3.1.tgz#0c55afac6284291ab563d0913c062cf78a8c0ddb"
   integrity sha512-Bh05dSOnJBf3miNMqpsormfNtfidA/GxQVakhtn0T4DECWKeXQRQUceYjJ+OxYiiLdGe4Jo9iFV8wICFapFeIA==
 
-syllable@^3.4.0:
-  version "3.6.1"
-  resolved "https://registry.yarnpkg.com/syllable/-/syllable-3.6.1.tgz#1b08a0522c14ebc4db871f5697f68f49616e87d8"
-  integrity sha512-L2yAT4DRi9rwHpHMResxA/VKSM9T7X+eRAOEKoAFvHJxaxjtxT2Rt8qfB6pbrxeOZWsHu+ON0kTc9Oo0lU2PHA==
+syllable@^5.0.1:
+  version "5.0.1"
+  resolved "https://registry.yarnpkg.com/syllable/-/syllable-5.0.1.tgz#ae283ef2b488e6047bfb9da7874a72f4df0eb881"
+  integrity sha512-HWtNCp6v7J8H0lrT8j1HHjfOLltRoDcC7QRFVu25p4BE52JqetXG65nqC7CsatT8WQRfY4Qvh93BWJIUxbmXFg==
   dependencies:
+    "@types/pluralize" "^0.0.29"
     normalize-strings "^1.1.0"
-    pluralize "^7.0.0"
-    trim "0.0.1"
+    pluralize "^8.0.0"
 
 synckit@^0.8.6:
   version "0.8.6"
@@ -3534,13 +3534,13 @@ synckit@^0.8.6:
     "@pkgr/utils" "^2.4.2"
     tslib "^2.6.2"
 
-text-readability@^1.0.5:
-  version "1.0.5"
-  resolved "https://registry.yarnpkg.com/text-readability/-/text-readability-1.0.5.tgz#49e679a889926f41edd08b4d14d0d8b94241ca02"
-  integrity sha512-vFe48ng7VSauwaryuWufLKC3/sZrnZhaLKECvrBxFchgZoWBoPwl4s8rMhV95qGq2s9Rt3K6itjz+PHk+4vxjQ==
+text-readability@^1.1.0:
+  version "1.1.0"
+  resolved "https://registry.yarnpkg.com/text-readability/-/text-readability-1.1.0.tgz#0609b0b6620c372dab80d946e9aafd02d3a3d695"
+  integrity sha512-I1kqUJX8nJwzCvCZSV945sjisi4NBnwZ5iwzzdsRXbqH8fKqhjwZMGdBm01UMb1K1EWrJ7jFozjXUobs7JZA6g==
   dependencies:
     pluralize "^8.0.0"
-    syllable "^3.4.0"
+    syllable "^5.0.1"
 
 text-table@^0.2.0:
   version "0.2.0"
@@ -3574,7 +3574,7 @@ to-regex-range@^5.0.1:
   dependencies:
     is-number "^7.0.0"
 
-trim@0.0.1, trim@^0.0.3:
+trim@^0.0.3:
   version "0.0.3"
   resolved "https://registry.yarnpkg.com/trim/-/trim-0.0.3.tgz#05243a47a3a4113e6b49367880a9cca59697a20b"
   integrity sha512-h82ywcYhHK7veeelXrCScdH7HkWfbIT1D/CgYO+nmDarz3SGNssVBMws6jU16Ga60AJCRAvPV6w6RLuNerQqjg==
