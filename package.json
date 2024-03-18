@@ -33,7 +33,7 @@
         "@rebilly/revel": "^6.16.0",
         "@types/glob": "^8.1.0",
         "@types/node": "^20.11.27",
-        "@typescript-eslint/parser": "^6.21.0",
+        "@typescript-eslint/parser": "^7.3.0",
         "@vercel/ncc": "^0.38.1",
         "@vitejs/plugin-vue": "^5.0.4",
         "commander": "^12.0.0",
