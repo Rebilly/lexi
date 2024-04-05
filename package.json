@@ -47,10 +47,10 @@
         "typescript": "^5.4.3",
         "vite": "^5.1.6",
         "vite-plugin-mkcert": "^1.17.3",
-        "vitest": "^1.2.2",
+        "vitest": "^1.4.0",
         "vue": "^3.4.20",
         "vue-codemirror": "^6.1.1",
-        "vue-tsc": "^2.0.6"
+        "vue-tsc": "^2.0.7"
     },
     "prettier": {
         "tabWidth": 4,
