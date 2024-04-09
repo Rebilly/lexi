@@ -43,7 +43,7 @@
         "js-yaml": "^4.1.0",
         "moment": "^2.30.1",
         "prettier": "^3.2.5",
-        "tsx": "^4.7.1",
+        "tsx": "^4.7.2",
         "typescript": "^5.4.3",
         "vite": "^5.2.8",
         "vite-plugin-mkcert": "^1.17.3",
