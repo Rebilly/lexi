@@ -144,6 +144,19 @@ const removeFrontmatter: Plugin = () => (tree) => {
     });
 };
 
+// Remove all horizontal lines from the Markdown.
+// Horizontal lines are not a part of the sentence structure,
+// so we should remove them.
+const removeHorizontalLines: Plugin = () => (tree) => {
+    visit(tree, 'text', (textNode) => {
+        // @ts-ignore
+        if (textNode.value.includes('---')) {
+            // @ts-ignore
+            textNode.value = textNode.value.trim();
+        }
+    });
+};
+
 // Alt text is not a part of the sentence structure, so we should
 // remove it.
 const removeImageAltText: Plugin = () => (tree) => {
@@ -374,6 +387,7 @@ export function preprocessMarkdown(markdown: string) {
         .use(addPeriodsToListItems)
         .use(removeJsItems)
         .use(removeUnwantedNodeTypes)
+        .use(removeHorizontalLines)
         .use(removeImageAltText)
         .use(removeFrontmatter)
         .use(replaceNodesWithTheirTextContent);
