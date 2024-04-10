@@ -54,7 +54,7 @@ const upsertComment = (client, context, prNumber, body, hiddenHeader) => __await
 exports.upsertComment = upsertComment;
 // Given a PR number, returns 3 arrays: file names modified, added and renamed
 const getFileStatusesFromPR = (client, context, prNumber) => __awaiter(void 0, void 0, void 0, function* () {
-    const { data: files } = yield client.rest.pulls.listFiles(Object.assign(Object.assign({}, context.repo), { pull_number: prNumber, 
+    const { data: files } = yield client.rest.pulls.listFiles(Object.assign(Object.assign({}, context.repo), { pull_number: prNumber,
         // Pull the maximum number of files.
         // For PRs with over 100 files, we will have too many files which will create
         // a comment which is too large to post anyway.
@@ -546,6 +546,20 @@ const removeImageAltText = () => (tree) => {
         imageNode.alt = '';
     });
 };
+
+// Remove all horizontal lines from the Markdown.
+// Horizontal lines are not a part of the sentence structure,
+// so we should remove them.
+const removeHorizontalLines = () => (tree) => {
+  (0, unist_util_visit_1.default)(tree, 'text', (textNode) => {
+    // @ts-ignore
+    if (textNode.value.includes('---')) {
+      // @ts-ignore
+      textNode.value = textNode.value.trim();
+    }
+  });
+};
+
 // Convert colons to periods
 const convertColonsToPeriods = () => (tree) => {
     (0, unist_util_visit_1.default)(tree, 'text', (textNode) => {
@@ -566,7 +580,7 @@ const convertTableToText = () => (tree) => {
     });
     // Add a period to the end of each cell grouping if it doesnt already exsit
     (0, unist_util_visit_1.default)(tree, 'tableCell', (tableCellNode) => {
-        const lastNode = 
+        const lastNode =
         // @ts-ignore
         tableCellNode.children[tableCellNode.children.length - 1];
         if ((lastNode === null || lastNode === void 0 ? void 0 : lastNode.type) === 'text' && !(lastNode === null || lastNode === void 0 ? void 0 : lastNode.value.endsWith('.'))) {
@@ -714,6 +728,7 @@ function preprocessMarkdown(markdown) {
         .use(convertTableToText)
         .use(removeURLsInBackticks)
         .use(removeAdmonitionHeadings)
+        .use(removeHorizontalLines)
         .use(convertColonsToPeriods)
         .use(removeShortListItems)
         .use(addPeriodsToListItems)
@@ -1374,8 +1389,8 @@ class OidcClient {
             const res = yield httpclient
                 .getJson(id_token_url)
                 .catch(error => {
-                throw new Error(`Failed to get ID Token. \n 
-        Error Code : ${error.statusCode}\n 
+                throw new Error(`Failed to get ID Token. \n
+        Error Code : ${error.statusCode}\n
         Error Message: ${error.message}`);
             });
             const id_token = (_a = res.result) === null || _a === void 0 ? void 0 : _a.value;
@@ -64342,7 +64357,7 @@ module.exports = JSON.parse('{"105":"i","192":"A","193":"A","194":"A","195":"A",
 /************************************************************************/
 /******/ 	// The module cache
 /******/ 	var __webpack_module_cache__ = {};
-/******/ 	
+/******/
 /******/ 	// The require function
 /******/ 	function __nccwpck_require__(moduleId) {
 /******/ 		// Check if module is in cache
@@ -64356,7 +64371,7 @@ module.exports = JSON.parse('{"105":"i","192":"A","193":"A","194":"A","195":"A",
 /******/ 			// no module.loaded needed
 /******/ 			exports: {}
 /******/ 		};
-/******/ 	
+/******/
 /******/ 		// Execute the module function
 /******/ 		var threw = true;
 /******/ 		try {
@@ -64365,11 +64380,11 @@ module.exports = JSON.parse('{"105":"i","192":"A","193":"A","194":"A","195":"A",
 /******/ 		} finally {
 /******/ 			if(threw) delete __webpack_module_cache__[moduleId];
 /******/ 		}
-/******/ 	
+/******/
 /******/ 		// Return the exports of the module
 /******/ 		return module.exports;
 /******/ 	}
-/******/ 	
+/******/
 /************************************************************************/
 /******/ 	/* webpack/runtime/define property getters */
 /******/ 	(() => {
@@ -64382,12 +64397,12 @@ module.exports = JSON.parse('{"105":"i","192":"A","193":"A","194":"A","195":"A",
 /******/ 			}
 /******/ 		};
 /******/ 	})();
-/******/ 	
+/******/
 /******/ 	/* webpack/runtime/hasOwnProperty shorthand */
 /******/ 	(() => {
 /******/ 		__nccwpck_require__.o = (obj, prop) => (Object.prototype.hasOwnProperty.call(obj, prop))
 /******/ 	})();
-/******/ 	
+/******/
 /******/ 	/* webpack/runtime/make namespace object */
 /******/ 	(() => {
 /******/ 		// define __esModule on exports
@@ -64398,19 +64413,19 @@ module.exports = JSON.parse('{"105":"i","192":"A","193":"A","194":"A","195":"A",
 /******/ 			Object.defineProperty(exports, '__esModule', { value: true });
 /******/ 		};
 /******/ 	})();
-/******/ 	
+/******/
 /******/ 	/* webpack/runtime/compat */
-/******/ 	
+/******/
 /******/ 	if (typeof __nccwpck_require__ !== 'undefined') __nccwpck_require__.ab = __dirname + "/";
-/******/ 	
+/******/
 /************************************************************************/
-/******/ 	
+/******/
 /******/ 	// startup
 /******/ 	// Load entry module and return exports
 /******/ 	// This entry module is referenced by other modules so it can't be inlined
 /******/ 	var __webpack_exports__ = __nccwpck_require__(4822);
 /******/ 	module.exports = __webpack_exports__;
-/******/ 	
+/******/
 /******/ })()
 ;
 //# sourceMappingURL=index.js.map
