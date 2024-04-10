@@ -144,15 +144,14 @@ const removeFrontmatter: Plugin = () => (tree) => {
     });
 };
 
-// Remove all horizontal lines from the Markdown.
+// Remove all horizontal rules from the Markdown.
 // Horizontal lines are not a part of the sentence structure,
 // so we should remove them.
-const removeHorizontalLines: Plugin = () => (tree) => {
-    visit(tree, 'text', (textNode) => {
-        // @ts-ignore
-        if (textNode.value.includes('---')) {
-            // @ts-ignore
-            textNode.value = textNode.value.trim();
+const removeHorizontalRules: Plugin = () => (tree) => {
+    visit(tree, 'thematicBreak', (node, index, parent) => {
+        // Remove the thematicBreak node from its parent's children array
+        if (parent) {
+            parent.children.splice(index, 1);
         }
     });
 };
@@ -387,7 +386,7 @@ export function preprocessMarkdown(markdown: string) {
         .use(addPeriodsToListItems)
         .use(removeJsItems)
         .use(removeUnwantedNodeTypes)
-        .use(removeHorizontalLines)
+        .use(removeHorizontalRules)
         .use(removeImageAltText)
         .use(removeFrontmatter)
         .use(replaceNodesWithTheirTextContent);
