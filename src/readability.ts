@@ -148,7 +148,7 @@ const removeFrontmatter: Plugin = () => (tree) => {
 // Horizontal lines are not a part of the sentence structure,
 // so we should remove them.
 const removeHorizontalRules: Plugin = () => (tree) => {
-    visit(tree, 'thematicBreak', (node, index, parent) => {
+    visit(tree, 'thematicBreak', (_, index, parent) => {
         // Remove the thematicBreak node from its parent's children array
         if (parent) {
             parent.children.splice(index, 1);
