@@ -30,7 +30,7 @@
     },
     "devDependencies": {
         "@guolao/vue-monaco-editor": "^1.5.1",
-        "@rebilly/revel": "^6.22.10",
+        "@rebilly/revel": "^6.22.15",
         "@types/glob": "^8.1.0",
         "@types/node": "^20.12.5",
         "@typescript-eslint/parser": "^7.3.1",
