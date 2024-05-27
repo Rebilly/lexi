@@ -139,7 +139,7 @@ const removeFrontmatter: Plugin = () => (tree) => {
         } else {
             // Remove the two thematic breaks and all children
             // @ts-ignore
-            node?.children.splice(0, secondThematicBreakIndex + 1);
+            node?.children.splice(0, secondThematicBreakIndex - 1);
         }
     });
 };

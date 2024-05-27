@@ -534,7 +534,7 @@ const removeFrontmatter = () => (tree) => {
         else {
             // Remove the two thematic breaks and all children
             // @ts-ignore
-            node === null || node === void 0 ? void 0 : node.children.splice(0, secondThematicBreakIndex + 1);
+            node === null || node === void 0 ? void 0 : node.children.splice(0, secondThematicBreakIndex - 1);
         }
     });
 };
