@@ -534,7 +534,18 @@ const removeFrontmatter = () => (tree) => {
         else {
             // Remove the two thematic breaks and all children
             // @ts-ignore
-            node === null || node === void 0 ? void 0 : node.children.splice(0, secondThematicBreakIndex + 1);
+            node === null || node === void 0 ? void 0 : node.children.splice(0, secondThematicBreakIndex - 1);
+        }
+    });
+};
+// Remove all horizontal rules from the Markdown.
+// Horizontal lines are not a part of the sentence structure,
+// so we should remove them.
+const removeHorizontalRules = () => (tree) => {
+    (0, unist_util_visit_1.default)(tree, 'thematicBreak', (_, index, parent) => {
+        // Remove the thematicBreak node from its parent's children array
+        if (parent) {
+            parent.children.splice(index, 1);
         }
     });
 };
@@ -721,6 +732,7 @@ function preprocessMarkdown(markdown) {
         .use(removeUnwantedNodeTypes)
         .use(removeImageAltText)
         .use(removeFrontmatter)
+        .use(removeHorizontalRules)
         .use(replaceNodesWithTheirTextContent);
     return (remarker
         .processSync(markdown)
