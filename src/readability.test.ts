@@ -255,6 +255,28 @@ This is the only content.
         `);
     });
 
+    it('should horizontal rules', () => {
+        const stripped = preprocessMarkdown(
+            `
+            ---
+
+Example text 1.
+
+---
+
+Example text 2.
+
+---
+`,
+        );
+
+        expect(stripped).toMatchInlineSnapshot(`
+          "Example text 1.
+          Example text 2.
+          "
+        `);
+    });
+
     it('should remove markdoc tags', () => {
         const stripped = preprocessMarkdown(
             `# This is the first heading
