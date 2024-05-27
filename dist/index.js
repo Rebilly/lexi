@@ -730,9 +730,9 @@ function preprocessMarkdown(markdown) {
         .use(addPeriodsToListItems)
         .use(removeJsItems)
         .use(removeUnwantedNodeTypes)
-        .use(removeHorizontalRules)
         .use(removeImageAltText)
         .use(removeFrontmatter)
+        .use(removeHorizontalRules)
         .use(replaceNodesWithTheirTextContent);
     return (remarker
         .processSync(markdown)

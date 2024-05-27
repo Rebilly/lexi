@@ -386,9 +386,9 @@ export function preprocessMarkdown(markdown: string) {
         .use(addPeriodsToListItems)
         .use(removeJsItems)
         .use(removeUnwantedNodeTypes)
-        .use(removeHorizontalRules)
         .use(removeImageAltText)
         .use(removeFrontmatter)
+        .use(removeHorizontalRules)
         .use(replaceNodesWithTheirTextContent);
 
     return (
