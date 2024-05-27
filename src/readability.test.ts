@@ -255,10 +255,10 @@ This is the only content.
         `);
     });
 
-    it('should horizontal rules', () => {
+    it('should remove horizontal rules', () => {
         const stripped = preprocessMarkdown(
             `
-            ---
+---
 
 Example text 1.
 
