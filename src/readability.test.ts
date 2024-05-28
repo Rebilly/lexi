@@ -250,7 +250,51 @@ This is the only content.
         );
 
         expect(stripped).toMatchInlineSnapshot(`
-          "This is the only content.
+          "
+          This is the only content.
+          "
+        `);
+    });
+
+    it('should remove horizontal rules', () => {
+        const stripped = preprocessMarkdown(
+            `
+Example text 1.
+
+---
+
+Example text 2.
+
+`,
+        );
+
+        expect(stripped).toMatchInlineSnapshot(`
+          "Example text 1.
+          Example text 2.
+          "
+        `);
+    });
+
+    it('should remove horizontal rules with front matter', () => {
+        const stripped = preprocessMarkdown(
+            `---
+title: "Front matter"
+nested:
+  description: "Cashier strategies"
+---
+
+Example text 1.
+
+---
+
+Example text 2.
+
+`,
+        );
+
+        expect(stripped).toMatchInlineSnapshot(`
+          "Example text 1.
+          Example text 2.
           "
         `);
     });
