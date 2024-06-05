@@ -21,7 +21,7 @@
         "@actions/core": "^1.10.1",
         "@actions/exec": "^1.1.0",
         "@actions/github": "^6.0.0",
-        "glob": "^7.1.7",
+        "glob": "^10.4.1",
         "remark": "^14.0.3",
         "remark-gfm": "^3.0.1",
         "strip-markdown": "^6.0.0",
