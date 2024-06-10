@@ -32,7 +32,7 @@
         "@guolao/vue-monaco-editor": "^1.5.1",
         "@rebilly/revel": "^6.25.3",
         "@types/glob": "^8.1.0",
-        "@types/node": "^20.12.5",
+        "@types/node": "^20.14.2",
         "@typescript-eslint/parser": "^7.3.1",
         "@vercel/ncc": "^0.38.1",
         "@vitejs/plugin-vue": "^5.0.5",
