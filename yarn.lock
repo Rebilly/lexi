@@ -558,10 +558,10 @@
     picocolors "^1.0.0"
     tslib "^2.6.0"
 
-"@rebilly/revel@^6.25.3":
-  version "6.25.3"
-  resolved "https://registry.yarnpkg.com/@rebilly/revel/-/revel-6.25.3.tgz#263ab64c90db265fe78e528bf094318636a7a9d2"
-  integrity sha512-rlvdxaUEOhx/5nRi+j1rso6HYlYQhnIiJKngrwWzUJvRQCIIGO1vTpKP5mITzcPvq3/FLOGwgvEDsaV2YurUFw==
+"@rebilly/revel@^6.30.16":
+  version "6.30.16"
+  resolved "https://registry.yarnpkg.com/@rebilly/revel/-/revel-6.30.16.tgz#acd433311f41ba42c9b092062a049ad7e278a5dd"
+  integrity sha512-FyczY55OTYssfqf2280an5mcG4f8fouRBrKKkFZlC3hgGde13K2TMcmzUa+NcJ6GU94t4c7c29N1tD6QNls7Sw==
 
 "@rollup/rollup-android-arm-eabi@4.14.0":
   version "4.14.0"
