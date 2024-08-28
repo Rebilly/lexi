@@ -48,7 +48,7 @@
         "vite": "^5.3.3",
         "vite-plugin-mkcert": "^1.17.5",
         "vitest": "^2.0.5",
-        "vue": "^3.4.27",
+        "vue": "^3.4.38",
         "vue-codemirror": "^6.1.1",
         "vue-tsc": "^2.0.26"
     },
