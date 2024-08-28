@@ -50,7 +50,7 @@
         "vitest": "^2.0.5",
         "vue": "^3.4.38",
         "vue-codemirror": "^6.1.1",
-        "vue-tsc": "^2.0.26"
+        "vue-tsc": "^2.0.29"
     },
     "prettier": {
         "tabWidth": 4,
