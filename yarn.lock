@@ -1043,10 +1043,10 @@
   resolved "https://registry.yarnpkg.com/@vercel/ncc/-/ncc-0.38.3.tgz#5475eeee3ac0f1a439f237596911525a490a88b5"
   integrity sha512-rnK6hJBS6mwc+Bkab+PGPs9OiS0i/3kdTO+CkI8V0/VrW3vmz7O2Pxjw/owOlmo6PKEIxRSeZKv/kuL9itnpYA==
 
-"@vitejs/plugin-vue@^5.0.5":
-  version "5.0.5"
-  resolved "https://registry.yarnpkg.com/@vitejs/plugin-vue/-/plugin-vue-5.0.5.tgz#e3dc11e427d4b818b7e3202766ad156e3d5e2eaa"
-  integrity sha512-LOjm7XeIimLBZyzinBQ6OSm3UBCNVCpLkxGC0oWmm2YPzVZoxMsdvNVimLTBzpAnR9hl/yn1SHGuRfe6/Td9rQ==
+"@vitejs/plugin-vue@^5.2.0":
+  version "5.2.0"
+  resolved "https://registry.yarnpkg.com/@vitejs/plugin-vue/-/plugin-vue-5.2.0.tgz#994f3b4f12d3590c5a6895df4cbd270d9a6d5e17"
+  integrity sha512-7n7KdUEtx/7Yl7I/WVAMZ1bEb0eVvXF3ummWTeLcs/9gvo9pJhuLdouSXGjdZ/MKD1acf1I272+X0RMua4/R3g==
 
 "@vitest/expect@2.0.5":
   version "2.0.5"
