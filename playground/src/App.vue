@@ -53,7 +53,7 @@ const scores = computed(() => {
 });
 
 const readabilityScore = computed(() =>
-    rawScores.value.readabilityScore.toFixed(2)
+    rawScores.value.readabilityScore.toFixed(2),
 );
 </script>
 
