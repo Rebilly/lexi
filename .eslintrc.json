@@ -7,6 +7,14 @@
         "sourceType": "module",
         "project": "./tsconfig.json"
     },
+    "overrides": [
+        {
+            "files": ["*.test.ts"],
+            "env": {
+                "jest": true
+            }
+        }
+    ],
     "rules": {
         "i18n-text/no-en": "off",
         "eslint-comments/no-use": "off",
@@ -23,10 +31,7 @@
         "@typescript-eslint/ban-ts-comment": "error",
         "camelcase": "off",
         "@typescript-eslint/consistent-type-assertions": "error",
-        "@typescript-eslint/explicit-function-return-type": [
-            "error",
-            {"allowExpressions": true}
-        ],
+        "@typescript-eslint/explicit-function-return-type": "off",
         "@typescript-eslint/func-call-spacing": ["error", "never"],
         "@typescript-eslint/no-array-constructor": "error",
         "@typescript-eslint/no-empty-interface": "error",
