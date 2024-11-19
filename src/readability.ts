@@ -1,9 +1,12 @@
 import strip from 'strip-markdown';
 import {remark} from 'remark';
-import remarkGfm from 'remark-gfm';
-import visit, {SKIP} from 'unist-util-visit';
+import remarkGfm, {Root} from 'remark-gfm';
+import {SKIP, visit} from 'unist-util-visit';
 import readability from 'text-readability';
-import {Plugin} from 'unified';
+import {Plugin as UnifiedPlugin} from 'unified';
+
+// Helper type to make simplify writing plugins
+type Plugin = UnifiedPlugin<any, Root>;
 
 export const METRIC_RANGES = {
     readabilityScore: {
@@ -54,10 +57,12 @@ const removeUnwantedNodeTypes: Plugin = () => (tree) => {
     ];
 
     visit(tree, nodeTypesToRemove, (_node, index, parent) => {
-        parent?.children.splice(index, 1);
+        if (typeof index === 'number') {
+            parent?.children.splice(index, 1);
 
-        // Do not traverse `node`, continue at the node *now* at `index`.
-        return [SKIP, index];
+            // Do not traverse `node`, continue at the node *now* at `index`.
+            return [SKIP, index];
+        }
     });
 };
 
@@ -150,7 +155,7 @@ const removeFrontmatter: Plugin = () => (tree) => {
 const removeHorizontalRules: Plugin = () => (tree) => {
     visit(tree, 'thematicBreak', (_, index, parent) => {
         // Remove the thematicBreak node from its parent's children array
-        if (parent) {
+        if (parent && typeof index === 'number') {
             parent.children.splice(index, 1);
         }
     });
@@ -235,7 +240,10 @@ const removeShortListItems: Plugin = () => (tree) => {
             visit(paragraphNode, 'text', (textNode, index, parent) => {
                 // Only keep the list item if it is at least 4 words long
                 // @ts-ignore
-                if (textNode.value.split(' ').length < 4) {
+                if (
+                    textNode.value.split(' ').length < 4 &&
+                    typeof index === 'number'
+                ) {
                     parent?.children.splice(index, 1);
                     // Do not traverse `node`, continue at the node *now* at `index`.
                     return [SKIP, index];
