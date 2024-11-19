@@ -27,7 +27,7 @@
         "remark-gfm": "^3.0.1",
         "strip-markdown": "^6.0.0",
         "text-readability": "^1.1.0",
-        "unist-util-visit": "2.0.3"
+        "unist-util-visit": "^5.0.0"
     },
     "devDependencies": {
         "@guolao/vue-monaco-editor": "^1.5.1",
