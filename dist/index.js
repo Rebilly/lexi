@@ -31538,7 +31538,7 @@ Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.averageObjectProperties = averageObjectProperties;
 exports.calculateReadability = calculateReadability;
 const fs_1 = __importDefault(__nccwpck_require__(9896));
-const glob_1 = __importDefault(__nccwpck_require__(1363));
+const glob_1 = __nccwpck_require__(1363);
 const readability_1 = __nccwpck_require__(4625);
 // Calculates the average of a particular property value, given an array of objects
 function calcAverage(arrayOfObjects, accessorFn) {
@@ -31554,7 +31554,7 @@ function averageObjectProperties(objects) {
 // Calculate the readabilty result for all files found in a given path glob.
 // This result contains readability scores for each file, and an overall average
 function calculateReadability(globPath) {
-    const filePaths = glob_1.default.sync(globPath);
+    const filePaths = glob_1.glob.sync(globPath);
     const fileResults = filePaths.map((filePath) => {
         const markdown = fs_1.default.readFileSync(filePath);
         return {
