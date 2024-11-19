@@ -33,7 +33,7 @@ const listComments = async (
     return existingComments.filter(({body}) => body?.startsWith(hiddenHeader));
 };
 
-const insertComment = (
+const insertComment = async (
     client: Octokit,
     context: Context,
     prNumber: number,
@@ -46,7 +46,7 @@ const insertComment = (
         body: appendHiddenHeaderToComment(body, hiddenHeader),
     });
 
-const updateComment = (
+const updateComment = async (
     client: Octokit,
     context: Context,
     body: string,
@@ -59,13 +59,13 @@ const updateComment = (
         body: appendHiddenHeaderToComment(body, hiddenHeader),
     });
 
-const deleteComments = (
+const deleteComments = async (
     client: Octokit,
     context: Context,
     comments: {id: number}[],
 ) =>
     Promise.all(
-        comments.map(({id}) =>
+        comments.map(async ({id}) =>
             client.rest.issues.deleteComment({
                 ...context.repo,
                 comment_id: id,
