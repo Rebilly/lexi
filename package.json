@@ -4,10 +4,10 @@
     "description": "Report a readability score for Markdown files in your pull requests",
     "author": "Rebilly Inc",
     "repository": "https://github.com/Rebilly/lexi",
-    "main": "lib/index.js",
+    "main": "src/index.ts",
     "type": "module",
     "scripts": {
-        "build": "yarn tsc && ncc build --source-map --license licenses.txt",
+        "build": "ncc build --source-map --license licenses.txt",
         "test": "vitest run",
         "format": "prettier --write .",
         "format-check": "prettier --check '**/*.ts'",
