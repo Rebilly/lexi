@@ -339,7 +339,8 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", ({ value: true }));
-exports.calculateReadability = exports.averageObjectProperties = void 0;
+exports.averageObjectProperties = averageObjectProperties;
+exports.calculateReadability = calculateReadability;
 const fs_1 = __importDefault(__nccwpck_require__(7147));
 const glob_1 = __importDefault(__nccwpck_require__(1957));
 const readability_1 = __nccwpck_require__(1212);
@@ -354,7 +355,6 @@ function averageObjectProperties(objects) {
         return acc;
     }, {});
 }
-exports.averageObjectProperties = averageObjectProperties;
 // Calculate the readabilty result for all files found in a given path glob.
 // This result contains readability scores for each file, and an overall average
 function calculateReadability(globPath) {
@@ -378,7 +378,6 @@ function calculateReadability(globPath) {
         averageResult,
     };
 }
-exports.calculateReadability = calculateReadability;
 
 
 /***/ }),
@@ -415,7 +414,10 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", ({ value: true }));
-exports.calculateReadabilityOfText = exports.preprocessMarkdown = exports.scoreText = exports.METRIC_RANGES = void 0;
+exports.METRIC_RANGES = void 0;
+exports.scoreText = scoreText;
+exports.preprocessMarkdown = preprocessMarkdown;
+exports.calculateReadabilityOfText = calculateReadabilityOfText;
 const strip_markdown_1 = __importDefault(__nccwpck_require__(4654));
 const remark_1 = __nccwpck_require__(5745);
 const remark_gfm_1 = __importDefault(__nccwpck_require__(8103));
@@ -686,7 +688,6 @@ function scoreText(text) {
     // Cap all the scores
     return Object.entries(scores).reduce((acc, [key, value]) => (Object.assign(Object.assign({}, acc), { [key]: capBetween(exports.METRIC_RANGES[key].min, exports.METRIC_RANGES[key].max, value) })), {});
 }
-exports.scoreText = scoreText;
 // Returns each score normalized to a value between 0 and 1
 function normalizeScores(scores) {
     const normalize = (range, value) => (value - range.min) / (range.max - range.min);
@@ -745,7 +746,6 @@ function preprocessMarkdown(markdown) {
         // Here we just presume these will be preceeded by a normal alphabetical character
         .replace(/([a-zA-Z])\n/g, '$1 '));
 }
-exports.preprocessMarkdown = preprocessMarkdown;
 function calculateReadabilityOfText(text) {
     if (text.length === 0)
         return {
@@ -762,7 +762,6 @@ function calculateReadabilityOfText(text) {
     const readabilityScore = calculateReadabilityScore(normalized);
     return Object.assign({ readabilityScore }, scores);
 }
-exports.calculateReadabilityOfText = calculateReadabilityOfText;
 
 
 /***/ }),
