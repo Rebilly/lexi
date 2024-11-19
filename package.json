@@ -46,7 +46,7 @@
         "tsx": "^4.19.2",
         "typescript": "^5.6.3",
         "vite": "^5.4.11",
-        "vite-plugin-mkcert": "^1.17.5",
+        "vite-plugin-mkcert": "^1.17.6",
         "vitest": "^2.0.5",
         "vue": "^3.4.38",
         "vue-codemirror": "^6.1.1",
