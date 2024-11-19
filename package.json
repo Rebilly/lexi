@@ -5,6 +5,7 @@
     "author": "Rebilly Inc",
     "repository": "https://github.com/Rebilly/lexi",
     "main": "lib/index.js",
+    "type": "module",
     "scripts": {
         "build": "yarn tsc && ncc build --source-map --license licenses.txt",
         "test": "vitest run",
