@@ -1,7 +1,6 @@
 import path from 'path';
 import {
     ReadabilityReport,
-    ReadabilityReportFileResult,
     SingleReadabilityResultWithDiff,
 } from './report';
 
