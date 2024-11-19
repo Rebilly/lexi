@@ -79,6 +79,6 @@ const progress = computed(() => {
     margin-left: 6px;
     margin-top: 3px;
     width: 16px;
-    fill: rgba(255, 255, 255, 0.60);
+    fill: rgba(255, 255, 255, 0.6);
 }
 </style>

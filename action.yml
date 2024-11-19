@@ -2,15 +2,15 @@ name: Lexi readability report
 description: Report a readability score for Markdown files in your pull requests
 author: 'Rebilly Inc'
 branding:
-  icon: edit
-  color: green
+    icon: edit
+    color: green
 inputs:
-  github-token:
-    description: Github token (required for commenting)
-    required: true
-  glob:
-    description: A glob pattern matching a set of markdown files to run the readability tests on
-    required: true
+    github-token:
+        description: Github token (required for commenting)
+        required: true
+    glob:
+        description: A glob pattern matching a set of markdown files to run the readability tests on
+        required: true
 runs:
-  using: node20
-  main: dist/index.js
+    using: node20
+    main: dist/index.js

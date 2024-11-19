@@ -66,7 +66,7 @@ jobs:
               # See if there are any diffs in the dist file. Grep returns an error
               # when there are no changes, so we flip the output
               run: (git diff --name-only | grep dist/index.js || exit 0 && exit 1)
-    
+
     build-playground:
         name: Build the playground
         runs-on: ubuntu-latest
@@ -97,7 +97,7 @@ jobs:
             - name: Checkout repo
               uses: actions/checkout@v4
               with:
-                fetch-depth: 0
+                  fetch-depth: 0
             - uses: ./
               with:
                   github-token: ${{ secrets.GITHUB_TOKEN }}
