@@ -27,9 +27,9 @@ function diffScores(
     newResult: ReadabilityScores,
     oldResult: ReadabilityScores,
 ): ReadabilityScores {
-    // @ts-ignore
+    // @ts-expect-error
     return Object.keys(newResult).reduce((acc, key) => {
-        // @ts-ignore
+        // @ts-expect-error
         acc[key] = newResult[key] - oldResult[key];
         return acc;
     }, {});

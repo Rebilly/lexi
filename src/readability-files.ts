@@ -61,7 +61,7 @@ export function calculateReadability(globPath: string): ReadabilityResults {
 
     return {
         fileResults,
-        // @ts-ignore
+        // @ts-expect-error
         averageResult,
     };
 }
