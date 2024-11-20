@@ -1,8 +1,5 @@
 import path from 'path';
-import {
-    ReadabilityReport,
-    SingleReadabilityResultWithDiff,
-} from './report';
+import {ReadabilityReport, SingleReadabilityResultWithDiff} from './report';
 
 const arrayToCells = (rows: string[]) => `${rows.join(' | ')}\n`;
 
