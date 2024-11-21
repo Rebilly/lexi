@@ -84,7 +84,7 @@ const replaceNodesWithTheirTextContent: Plugin = () => (tree) => {
     ];
 
     visit(tree, nodeTypesToReplace, (node, index, parent) => {
-        // @ts-expect-error
+        // @ts-expect-error TODO improve types
         parent?.children.splice(index, 1, ...(node?.children ?? []));
         // Do not traverse `node`, continue at the node *now* at `index`.
         return [SKIP, index];
@@ -107,8 +107,10 @@ const removeAdmonitionHeadings: Plugin = () => (tree) => {
 const removeURLsInBackticks: Plugin = () => (tree) => {
     visit(tree, 'inlineCode', (node, index, parent) => {
         // Remove text if the value is a URL
-        if (node.value.match(/https?:\/\/[^\s]+/)) {
-            // @ts-expect-error
+        if (
+            typeof index === 'number' &&
+            node.value.match(/https?:\/\/[^\s]+/)
+        ) {
             parent?.children.splice(index, 1);
             // Do not traverse `node`, continue at the node *now* at `index`.
             return [SKIP, index];
@@ -177,7 +179,7 @@ const convertColonsToPeriods: Plugin = () => (tree) => {
 const convertTableToText: Plugin = () => (tree) => {
     // flatten all table cells
     visit(tree, 'tableCell', (tableCellNode) => {
-        // @ts-expect-error
+        // @ts-expect-error TODO improve types
         replaceNodesWithTheirTextContent(tableCellNode);
     });
 
@@ -192,7 +194,7 @@ const convertTableToText: Plugin = () => (tree) => {
 
     // Remove any cells with < 4 words
     visit(tree, 'tableCell', (tableCellNode) => {
-        // @ts-expect-error
+        // @ts-expect-error TODO improve types
         const text = tableCellNode.children.map(({value}) => value).join(' ');
         if (text.split(' ').length < 4) {
             tableCellNode.children = [];
@@ -206,7 +208,7 @@ const convertTableToText: Plugin = () => (tree) => {
             children: node.children,
         };
 
-        // @ts-expect-error
+        // @ts-expect-error TODO improve types
         parent?.children.splice(index, 1, newNode);
 
         // Do not traverse `node`, continue at the node *now* at `index`.
@@ -222,7 +224,7 @@ const removeShortListItems: Plugin = () => (tree) => {
         visit(listItemNode, 'paragraph', (paragraphNode) => {
             // Convert list items to plain text (as they can have children of many
             // different types, such as italics, bold etc)
-            // @ts-expect-error
+            // @ts-expect-error Manually run strip on the paragraph node
             strip()(paragraphNode);
 
             visit(paragraphNode, 'text', (textNode, index, parent) => {
@@ -246,7 +248,7 @@ const addPeriodsToListItems: Plugin = () => (tree) => {
         visit(listItemNode, 'paragraph', (paragraphNode) => {
             // Convert list items to plain text (as they can have children of many
             // different types, such as italics, bold etc)
-            // @ts-expect-error
+            // @ts-expect-error Manually run strip on the paragraph node
             strip()(paragraphNode);
 
             visit(paragraphNode, 'text', (textNode) => {
@@ -264,7 +266,7 @@ const removeJsItems: Plugin = () => (tree) => {
         visit(listItemNode, ['html', 'paragraph'], (elementNode) => {
             if (visitNexParagraph && elementNode.type === 'paragraph') {
                 visit(elementNode, ['text', 'inlineCode'], (textNode) => {
-                    // @ts-expect-error
+                    // @ts-expect-error TODO improve types
                     textNode.value = '';
                 });
             }
