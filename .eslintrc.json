@@ -18,6 +18,7 @@
     "rules": {
         "i18n-text/no-en": "off",
         "eslint-comments/no-use": "off",
+        "import/named": "off",
         "import/no-namespace": "off",
         "no-console": "off",
         "@typescript-eslint/no-unused-vars": "error",
