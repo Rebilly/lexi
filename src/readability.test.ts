@@ -1,4 +1,4 @@
-import {describe} from 'node:test';
+import {describe, it, expect, vi} from 'vitest';
 import {preprocessMarkdown, calculateReadabilityOfText} from './readability';
 import readability from 'text-readability';
 
