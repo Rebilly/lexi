@@ -126,7 +126,7 @@ const removeFrontmatter: Plugin = () => (tree) => {
         }
 
         const secondThematicBreakIndex = node.children.findIndex(
-            (childNode: any, index: number) => {
+            (childNode, index) => {
                 return index > 0 && childNode.type === 'thematicBreak';
             },
         );
