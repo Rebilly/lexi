@@ -6,6 +6,8 @@ import readability from 'text-readability';
 import {Plugin as UnifiedPlugin} from 'unified';
 
 // Helper type to make simplify writing plugins
+// Use any here, as it does not affect types we are using in our code
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 type Plugin = UnifiedPlugin<any, Root>;
 
 export const METRIC_RANGES = {
