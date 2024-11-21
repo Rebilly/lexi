@@ -8,7 +8,10 @@
         "noImplicitAny": true /* Raise error on expressions and declarations with an implied 'any' type. */,
         "esModuleInterop": true /* Enables emit interoperability between CommonJS and ES Modules via creation of namespace objects for all imports. Implies 'allowSyntheticDefaultImports'. */,
         "types": ["vitest/globals"] /* Include Vitest globals */,
-        "typeRoots": ["./node_modules/@types", "./typings"] /* Custom types for missing types */,
+        "typeRoots": [
+            "./node_modules",
+            "./typings"
+        ] /* Custom types for missing types */
     },
     "exclude": ["node_modules", "typings", "playground", "vite.config.ts"]
 }
