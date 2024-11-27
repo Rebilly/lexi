@@ -19,7 +19,7 @@
         "playground:build": "vue-tsc --project ./playground && vite build --config ./playground/vite.config.ts"
     },
     "dependencies": {
-        "@actions/core": "^1.10.1",
+        "@actions/core": "^1.11.1",
         "@actions/exec": "^1.1.0",
         "@actions/github": "^6.0.0",
         "glob": "^11.0.0",
@@ -31,10 +31,10 @@
     },
     "devDependencies": {
         "@guolao/vue-monaco-editor": "^1.5.4",
-        "@rebilly/revel": "^6.30.47",
+        "@rebilly/revel": "^8.0.2",
         "@types/glob": "^8.1.0",
         "@types/node": "^20.14.10",
-        "@typescript-eslint/parser": "^8.15.0",
+        "@typescript-eslint/parser": "^8.16.0",
         "@vercel/ncc": "^0.38.1",
         "@vitejs/plugin-vue": "^5.2.0",
         "commander": "^12.1.0",
