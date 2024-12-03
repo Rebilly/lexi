@@ -31,9 +31,9 @@
     },
     "devDependencies": {
         "@guolao/vue-monaco-editor": "^1.5.4",
-        "@rebilly/revel": "^8.0.2",
+        "@rebilly/revel": "^8.2.1",
         "@types/glob": "^8.1.0",
-        "@types/node": "^20.14.10",
+        "@types/node": "^22.10.1",
         "@typescript-eslint/parser": "^8.16.0",
         "@vercel/ncc": "^0.38.1",
         "@vitejs/plugin-vue": "^5.2.1",
