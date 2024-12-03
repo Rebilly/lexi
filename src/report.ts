@@ -27,12 +27,11 @@ function diffScores(
     newResult: ReadabilityScores,
     oldResult: ReadabilityScores,
 ): ReadabilityScores {
-    // @ts-ignore
-    return Object.keys(newResult).reduce((acc, key) => {
-        // @ts-ignore
+    return Object.keys(newResult).reduce((acc, untypedKey) => {
+        const key = untypedKey as keyof ReadabilityScores;
         acc[key] = newResult[key] - oldResult[key];
         return acc;
-    }, {});
+    }, {} as ReadabilityScores);
 }
 
 // Adds a diff property to each result object, showing an increase

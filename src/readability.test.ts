@@ -1,4 +1,4 @@
-import {describe} from 'node:test';
+import {describe, it, expect, vi} from 'vitest';
 import {preprocessMarkdown, calculateReadabilityOfText} from './readability';
 import readability from 'text-readability';
 
@@ -394,11 +394,11 @@ describe('scoring', () => {
     });
 
     it('should cap min and max scores', () => {
-        readability.automatedReadabilityIndex.mockReturnValue(-1);
-        readability.colemanLiauIndex.mockReturnValue(-1);
-        readability.daleChallReadabilityScore.mockReturnValue(-1);
-        readability.fleschReadingEase.mockReturnValue(-1);
-        readability.gunningFog.mockReturnValue(-1);
+        vi.mocked(readability.automatedReadabilityIndex).mockReturnValue(-1);
+        vi.mocked(readability.colemanLiauIndex).mockReturnValue(-1);
+        vi.mocked(readability.daleChallReadabilityScore).mockReturnValue(-1);
+        vi.mocked(readability.fleschReadingEase).mockReturnValue(-1);
+        vi.mocked(readability.gunningFog).mockReturnValue(-1);
 
         expect(calculateReadabilityOfText('dummy text')).toMatchObject({
             automatedReadabilityIndex: 6,
@@ -408,11 +408,11 @@ describe('scoring', () => {
             gunningFog: 6,
         });
 
-        readability.automatedReadabilityIndex.mockReturnValue(1000);
-        readability.colemanLiauIndex.mockReturnValue(1000);
-        readability.daleChallReadabilityScore.mockReturnValue(1000);
-        readability.fleschReadingEase.mockReturnValue(1000);
-        readability.gunningFog.mockReturnValue(1000);
+        vi.mocked(readability.automatedReadabilityIndex).mockReturnValue(1000);
+        vi.mocked(readability.colemanLiauIndex).mockReturnValue(1000);
+        vi.mocked(readability.daleChallReadabilityScore).mockReturnValue(1000);
+        vi.mocked(readability.fleschReadingEase).mockReturnValue(1000);
+        vi.mocked(readability.gunningFog).mockReturnValue(1000);
 
         expect(calculateReadabilityOfText('dummy text')).toMatchObject({
             automatedReadabilityIndex: 22,

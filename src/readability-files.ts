@@ -13,26 +13,27 @@ export type ReadabilityResults = {
 };
 
 // Calculates the average of a particular property value, given an array of objects
-function calcAverage(
-    arrayOfObjects: Record<string, number>[],
-    accessorFn: (value: Record<string, number>) => number,
-) {
+function calcAverage<T extends Record<string, number>>(
+    arrayOfObjects: T[],
+    accessorFn: (value: T) => number,
+): number {
     return (
-        arrayOfObjects.reduce(
-            (acc: number, value) => acc + accessorFn(value),
-            0,
-        ) / arrayOfObjects.length
+        arrayOfObjects.reduce((acc, value) => acc + accessorFn(value), 0) /
+        arrayOfObjects.length
     );
 }
 
 // Returns a score object containing the averages, given an array of scores
-export function averageObjectProperties(objects: Record<string, number>[]) {
-    return Object.keys(objects[0]).reduce(
-        (acc: Record<string, number>, key) => {
+export function averageObjectProperties<T extends Record<string, number>>(
+    objects: T[],
+): Record<keyof T, number> {
+    const keys = Object.keys(objects[0]) as (keyof T)[];
+    return keys.reduce(
+        (acc, key) => {
             acc[key] = calcAverage(objects, (object) => object[key]);
             return acc;
         },
-        {},
+        {} as Record<keyof T, number>,
     );
 }
 
@@ -61,7 +62,6 @@ export function calculateReadability(globPath: string): ReadabilityResults {
 
     return {
         fileResults,
-        // @ts-ignore
         averageResult,
     };
 }

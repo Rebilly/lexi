@@ -11,7 +11,7 @@
         "test": "vitest run",
         "format": "prettier --write .",
         "format-check": "prettier --check '**/*.ts'",
-        "lint": "eslint src/**/*.ts",
+        "lint": "eslint 'src/**/*.ts'",
         "all": "npm run build && npm run format && npm run lint && npm test",
         "run:local:report": "tsx ./src/cli/report.ts",
         "run:local:debugfile": "tsx ./src/cli/debug-file.ts",

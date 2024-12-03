@@ -30728,9 +30728,17 @@ const listComments = (client, context, prNumber, hiddenHeader) => __awaiter(void
     const { data: existingComments } = yield client.rest.issues.listComments(Object.assign(Object.assign({}, context.repo), { issue_number: prNumber }));
     return existingComments.filter(({ body }) => body === null || body === void 0 ? void 0 : body.startsWith(hiddenHeader));
 });
-const insertComment = (client, context, prNumber, body, hiddenHeader) => client.rest.issues.createComment(Object.assign(Object.assign({}, context.repo), { issue_number: prNumber, body: appendHiddenHeaderToComment(body, hiddenHeader) }));
-const updateComment = (client, context, body, commentId, hiddenHeader) => client.rest.issues.updateComment(Object.assign(Object.assign({}, context.repo), { comment_id: commentId, body: appendHiddenHeaderToComment(body, hiddenHeader) }));
-const deleteComments = (client, context, comments) => Promise.all(comments.map(({ id }) => client.rest.issues.deleteComment(Object.assign(Object.assign({}, context.repo), { comment_id: id }))));
+const insertComment = (client, context, prNumber, body, hiddenHeader) => __awaiter(void 0, void 0, void 0, function* () {
+    return client.rest.issues.createComment(Object.assign(Object.assign({}, context.repo), { issue_number: prNumber, body: appendHiddenHeaderToComment(body, hiddenHeader) }));
+});
+const updateComment = (client, context, body, commentId, hiddenHeader) => __awaiter(void 0, void 0, void 0, function* () {
+    return client.rest.issues.updateComment(Object.assign(Object.assign({}, context.repo), { comment_id: commentId, body: appendHiddenHeaderToComment(body, hiddenHeader) }));
+});
+const deleteComments = (client, context, comments) => __awaiter(void 0, void 0, void 0, function* () {
+    return Promise.all(comments.map((_a) => __awaiter(void 0, [_a], void 0, function* ({ id }) {
+        return client.rest.issues.deleteComment(Object.assign(Object.assign({}, context.repo), { comment_id: id }));
+    })));
+});
 const upsertComment = (client, context, prNumber, body, hiddenHeader) => __awaiter(void 0, void 0, void 0, function* () {
     const existingComments = yield listComments(client, context, prNumber, hiddenHeader);
     const last = existingComments.pop();
@@ -31031,11 +31039,13 @@ const glob_1 = __nccwpck_require__(1363);
 const readability_1 = __nccwpck_require__(4625);
 // Calculates the average of a particular property value, given an array of objects
 function calcAverage(arrayOfObjects, accessorFn) {
-    return (arrayOfObjects.reduce((acc, value) => acc + accessorFn(value), 0) / arrayOfObjects.length);
+    return (arrayOfObjects.reduce((acc, value) => acc + accessorFn(value), 0) /
+        arrayOfObjects.length);
 }
 // Returns a score object containing the averages, given an array of scores
 function averageObjectProperties(objects) {
-    return Object.keys(objects[0]).reduce((acc, key) => {
+    const keys = Object.keys(objects[0]);
+    return keys.reduce((acc, key) => {
         acc[key] = calcAverage(objects, (object) => object[key]);
         return acc;
     }, {});
@@ -31059,7 +31069,6 @@ function calculateReadability(globPath) {
     ];
     return {
         fileResults,
-        // @ts-ignore
         averageResult,
     };
 }
@@ -31142,7 +31151,7 @@ const replaceNodesWithTheirTextContent = () => (tree) => {
     ];
     (0, unist_util_visit_1.visit)(tree, nodeTypesToReplace, (node, index, parent) => {
         var _a;
-        // @ts-ignore
+        // @ts-expect-error TODO improve types
         parent === null || parent === void 0 ? void 0 : parent.children.splice(index, 1, ...((_a = node === null || node === void 0 ? void 0 : node.children) !== null && _a !== void 0 ? _a : []));
         // Do not traverse `node`, continue at the node *now* at `index`.
         return [unist_util_visit_1.SKIP, index];
@@ -31154,9 +31163,7 @@ const replaceNodesWithTheirTextContent = () => (tree) => {
 // Would be removed.
 const removeAdmonitionHeadings = () => (tree) => {
     (0, unist_util_visit_1.visit)(tree, 'text', (textNode) => {
-        // @ts-ignore
         if (textNode.value.startsWith(':::')) {
-            // @ts-ignore
             textNode.value = '';
         }
     });
@@ -31164,10 +31171,9 @@ const removeAdmonitionHeadings = () => (tree) => {
 // Remove URLs in backticks, for example: `https://example.com`
 const removeURLsInBackticks = () => (tree) => {
     (0, unist_util_visit_1.visit)(tree, 'inlineCode', (node, index, parent) => {
-        // @ts-ignore
         // Remove text if the value is a URL
-        if (node.value.match(/https?:\/\/[^\s]+/)) {
-            // @ts-ignore
+        if (typeof index === 'number' &&
+            node.value.match(/https?:\/\/[^\s]+/)) {
             parent === null || parent === void 0 ? void 0 : parent.children.splice(index, 1);
             // Do not traverse `node`, continue at the node *now* at `index`.
             return [unist_util_visit_1.SKIP, index];
@@ -31181,24 +31187,19 @@ const removeURLsInBackticks = () => (tree) => {
 const removeFrontmatter = () => (tree) => {
     (0, unist_util_visit_1.visit)(tree, 'root', (node) => {
         var _a;
-        // @ts-ignore
         if (((_a = node.children[0]) === null || _a === void 0 ? void 0 : _a.type) !== 'thematicBreak') {
             // There is no frontmatter
             return;
         }
-        // @ts-ignore
         const secondThematicBreakIndex = node.children.findIndex((childNode, index) => {
-            // @ts-ignore
             return index > 0 && childNode.type === 'thematicBreak';
         });
         if (secondThematicBreakIndex === -1) {
             // There is only 1 thematic break, so remove it and the first child
-            // @ts-ignore
             node === null || node === void 0 ? void 0 : node.children.splice(0, 1);
         }
         else {
             // Remove the two thematic breaks and all children
-            // @ts-ignore
             node === null || node === void 0 ? void 0 : node.children.splice(0, secondThematicBreakIndex - 1);
         }
     });
@@ -31218,16 +31219,13 @@ const removeHorizontalRules = () => (tree) => {
 // remove it.
 const removeImageAltText = () => (tree) => {
     (0, unist_util_visit_1.visit)(tree, 'image', (imageNode) => {
-        // @ts-ignore
         imageNode.alt = '';
     });
 };
 // Convert colons to periods
 const convertColonsToPeriods = () => (tree) => {
     (0, unist_util_visit_1.visit)(tree, 'text', (textNode) => {
-        // @ts-ignore
         if (textNode.value.includes(':')) {
-            // @ts-ignore
             textNode.value = textNode.value.replace(/:/g, '.');
         }
     });
@@ -31237,24 +31235,21 @@ const convertColonsToPeriods = () => (tree) => {
 const convertTableToText = () => (tree) => {
     // flatten all table cells
     (0, unist_util_visit_1.visit)(tree, 'tableCell', (tableCellNode) => {
-        // @ts-ignore
+        // @ts-expect-error TODO improve types
         replaceNodesWithTheirTextContent(tableCellNode);
     });
     // Add a period to the end of each cell grouping if it doesnt already exsit
     (0, unist_util_visit_1.visit)(tree, 'tableCell', (tableCellNode) => {
-        const lastNode = 
-        // @ts-ignore
-        tableCellNode.children[tableCellNode.children.length - 1];
+        const lastNode = tableCellNode.children[tableCellNode.children.length - 1];
         if ((lastNode === null || lastNode === void 0 ? void 0 : lastNode.type) === 'text' && !(lastNode === null || lastNode === void 0 ? void 0 : lastNode.value.endsWith('.'))) {
             lastNode.value += '.';
         }
     });
     // Remove any cells with < 4 words
     (0, unist_util_visit_1.visit)(tree, 'tableCell', (tableCellNode) => {
-        // @ts-ignore
+        // @ts-expect-error TODO improve types
         const text = tableCellNode.children.map(({ value }) => value).join(' ');
         if (text.split(' ').length < 4) {
-            // @ts-ignore
             tableCellNode.children = [];
         }
     });
@@ -31262,10 +31257,9 @@ const convertTableToText = () => (tree) => {
     (0, unist_util_visit_1.visit)(tree, 'tableCell', (node, index, parent) => {
         const newNode = {
             type: 'paragraph',
-            // @ts-ignore
             children: node.children,
         };
-        // @ts-ignore
+        // @ts-expect-error TODO improve types
         parent === null || parent === void 0 ? void 0 : parent.children.splice(index, 1, newNode);
         // Do not traverse `node`, continue at the node *now* at `index`.
         return [unist_util_visit_1.SKIP, index];
@@ -31279,11 +31273,10 @@ const removeShortListItems = () => (tree) => {
         (0, unist_util_visit_1.visit)(listItemNode, 'paragraph', (paragraphNode) => {
             // Convert list items to plain text (as they can have children of many
             // different types, such as italics, bold etc)
-            // @ts-ignore
+            // @ts-expect-error Manually run strip on the paragraph node
             (0, strip_markdown_1.default)()(paragraphNode);
             (0, unist_util_visit_1.visit)(paragraphNode, 'text', (textNode, index, parent) => {
                 // Only keep the list item if it is at least 4 words long
-                // @ts-ignore
                 if (textNode.value.split(' ').length < 4 &&
                     typeof index === 'number') {
                     parent === null || parent === void 0 ? void 0 : parent.children.splice(index, 1);
@@ -31300,12 +31293,10 @@ const addPeriodsToListItems = () => (tree) => {
         (0, unist_util_visit_1.visit)(listItemNode, 'paragraph', (paragraphNode) => {
             // Convert list items to plain text (as they can have children of many
             // different types, such as italics, bold etc)
-            // @ts-ignore
+            // @ts-expect-error Manually run strip on the paragraph node
             (0, strip_markdown_1.default)()(paragraphNode);
             (0, unist_util_visit_1.visit)(paragraphNode, 'text', (textNode) => {
-                // @ts-ignore
                 if (textNode.value.length && !textNode.value.endsWith('.')) {
-                    // @ts-ignore
                     textNode.value += '.';
                 }
             });
@@ -31318,13 +31309,12 @@ const removeJsItems = () => (tree) => {
         (0, unist_util_visit_1.visit)(listItemNode, ['html', 'paragraph'], (elementNode) => {
             if (visitNexParagraph && elementNode.type === 'paragraph') {
                 (0, unist_util_visit_1.visit)(elementNode, ['text', 'inlineCode'], (textNode) => {
-                    // @ts-ignore
+                    // @ts-expect-error TODO improve types
                     textNode.value = '';
                 });
             }
             if (elementNode.type === 'html') {
                 visitNexParagraph =
-                    // @ts-ignore
                     elementNode.value === '<!-- JS block -->' &&
                         !visitNexParagraph;
             }
@@ -31442,9 +31432,8 @@ const constants_1 = __nccwpck_require__(7242);
 // diffScores({a: 1, b: 10}, {a: 3, b:10})
 // returns: {a:2, b:0}
 function diffScores(newResult, oldResult) {
-    // @ts-ignore
-    return Object.keys(newResult).reduce((acc, key) => {
-        // @ts-ignore
+    return Object.keys(newResult).reduce((acc, untypedKey) => {
+        const key = untypedKey;
         acc[key] = newResult[key] - oldResult[key];
         return acc;
     }, {});
