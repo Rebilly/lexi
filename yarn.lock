@@ -656,10 +656,10 @@
   resolved "https://registry.yarnpkg.com/@pkgr/core/-/core-0.1.1.tgz#1ec17e2edbec25c8306d424ecfbf13c7de1aaa31"
   integrity sha512-cq8o4cWH0ibXh9VGi5P20Tu9XF/0fFXl9EUinr9QfTM7a7p0oTA4iJRCQWppXR1Pg8dSM0UCItCkPwsk9qWWYA==
 
-"@rebilly/revel@^8.2.1":
-  version "8.2.1"
-  resolved "https://registry.yarnpkg.com/@rebilly/revel/-/revel-8.2.1.tgz#f21ba737dd72cf541c7c82fe265a65d9089e010d"
-  integrity sha512-PMK3RhusA4VlAJAnufe0DISBSu1DFyk7BNp/leW+0U22E4FGxlaRwuD+qPisHVed29HFsAK/A4VAO5BqJfPaMA==
+"@rebilly/revel@^8.3.5":
+  version "8.3.5"
+  resolved "https://registry.yarnpkg.com/@rebilly/revel/-/revel-8.3.5.tgz#21a365d3dac13f6cc0c2b5e00d6c4fca207c581e"
+  integrity sha512-MD7/RMq9ihHHKYpcPV2H+Y1y4blui+0MA15I+6F9qIHgGzlCTlQTQ739Af/gcq9aFr86OV8BAhVbd66sQWJMDg==
 
 "@rollup/rollup-android-arm-eabi@4.27.2":
   version "4.27.2"
