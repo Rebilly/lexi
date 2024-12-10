@@ -159,12 +159,12 @@ For example: `yarn run:local:report ./test-data/old ./test-data/new`
 
 ## Supported file formats
 
-Lexi supports the following Markdown file formats: `.md`, `.mdx`. To configure the file formats, update the `glob` input in the workflow file. For more information, see [Example workflow](#example-workflow).
+Lexi supports the following Markdown file formats: `.md`, `.markdown`, and `.mdx`. To configure the file formats, update the`glob` input in the workflow file. For more information, see [Example workflow](#example-workflow).
 
 Examples:
 
 - To only report on `.md` files, use: `glob: '**/*.md'`.
-- To report on both `.md` and `.mdx` files, use: `glob: '**/*.{md,mdx}'`.
+- To report on `.md`, `.markdown`, and `.mdx` files, use: `glob: '**/*.{md,markdown,mdx}'`.
 
 ## Playground
 
