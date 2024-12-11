@@ -159,7 +159,7 @@ For example: `yarn run:local:report ./test-data/old ./test-data/new`
 
 ## Supported markup languages
 
-Lexi supports the following Markdown file formats: Markdown, Markdoc, and MDX.
+Lexi supports the following markup languages: Markdown, Markdoc, and MDX.
 
 To configure the file formats, update the `glob` input in the workflow file. For more information, see [Example workflow](#example-workflow).
 
