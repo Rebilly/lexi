@@ -101,7 +101,7 @@ To view metrics from previous commits in a pull request:
 
 ### Example workflow
 
-This workflow reports readability metrics for `.md` files in your pull requests. For information, see [Supported file formats](#supported-file-formats).
+This workflow reports readability metrics for `.md` files in your pull requests. For information, see [Supported markup languages](#supported-markup-languages).
 
 ```yaml
 name: Report readability
@@ -157,14 +157,13 @@ For example: `yarn run:local:report ./test-data/old ./test-data/new`
     1. Click "Publish release".
 1. The release is published to the Marketplace, and a [workflow automatically](./.github/workflows/update-tags-post-release.yml) updates the major and minor tags.
 
-## Supported file formats
+## Supported markup languages
 
-Lexi supports the following Markdown file formats: `.md`, `.markdown`, and `.mdx`. To configure the file formats, update the`glob` input in the workflow file. For more information, see [Example workflow](#example-workflow).
+Lexi supports the following Markdown file formats: Markdown, Markdoc, and MDX.
 
-Examples:
+To configure the file formats, update the `glob` input in the workflow file. For more information, see [Example workflow](#example-workflow).
 
-- To only report on `.md` files, use: `glob: '**/*.md'`.
-- To report on `.md`, `.markdown`, and `.mdx` files, use: `glob: '**/*.{md,markdown,mdx}'`.
+Example: To report on `.md` and `.mdx` files, use: `glob: '**/*.{md,mdx}'`.
 
 ## Playground
 
