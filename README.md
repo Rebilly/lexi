@@ -16,20 +16,20 @@ Use Lexi to reduce the complexity of the language in your documentation, and to 
 
 Lexi is a GitHub action that reports readability metrics for Markdown files in your pull requests. Use these metrics to help you understand how changes impact the readability of your documentation. Lexi reports an overall readability score that is calculated based on a scaled combination of the following readability metrics:
 
--   [Flesch Reading Ease](https://en.wikipedia.org/wiki/Flesch_reading_ease)
--   [Gunning Fog Index](https://en.wikipedia.org/wiki/Gunning_fog_index)
--   [Automated Readability Index (ARI)](https://en.wikipedia.org/wiki/Automated_readability_index)
--   [Dale-Chall Readability Score](https://en.wikipedia.org/wiki/Dale%E2%80%93Chall_readability_formula)
--   [Coleman–Liau Index](https://en.wikipedia.org/wiki/Coleman%E2%80%93Liau_index)
+- [Flesch Reading Ease](https://en.wikipedia.org/wiki/Flesch_reading_ease)
+- [Gunning Fog Index](https://en.wikipedia.org/wiki/Gunning_fog_index)
+- [Automated Readability Index (ARI)](https://en.wikipedia.org/wiki/Automated_readability_index)
+- [Dale-Chall Readability Score](https://en.wikipedia.org/wiki/Dale%E2%80%93Chall_readability_formula)
+- [Coleman–Liau Index](https://en.wikipedia.org/wiki/Coleman%E2%80%93Liau_index)
 
 ### Reports
 
 Reports describe the overall change to each file in a pull request, and also the impact the edits make to the documentation set as a whole.
 
--   **Overall readability**: describes the readability of all the documentation in your repository, along with the scores and degree of change for each file that was edited in the pull request.
--   **Detailed metrics**: describes all available metrics for each file that was edited in the pull request.
--   **Averages**: describes the overall readability of all the documentation in your repository for each available metric.
--   **Metrics targets**: describes the range and ideal score for each readability metric.
+- **Overall readability**: describes the readability of all the documentation in your repository, along with the scores and degree of change for each file that was edited in the pull request.
+- **Detailed metrics**: describes all available metrics for each file that was edited in the pull request.
+- **Averages**: describes the overall readability of all the documentation in your repository for each available metric.
+- **Metrics targets**: describes the range and ideal score for each readability metric.
 
 #### View reports from previous commits
 
