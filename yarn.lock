@@ -696,10 +696,10 @@
   resolved "https://registry.yarnpkg.com/@pkgr/core/-/core-0.1.1.tgz#1ec17e2edbec25c8306d424ecfbf13c7de1aaa31"
   integrity sha512-cq8o4cWH0ibXh9VGi5P20Tu9XF/0fFXl9EUinr9QfTM7a7p0oTA4iJRCQWppXR1Pg8dSM0UCItCkPwsk9qWWYA==
 
-"@rebilly/revel@^8.6.1":
-  version "8.6.1"
-  resolved "https://registry.yarnpkg.com/@rebilly/revel/-/revel-8.6.1.tgz#e2ee41bdbedc2cae64e92c59b3612225e3422fc4"
-  integrity sha512-5SXr3Ra9ovZ0pmNNuIEJLdUgFnXsAjoFuWzExHDhDWr3VhWMiprio9cF62tkqujmd3+5tdm92vVMxIr/QL2ALQ==
+"@rebilly/revel@^8.7.0":
+  version "8.7.0"
+  resolved "https://registry.yarnpkg.com/@rebilly/revel/-/revel-8.7.0.tgz#1a84abcf7912d189974a06fe1c2706519854edbf"
+  integrity sha512-poWUl4XrdFYS8wndrCiRA/hBWQakkAwVxNHLnd0fMc6Ey0/WR+giRUe5CPhaCX+XTc5ZmKjqkDD0IHGP6uLhIw==
 
 "@rollup/rollup-android-arm-eabi@4.34.6":
   version "4.34.6"
@@ -3595,10 +3595,10 @@ prettier-linter-helpers@^1.0.0:
   dependencies:
     fast-diff "^1.1.2"
 
-prettier@^3.0.0, prettier@^3.4.2:
-  version "3.4.2"
-  resolved "https://registry.yarnpkg.com/prettier/-/prettier-3.4.2.tgz#a5ce1fb522a588bf2b78ca44c6e6fe5aa5a2b13f"
-  integrity sha512-e9MewbtFo+Fevyuxn/4rrcDAaq0IYxPGLvObpQjiZBMAzB9IGmzlnG9RZy3FFas+eBMu2vA0CszMeduow5dIuQ==
+prettier@^3.0.0, prettier@^3.5.0:
+  version "3.5.0"
+  resolved "https://registry.yarnpkg.com/prettier/-/prettier-3.5.0.tgz#50325a28887c6dfdf2ca3f8eaba02b66a8429ca7"
+  integrity sha512-quyMrVt6svPS7CjQ9gKb3GLEX/rl3BCL2oa/QkNcXv4YNVBC9olt3s+H7ukto06q7B1Qz46PbrKLO34PR6vXcA==
 
 proxy-from-env@^1.1.0:
   version "1.1.0"
