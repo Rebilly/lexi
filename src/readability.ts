@@ -1,9 +1,12 @@
 import strip from 'strip-markdown';
-import {remark} from 'remark';
-import remarkGfm, {Root} from 'remark-gfm';
+import remarkParse from 'remark-parse';
+import remarkGfm from 'remark-gfm';
+import remarkRehype from 'remark-rehype';
+import rehypeStringify from 'rehype-stringify';
+import type {Root} from 'mdast';
 import {SKIP, visit} from 'unist-util-visit';
 import readability from 'text-readability';
-import {Plugin as UnifiedPlugin} from 'unified';
+import {unified, Plugin as UnifiedPlugin} from 'unified';
 
 // Helper type to make simplify writing plugins
 // Use any here, as it does not affect types we are using in our code
@@ -11,30 +14,12 @@ import {Plugin as UnifiedPlugin} from 'unified';
 type Plugin = UnifiedPlugin<any, Root>;
 
 export const METRIC_RANGES = {
-    readabilityScore: {
-        min: 0,
-        max: 100,
-    },
-    fleschReadingEase: {
-        min: 0,
-        max: 100,
-    },
-    gunningFog: {
-        min: 19,
-        max: 6,
-    },
-    automatedReadabilityIndex: {
-        min: 22,
-        max: 6,
-    },
-    daleChallReadabilityScore: {
-        min: 11,
-        max: 4.9,
-    },
-    colemanLiauIndex: {
-        min: 19,
-        max: 6,
-    },
+    readabilityScore: {min: 0, max: 100},
+    fleschReadingEase: {min: 0, max: 100},
+    gunningFog: {min: 19, max: 6},
+    automatedReadabilityIndex: {min: 22, max: 6},
+    daleChallReadabilityScore: {min: 11, max: 4.9},
+    colemanLiauIndex: {min: 19, max: 6},
 };
 
 type ThirdPartyReadabilityScores = {
@@ -72,6 +57,7 @@ const removeUnwantedNodeTypes: Plugin = () => (tree) => {
 // **text** with text
 const replaceNodesWithTheirTextContent: Plugin = () => (tree) => {
     const nodeTypesToReplace = [
+        'paragraph',
         'emphasis',
         'strong',
         'inlineCode',
@@ -99,21 +85,6 @@ const removeAdmonitionHeadings: Plugin = () => (tree) => {
     visit(tree, 'text', (textNode) => {
         if (textNode.value.startsWith(':::')) {
             textNode.value = '';
-        }
-    });
-};
-
-// Remove URLs in backticks, for example: `https://example.com`
-const removeURLsInBackticks: Plugin = () => (tree) => {
-    visit(tree, 'inlineCode', (node, index, parent) => {
-        // Remove text if the value is a URL
-        if (
-            typeof index === 'number' &&
-            node.value.match(/https?:\/\/[^\s]+/)
-        ) {
-            parent?.children.splice(index, 1);
-            // Do not traverse `node`, continue at the node *now* at `index`.
-            return [SKIP, index];
         }
     });
 };
@@ -203,10 +174,7 @@ const convertTableToText: Plugin = () => (tree) => {
 
     // Encapsulate with a paragraph, replacing the table cell
     visit(tree, 'tableCell', (node, index, parent) => {
-        const newNode = {
-            type: 'paragraph',
-            children: node.children,
-        };
+        const newNode = {type: 'paragraph', children: node.children};
 
         // @ts-expect-error TODO improve types
         parent?.children.splice(index, 1, newNode);
@@ -370,10 +338,10 @@ function calculateReadabilityScore(
 // Take our markdown text and clean and process it to the final
 // text we want to analyze.
 export function preprocessMarkdown(markdown: string) {
-    const remarker = remark()
+    const remarker = unified()
+        .use(remarkParse)
         .use(remarkGfm)
         .use(convertTableToText)
-        .use(removeURLsInBackticks)
         .use(removeAdmonitionHeadings)
         .use(convertColonsToPeriods)
         .use(removeShortListItems)
@@ -383,7 +351,9 @@ export function preprocessMarkdown(markdown: string) {
         .use(removeImageAltText)
         .use(removeFrontmatter)
         .use(removeHorizontalRules)
-        .use(replaceNodesWithTheirTextContent);
+        .use(replaceNodesWithTheirTextContent)
+        .use(remarkRehype)
+        .use(rehypeStringify);
 
     return (
         remarker
@@ -417,8 +387,5 @@ export function calculateReadabilityOfText(text: string): ReadabilityScores {
     const normalized = normalizeScores(scores);
     const readabilityScore = calculateReadabilityScore(normalized);
 
-    return {
-        readabilityScore,
-        ...scores,
-    };
+    return {readabilityScore, ...scores};
 }

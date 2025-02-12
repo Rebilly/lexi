@@ -26,9 +26,8 @@ Test 2.
         );
 
         expect(stripped).toMatchInlineSnapshot(`
-            "Test 1.
-            Test 2.
-            "
+          "Test 1.
+          Test 2."
         `);
     });
 
@@ -45,10 +44,9 @@ Test 2.
         );
 
         expect(stripped).toMatchInlineSnapshot(`
-            "This item has many words.
-            This item does too.
-            This item also has many words.
-            "
+          "This item has many words.
+          This item does too.
+          This item also has many words."
         `);
     });
 
@@ -67,10 +65,9 @@ Test 2.`,
         );
 
         expect(stripped).toMatchInlineSnapshot(`
-            "Test 1.
-            Admonition content.
-            Test 2.
-            "
+          "Test 1.
+          Admonition content.
+          Test 2."
         `);
     });
 
@@ -86,9 +83,8 @@ Test 2.`,
 
         expect(stripped).toMatchInlineSnapshot(`
           "Test 1.
-          Click the left button&#x20;
-          Test 2.
-          "
+          Click the left button 
+          Test 2."
         `);
     });
 
@@ -107,8 +103,7 @@ Some content. This is paragraph with const items = [];
 
         expect(stripped).toMatchInlineSnapshot(`
           "
-          Some content. This is paragraph with const items = \\[];
-          "
+          Some content. This is paragraph with const items = [];"
         `);
     });
 
@@ -131,14 +126,13 @@ More text after the list.
         );
 
         expect(stripped).toMatchInlineSnapshot(`
-            "This test has lines that are manually spaced out by their writer.
-            It should not remove new lines that are from different sentences.
-            Lists of items should not be affected either.
-            Here is list item number 1.
-            Here is list item number 2.
-            Here is list item number 3.
-            More text after the list.
-            "
+          "This test has lines that are manually spaced out by their writer.
+          It should not remove new lines that are from different sentences.
+          Lists of items should not be affected either.
+          Here is list item number 1.
+          Here is list item number 2.
+          Here is list item number 3.
+          More text after the list."
         `);
     });
 
@@ -152,17 +146,16 @@ More text after the list.
         );
 
         expect(stripped).toMatchInlineSnapshot(`
-            "Here is list item number 1.
-            Here is list item number 2.
-            Here is list item number 3.
-            "
+          "Here is list item number 1.
+          Here is list item number 2.
+          Here is list item number 3."
         `);
     });
 
     it('should convert colons to periods', () => {
         const stripped = preprocessMarkdown('This includes: a colon');
 
-        expect(stripped).toMatchInlineSnapshot(`"This includes. a colon "`);
+        expect(stripped).toMatchInlineSnapshot(`"This includes. a colon"`);
     });
 
     it('should convert tables to text and save cells with more than 4 words', () => {
@@ -177,11 +170,9 @@ More text after the list.
 `,
         );
 
-        expect(stripped).toMatchInlineSnapshot(`
-          "
-          Chance of processing a transaction.
-          "
-        `);
+        expect(stripped).toMatchInlineSnapshot(
+            `"Chance of processing a transaction."`,
+        );
     });
 
     it('should convert tables without compressing surrounding text', () => {
@@ -205,7 +196,7 @@ This content comes after the table
           A table header here.
           Cell contents goes here.
           Cell contents goes here.
-          This content comes after the table "
+          This content comes after the table"
         `);
     });
 
@@ -215,8 +206,8 @@ This content comes after the table
         );
 
         expect(stripped).toMatchInlineSnapshot(`
-          "This includes  a URL.
-          "
+          "This includes 
+           a URL."
         `);
     });
 
@@ -230,10 +221,7 @@ This is the only content.
 `,
         );
 
-        expect(stripped).toMatchInlineSnapshot(`
-          "This is the only content.
-          "
-        `);
+        expect(stripped).toMatchInlineSnapshot(`"This is the only content."`);
     });
 
     it('should remove more complicated yaml frontmatter', () => {
@@ -249,11 +237,7 @@ This is the only content.
 `,
         );
 
-        expect(stripped).toMatchInlineSnapshot(`
-          "
-          This is the only content.
-          "
-        `);
+        expect(stripped).toMatchInlineSnapshot(`"This is the only content."`);
     });
 
     it('should remove horizontal rules', () => {
@@ -270,8 +254,7 @@ Example text 2.
 
         expect(stripped).toMatchInlineSnapshot(`
           "Example text 1.
-          Example text 2.
-          "
+          Example text 2."
         `);
     });
 
@@ -294,8 +277,7 @@ Example text 2.
 
         expect(stripped).toMatchInlineSnapshot(`
           "Example text 1.
-          Example text 2.
-          "
+          Example text 2."
         `);
     });
 
@@ -373,8 +355,7 @@ Here is the sixth paragraph text.
           The first sub text paragraph.
           The second sub text paragraph.
           Special characters should not break markdoc parsing.
-          Here is the sixth paragraph text.
-          "
+          Here is the sixth paragraph text."
         `);
     });
 });
