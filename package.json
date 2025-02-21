@@ -64,6 +64,7 @@
         "bracketSpacing": false
     },
     "resolutions": {
-        "text-readability/syllable/trim": "^0.0.3"
+        "text-readability/syllable/trim": "^0.0.3",
+        "vite/esbuild": "^0.25.0"
     }
 }
