@@ -44,7 +44,7 @@
         "@vitejs/plugin-vue": "^5.2.1",
         "commander": "^13.1.0",
         "eslint": "^8.57.0",
-        "eslint-plugin-github": "^5.1.5",
+        "eslint-plugin-github": "^5.1.8",
         "eslint-plugin-prettier": "^5.2.3",
         "js-yaml": "^4.1.0",
         "moment": "^2.30.1",
