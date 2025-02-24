@@ -37,7 +37,7 @@
         "@guolao/vue-monaco-editor": "^1.5.4",
         "@rebilly/revel": "^8.7.3",
         "@types/glob": "^8.1.0",
-        "@types/mdast": "^4.0.0",
+        "@types/mdast": "^4.0.4",
         "@types/node": "^22.13.5",
         "@typescript-eslint/parser": "^8.24.1",
         "@vercel/ncc": "^0.38.1",
