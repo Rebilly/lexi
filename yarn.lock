@@ -491,10 +491,10 @@
   resolved "https://registry.yarnpkg.com/@pkgr/core/-/core-0.1.1.tgz#1ec17e2edbec25c8306d424ecfbf13c7de1aaa31"
   integrity sha512-cq8o4cWH0ibXh9VGi5P20Tu9XF/0fFXl9EUinr9QfTM7a7p0oTA4iJRCQWppXR1Pg8dSM0UCItCkPwsk9qWWYA==
 
-"@rebilly/revel@^8.7.5":
-  version "8.7.5"
-  resolved "https://registry.yarnpkg.com/@rebilly/revel/-/revel-8.7.5.tgz#e46cb1f167440a9eb1bcb852c0c48e5c81f69ed3"
-  integrity sha512-J3AB7dFynY429DzhbPTodvnU8vDrUlcWzJDsckPBwXHNHescupsnDqjfiSiTzM9ve+UN4WzwEfYmkUqeKcbMwg==
+"@rebilly/revel@^8.7.10":
+  version "8.7.10"
+  resolved "https://registry.yarnpkg.com/@rebilly/revel/-/revel-8.7.10.tgz#004f4e901f9bc1f76252b5584587cde12f309048"
+  integrity sha512-F+bDoo1rdZH7gncWtg8aoO7p2Jc434q2qCZG+DAUMG8/B6olyWfHBUlZisBfOtvHBqrmke8pjWqrfr5Z6ZPAdQ==
 
 "@rollup/rollup-android-arm-eabi@4.34.8":
   version "4.34.8"
@@ -1209,7 +1209,7 @@ axe-core@^4.10.0:
   resolved "https://registry.yarnpkg.com/axe-core/-/axe-core-4.10.2.tgz#85228e3e1d8b8532a27659b332e39b7fa0e022df"
   integrity sha512-RE3mdQ7P3FRSe7eqCWoeQ/Z9QXrtniSjp1wUjt5nRC3WIpz5rSCve6o3fsZ2aCpJtrZjSZgjwXAoTO5k4tEI0w==
 
-axios@^1.8.1:
+axios@^1.8.3:
   version "1.8.3"
   resolved "https://registry.yarnpkg.com/axios/-/axios-1.8.3.tgz#9ebccd71c98651d547162a018a1a95a4b4ed4de8"
   integrity sha512-iP4DebzoNlP/YN2dpwCgb8zoCmhtkajzS48JvwmkSkXvPI3DHc7m+XYL5tGnSlJtR6nImXZmdCuN5aP8dh1d8A==
@@ -4937,12 +4937,12 @@ vite-node@3.0.8:
     pathe "^2.0.3"
     vite "^5.0.0 || ^6.0.0"
 
-vite-plugin-mkcert@^1.17.7:
-  version "1.17.7"
-  resolved "https://registry.yarnpkg.com/vite-plugin-mkcert/-/vite-plugin-mkcert-1.17.7.tgz#bdc1aa4fd2e3e3e4533544b7dcbace308def59f0"
-  integrity sha512-w6897ZmEbn1dzQxY9fxXZBMEFNxeHWYDLJb42DBHSbLx+ASRnq5Mfy4v9bDMhqIGDz9ufhm2qXbVoCFe+8dazg==
+vite-plugin-mkcert@^1.17.8:
+  version "1.17.8"
+  resolved "https://registry.yarnpkg.com/vite-plugin-mkcert/-/vite-plugin-mkcert-1.17.8.tgz#7ddbd62a7b7941a57dfdf73cb19d6c39c3967e96"
+  integrity sha512-S+4tNEyGqdZQ3RLAG54ETeO2qyURHWrVjUWKYikLAbmhh/iJ+36gDEja4OWwFyXNuvyXcZwNt5TZZR9itPeG5Q==
   dependencies:
-    axios "^1.8.1"
+    axios "^1.8.3"
     debug "^4.4.0"
     picocolors "^1.1.1"
 
