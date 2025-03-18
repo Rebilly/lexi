@@ -4525,10 +4525,10 @@ synckit@^0.9.1:
     "@pkgr/core" "^0.1.0"
     tslib "^2.6.2"
 
-text-readability@^1.1.0:
-  version "1.1.0"
-  resolved "https://registry.yarnpkg.com/text-readability/-/text-readability-1.1.0.tgz#0609b0b6620c372dab80d946e9aafd02d3a3d695"
-  integrity sha512-I1kqUJX8nJwzCvCZSV945sjisi4NBnwZ5iwzzdsRXbqH8fKqhjwZMGdBm01UMb1K1EWrJ7jFozjXUobs7JZA6g==
+text-readability@^1.1.1:
+  version "1.1.1"
+  resolved "https://registry.yarnpkg.com/text-readability/-/text-readability-1.1.1.tgz#a2e4a8996c34536612514ea4ee015953d220f149"
+  integrity sha512-lo0KlcNRhlBAxTCEPXMFricim2vJVm0xAVdy40N6WQDn+MeKDBFxl0bMdP2YIMm9ph34CPvxYO/Lxb1QIi67ig==
   dependencies:
     pluralize "^8.0.0"
     syllable "^5.0.1"
