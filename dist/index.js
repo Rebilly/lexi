@@ -66903,9 +66903,6 @@ function toHast(tree, options) {
 }
 
 ;// CONCATENATED MODULE: ./node_modules/remark-rehype/lib/index.js
-// Include `data` fields in mdast and `raw` nodes in hast.
-/// <reference types="mdast-util-to-hast" />
-
 /**
  * @import {Root as HastRoot} from 'hast'
  * @import {Root as MdastRoot} from 'mdast'
@@ -66950,12 +66947,15 @@ function toHast(tree, options) {
  *
  * ###### Signature
  *
- * *   if a processor is given, runs the (rehype) plugins used on it with a
- *     hast tree, then discards the result (*bridge mode*)
- * *   otherwise, returns a hast tree, the plugins used after `remarkRehype`
- *     are rehype plugins (*mutate mode*)
+ * * if a processor is given,
+ *   runs the (rehype) plugins used on it with a hast tree,
+ *   then discards the result (*bridge mode*)
+ * * otherwise,
+ *   returns a hast tree,
+ *   the plugins used after `remarkRehype` are rehype plugins (*mutate mode*)
  *
- * > 👉 **Note**: It’s highly unlikely that you want to pass a `processor`.
+ * > 👉 **Note**:
+ * > It’s highly unlikely that you want to pass a `processor`.
  *
  * ###### HTML
  *
@@ -66963,36 +66963,40 @@ function toHast(tree, options) {
  * as semistandard `raw` nodes.
  * Most plugins ignore `raw` nodes but two notable ones don’t:
  *
- * *   `rehype-stringify` also has an option `allowDangerousHtml` which will
- *     output the raw HTML.
- *     This is typically discouraged as noted by the option name but is useful if
- *     you completely trust authors
- * *   `rehype-raw` can handle the raw embedded HTML strings by parsing them
- *     into standard hast nodes (`element`, `text`, etc).
- *     This is a heavy task as it needs a full HTML parser, but it is the only way
- *     to support untrusted content
+ * * `rehype-stringify` also has an option `allowDangerousHtml` which will
+ *   output the raw HTML.
+ *   This is typically discouraged as noted by the option name but is useful if
+ *   you completely trust authors
+ * * `rehype-raw` can handle the raw embedded HTML strings by parsing them
+ *   into standard hast nodes (`element`, `text`, etc);
+ *   this is a heavy task as it needs a full HTML parser,
+ *   but it is the only way to support untrusted content
  *
  * ###### Footnotes
  *
  * Many options supported here relate to footnotes.
- * Footnotes are not specified by CommonMark, which we follow by default.
- * They are supported by GitHub, so footnotes can be enabled in markdown with
- * `remark-gfm`.
+ * Footnotes are not specified by CommonMark,
+ * which we follow by default.
+ * They are supported by GitHub,
+ * so footnotes can be enabled in markdown with `remark-gfm`.
  *
  * The options `footnoteBackLabel` and `footnoteLabel` define natural language
- * that explains footnotes, which is hidden for sighted users but shown to
- * assistive technology.
- * When your page is not in English, you must define translated values.
+ * that explains footnotes,
+ * which is hidden for sighted users but shown to assistive technology.
+ * When your page is not in English,
+ * you must define translated values.
  *
- * Back references use ARIA attributes, but the section label itself uses a
- * heading that is hidden with an `sr-only` class.
- * To show it to sighted users, define different attributes in
- * `footnoteLabelProperties`.
+ * Back references use ARIA attributes,
+ * but the section label itself uses a heading that is hidden with an
+ * `sr-only` class.
+ * To show it to sighted users,
+ * define different attributes in `footnoteLabelProperties`.
  *
  * ###### Clobbering
  *
- * Footnotes introduces a problem, as it links footnote calls to footnote
- * definitions on the page through `id` attributes generated from user content,
+ * Footnotes introduces a problem,
+ * as it links footnote calls to footnote definitions on the page through `id`
+ * attributes generated from user content,
  * which results in DOM clobbering.
  *
  * DOM clobbering is this:
@@ -67014,11 +67018,13 @@ function toHast(tree, options) {
  * Unknown nodes are nodes with a type that isn’t in `handlers` or `passThrough`.
  * The default behavior for unknown nodes is:
  *
- * *   when the node has a `value` (and doesn’t have `data.hName`,
- *     `data.hProperties`, or `data.hChildren`, see later), create a hast `text`
- *     node
- * *   otherwise, create a `<div>` element (which could be changed with
- *     `data.hName`), with its children mapped from mdast to hast as well
+ * * when the node has a `value`
+ *   (and doesn’t have `data.hName`, `data.hProperties`, or `data.hChildren`,
+ *   see later),
+ *   create a hast `text` node
+ * * otherwise,
+ *   create a `<div>` element (which could be changed with `data.hName`),
+ *   with its children mapped from mdast to hast as well
  *
  * This behavior can be changed by passing an `unknownHandler`.
  *
@@ -67031,10 +67037,16 @@ function toHast(tree, options) {
  * @param {Readonly<Options> | null | undefined} [options]
  * @returns {TransformMutate}
  *
+ * @overload
+ * @param {Readonly<Options> | Processor | null | undefined} [destination]
+ * @param {Readonly<Options> | null | undefined} [options]
+ * @returns {TransformBridge | TransformMutate}
+ *
  * @param {Readonly<Options> | Processor | null | undefined} [destination]
  *   Processor or configuration (optional).
  * @param {Readonly<Options> | null | undefined} [options]
- *   When a processor was given, configuration (optional).
+ *   When a processor was given,
+ *   configuration (optional).
  * @returns {TransformBridge | TransformMutate}
  *   Transform.
  */
