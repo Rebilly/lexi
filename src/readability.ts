@@ -367,7 +367,7 @@ export function preprocessMarkdown(markdown: string) {
             // Here we just presume these will be preceeded by a normal alphabetical character
             .replace(/([a-zA-Z])\n/g, '$1 ')
             // Remove backslashes that are placed after a period
-            .replace(/\. \\\n/g, '. ')
+            .replace(/\. \\\n/g, '.\n')
     );
 }
 
