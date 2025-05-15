@@ -31378,7 +31378,9 @@ function preprocessMarkdown(markdown) {
         .replace(/\n+/g, `\n`)
         // Remove any new lines that are added for manual word wrapping.
         // Here we just presume these will be preceeded by a normal alphabetical character
-        .replace(/([a-zA-Z])\n/g, '$1 '));
+        .replace(/([a-zA-Z])\n/g, '$1 ')
+        // Remove backslashes that are placed after a period
+        .replace(/\. \\\n/g, '.\n'));
 }
 function calculateReadabilityOfText(text) {
     if (text.length === 0)
