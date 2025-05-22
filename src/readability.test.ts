@@ -215,7 +215,7 @@ This content comes after the table
 
     it('should remove URLs in backticks', () => {
         const stripped = preprocessMarkdown(
-            'This includes `https://example.com` a URL.',
+            'This includes`https://example.com` a URL.',
         );
 
         expect(stripped).toMatchInlineSnapshot(`
