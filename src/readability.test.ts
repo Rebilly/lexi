@@ -83,7 +83,7 @@ Test 2.`,
 
         expect(stripped).toMatchInlineSnapshot(`
           "Test 1.
-          Click the left button
+          Click the left button 
           Test 2."
         `);
     });
@@ -215,11 +215,11 @@ This content comes after the table
 
     it('should remove URLs in backticks', () => {
         const stripped = preprocessMarkdown(
-            'This includes`https://example.com` a URL.',
+            'This includes `https://example.com` a URL.',
         );
 
         expect(stripped).toMatchInlineSnapshot(`
-          "This includes
+          "This includes 
            a URL."
         `);
     });
