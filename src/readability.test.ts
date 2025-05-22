@@ -207,11 +207,10 @@ This content comes after the table
              1. This is a test document. \
                 Several lines new lines are created using the backslash character.`,
         );
-        expect(stripped).toMatchInlineSnapshot(`"
-             1. This is a test for use of the backslash character in Markdown.
-                In this process, several lines are created using it.
-             1. This is a test document.
-                Several lines new lines are created using the backslash character."`);
+        expect(stripped).toMatchInlineSnapshot(`
+          "This is a test for use of the backslash character in Markdown.                 In this process, several lines are created using it.
+          1. This is a test document.                 Several lines new lines are created using the backslash character."
+        `);
     });
 
     it('should remove URLs in backticks', () => {
