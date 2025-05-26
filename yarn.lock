@@ -509,10 +509,10 @@
   resolved "https://registry.yarnpkg.com/@pkgr/core/-/core-0.2.4.tgz#d897170a2b0ba51f78a099edccd968f7b103387c"
   integrity sha512-ROFF39F6ZrnzSUEmQQZUar0Jt4xVoP9WnDRdWwF4NNcXs3xBTLgBUDoOwW141y1jP+S8nahIbdxbFC7IShw9Iw==
 
-"@rebilly/revel@^8.8.6":
-  version "8.8.6"
-  resolved "https://registry.yarnpkg.com/@rebilly/revel/-/revel-8.8.6.tgz#71e4a9d3d70846de1950c34dcfe2fc4e893323e5"
-  integrity sha512-0mhR/tRAotJ8Wot4XK5yDnhIKLY6Td6IOz5TssHjgql6Yip+EdArohMppJ1bEeseBylJu2EgaecND+E6/8RzDQ==
+"@rebilly/revel@^8.8.10":
+  version "8.8.10"
+  resolved "https://registry.yarnpkg.com/@rebilly/revel/-/revel-8.8.10.tgz#1bc2d3eebfcc7d07e7a53baad148ca3c1f1374e1"
+  integrity sha512-ZjmOcMGmppzXV6LO6SRODc9GWzy4x6+nduqWl821e54NVl6ibKKKiZfsU59C1ttn5cFfCOxPUTE4bbArnrU9qA==
 
 "@rollup/rollup-android-arm-eabi@4.40.1":
   version "4.40.1"
@@ -1947,10 +1947,10 @@ eslint-plugin-no-only-tests@^3.0.0:
   resolved "https://registry.yarnpkg.com/eslint-plugin-no-only-tests/-/eslint-plugin-no-only-tests-3.1.0.tgz#f38e4935c6c6c4842bf158b64aaa20c366fe171b"
   integrity sha512-Lf4YW/bL6Un1R6A76pRZyE1dl1vr31G/ev8UzIc/geCgFWyrKil8hVjYqWVKGB/UIGmb6Slzs9T0wNezdSVegw==
 
-eslint-plugin-prettier@^5.2.1, eslint-plugin-prettier@^5.2.6:
-  version "5.2.6"
-  resolved "https://registry.yarnpkg.com/eslint-plugin-prettier/-/eslint-plugin-prettier-5.2.6.tgz#be39e3bb23bb3eeb7e7df0927cdb46e4d7945096"
-  integrity sha512-mUcf7QG2Tjk7H055Jk0lGBjbgDnfrvqjhXh9t2xLMSCjZVcw9Rb1V6sVNXO0th3jgeO7zllWPTNRil3JW94TnQ==
+eslint-plugin-prettier@^5.2.1, eslint-plugin-prettier@^5.4.0:
+  version "5.4.0"
+  resolved "https://registry.yarnpkg.com/eslint-plugin-prettier/-/eslint-plugin-prettier-5.4.0.tgz#54d4748904e58eaf1ffe26c4bffa4986ca7f952b"
+  integrity sha512-BvQOvUhkVQM1i63iMETK9Hjud9QhqBnbtT1Zc642p9ynzBuCe5pybkOnvqZIBypXmMlsGcnU4HZ8sCTPfpAexA==
   dependencies:
     prettier-linter-helpers "^1.0.0"
     synckit "^0.11.0"
