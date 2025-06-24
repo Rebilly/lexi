@@ -35,7 +35,7 @@
     },
     "devDependencies": {
         "@guolao/vue-monaco-editor": "^1.5.5",
-        "@rebilly/revel": "^8.12.0",
+        "@rebilly/revel": "^8.14.0",
         "@types/glob": "^8.1.0",
         "@types/mdast": "^4.0.4",
         "@types/node": "^24.0.3",
@@ -53,7 +53,7 @@
         "typescript": "^5.7.3",
         "vite": "^6.3.5",
         "vite-plugin-mkcert": "^1.17.8",
-        "vitest": "^3.2.3",
+        "vitest": "^3.2.4",
         "vue": "^3.5.16",
         "vue-codemirror": "^6.1.1",
         "vue-tsc": "^2.2.10"
