@@ -41,7 +41,7 @@
         "@types/node": "^24.0.13",
         "@typescript-eslint/parser": "^8.35.0",
         "@vercel/ncc": "^0.38.1",
-        "@vitejs/plugin-vue": "^5.2.4",
+        "@vitejs/plugin-vue": "^6.0.0",
         "commander": "^14.0.0",
         "eslint": "^8.57.0",
         "eslint-plugin-github": "^5.1.8",
