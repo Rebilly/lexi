@@ -518,10 +518,10 @@
   resolved "https://registry.yarnpkg.com/@pkgr/core/-/core-0.2.7.tgz#eb5014dfd0b03e7f3ba2eeeff506eed89b028058"
   integrity sha512-YLT9Zo3oNPJoBjBc4q8G2mjU4tqIbf5CEOORbUUr48dCD9q3umJ3IPlVqOqDakPfd2HuwccBaqlGhN4Gmr5OWg==
 
-"@rebilly/revel@^8.14.0":
-  version "8.14.0"
-  resolved "https://registry.yarnpkg.com/@rebilly/revel/-/revel-8.14.0.tgz#612234a7fe128da41958387055249ec8f14cd18d"
-  integrity sha512-eEXzXNI16Wv+KfacOCrYC7yJ9S9p4nxDohNXd2KjFRZWouMz6d4XGdespR/FcYUDUqQeWXY3HcqNsob7fT6ucg==
+"@rebilly/revel@^8.16.2":
+  version "8.16.2"
+  resolved "https://registry.yarnpkg.com/@rebilly/revel/-/revel-8.16.2.tgz#343a058c74701fa42a5392fa2d621d2e4d3aea71"
+  integrity sha512-12qML2qgkWlz9r3Z6Ir760W4b6MDqKk9pnjD8gqm+QFAxKvusxfrrNE+cavbHRVtC8zsUjkG6qob9LN2FnBHPg==
 
 "@rolldown/pluginutils@1.0.0-beta.19":
   version "1.0.0-beta.19"
