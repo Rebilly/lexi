@@ -35,10 +35,10 @@
     },
     "devDependencies": {
         "@guolao/vue-monaco-editor": "^1.5.5",
-        "@rebilly/revel": "^8.14.0",
+        "@rebilly/revel": "^8.16.2",
         "@types/glob": "^8.1.0",
         "@types/mdast": "^4.0.4",
-        "@types/node": "^24.0.13",
+        "@types/node": "^24.2.1",
         "@typescript-eslint/parser": "^8.35.0",
         "@vercel/ncc": "^0.38.1",
         "@vitejs/plugin-vue": "^6.0.0",
@@ -56,7 +56,7 @@
         "vitest": "^3.2.4",
         "vue": "^3.5.18",
         "vue-codemirror": "^6.1.1",
-        "vue-tsc": "^2.2.10"
+        "vue-tsc": "^3.0.5"
     },
     "prettier": {
         "tabWidth": 4,
