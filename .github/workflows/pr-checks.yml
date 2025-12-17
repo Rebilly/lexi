@@ -8,9 +8,9 @@ jobs:
         runs-on: ubuntu-latest
         steps:
             - name: Checkout repo
-              uses: actions/checkout@v5
+              uses: actions/checkout@v6
             - name: Setup node
-              uses: actions/setup-node@v5
+              uses: actions/setup-node@v6
               with:
                   node-version: 22
             - name: Restore node_modules cache
@@ -28,9 +28,9 @@ jobs:
         runs-on: ubuntu-latest
         steps:
             - name: Checkout repo
-              uses: actions/checkout@v5
+              uses: actions/checkout@v6
             - name: Setup node
-              uses: actions/setup-node@v5
+              uses: actions/setup-node@v6
               with:
                   node-version: 22
             - name: Restore node_modules cache
@@ -48,9 +48,9 @@ jobs:
         runs-on: ubuntu-latest
         steps:
             - name: Checkout repo
-              uses: actions/checkout@v5
+              uses: actions/checkout@v6
             - name: Setup node
-              uses: actions/setup-node@v5
+              uses: actions/setup-node@v6
               with:
                   node-version: 22
             - name: Restore node_modules cache
@@ -72,9 +72,9 @@ jobs:
         runs-on: ubuntu-latest
         steps:
             - name: Checkout repo
-              uses: actions/checkout@v5
+              uses: actions/checkout@v6
             - name: Setup node
-              uses: actions/setup-node@v5
+              uses: actions/setup-node@v6
               with:
                   node-version: 22
             - name: Restore node_modules cache
@@ -95,7 +95,7 @@ jobs:
         runs-on: ubuntu-latest
         steps:
             - name: Checkout repo
-              uses: actions/checkout@v5
+              uses: actions/checkout@v6
               with:
                   fetch-depth: 0
             - uses: ./
