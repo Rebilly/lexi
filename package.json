@@ -39,7 +39,7 @@
         "@types/glob": "^8.1.0",
         "@types/mdast": "^4.0.4",
         "@types/node": "^24.3.0",
-        "@typescript-eslint/parser": "^8.45.0",
+        "@typescript-eslint/parser": "^8.46.2",
         "@vercel/ncc": "^0.38.4",
         "@vitejs/plugin-vue": "^6.0.1",
         "commander": "^14.0.0",
