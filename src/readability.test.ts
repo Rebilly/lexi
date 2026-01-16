@@ -374,6 +374,23 @@ Here is the sixth paragraph text.
 });
 
 describe('scoring', () => {
+    it('should not let semantic line breaks affect the scored input', () => {
+        vi.clearAllMocks();
+
+        calculateReadabilityOfText(
+            `
+This is a sentence,
+that continues on the next line without ending.
+`,
+        );
+
+        const firstArg =
+            vi.mocked(readability.fleschReadingEase).mock.calls[0]?.[0] ?? '';
+
+        expect(firstArg).not.toContain('\n');
+        expect(firstArg).toContain('This is a sentence, that continues');
+    });
+
     it('should return minimum values for empty text', () => {
         expect(calculateReadabilityOfText('')).toMatchInlineSnapshot(`
           {
