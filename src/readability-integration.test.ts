@@ -38,4 +38,3 @@ KYC protects your account from fraud and identity theft.
         }
     });
 });
-
