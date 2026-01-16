@@ -8,14 +8,14 @@ describe('readability (integration)', () => {
         const {calculateReadabilityOfText} = await import('./readability');
 
         const original = `
-At MockupCasino, your safety is our top priority.
+At ExampleDocs, your safety is our top priority.
 That's why we require Know Your Customer (KYC) verification.
 KYC protects your account from fraud and identity theft.
 `;
 
         // Same content, different line breaks (semantic line breaks / wrapping).
         const semantic = `
-At MockupCasino,
+At ExampleDocs,
 your safety is our top priority.
 That's why we require Know Your Customer (KYC) verification.
 KYC protects your account from fraud and identity theft.
