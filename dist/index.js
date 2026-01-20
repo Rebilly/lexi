@@ -64835,10 +64835,8 @@ function normalizeUri(value) {
 }
 ;// CONCATENATED MODULE: ./node_modules/mdast-util-to-hast/lib/footer.js
 /**
- * @typedef {import('hast').Element} Element
- * @typedef {import('hast').ElementContent} ElementContent
- *
- * @typedef {import('./state.js').State} State
+ * @import {ElementContent, Element} from 'hast'
+ * @import {State} from './state.js'
  */
 
 /**
@@ -65089,13 +65087,10 @@ function footer(state) {
 
 ;// CONCATENATED MODULE: ./node_modules/mdast-util-to-hast/lib/handlers/blockquote.js
 /**
- * @typedef {import('hast').Element} Element
- * @typedef {import('mdast').Blockquote} Blockquote
- * @typedef {import('../state.js').State} State
+ * @import {Element} from 'hast'
+ * @import {Blockquote} from 'mdast'
+ * @import {State} from '../state.js'
  */
-
-// Make VS Code show references to the above types.
-''
 
 /**
  * Turn an mdast `blockquote` node into hast.
@@ -65121,14 +65116,10 @@ function blockquote(state, node) {
 
 ;// CONCATENATED MODULE: ./node_modules/mdast-util-to-hast/lib/handlers/break.js
 /**
- * @typedef {import('hast').Element} Element
- * @typedef {import('hast').Text} Text
- * @typedef {import('mdast').Break} Break
- * @typedef {import('../state.js').State} State
+ * @import {Element, Text} from 'hast'
+ * @import {Break} from 'mdast'
+ * @import {State} from '../state.js'
  */
-
-// Make VS Code show references to the above types.
-''
 
 /**
  * Turn an mdast `break` node into hast.
@@ -65149,14 +65140,10 @@ function hardBreak(state, node) {
 
 ;// CONCATENATED MODULE: ./node_modules/mdast-util-to-hast/lib/handlers/code.js
 /**
- * @typedef {import('hast').Element} Element
- * @typedef {import('hast').Properties} Properties
- * @typedef {import('mdast').Code} Code
- * @typedef {import('../state.js').State} State
+ * @import {Element, Properties} from 'hast'
+ * @import {Code} from 'mdast'
+ * @import {State} from '../state.js'
  */
-
-// Make VS Code show references to the above types.
-''
 
 /**
  * Turn an mdast `code` node into hast.
@@ -65172,9 +65159,12 @@ function code(state, node) {
   const value = node.value ? node.value + '\n' : ''
   /** @type {Properties} */
   const properties = {}
+  // Someone can write `js&#x20;python&#x9;ruby`.
+  const language = node.lang ? node.lang.split(/\s+/) : []
 
-  if (node.lang) {
-    properties.className = ['language-' + node.lang]
+  // GH/CM still drop the non-first languages.
+  if (language.length > 0) {
+    properties.className = ['language-' + language[0]]
   }
 
   // Create `<code>`.
@@ -65201,13 +65191,10 @@ function code(state, node) {
 
 ;// CONCATENATED MODULE: ./node_modules/mdast-util-to-hast/lib/handlers/delete.js
 /**
- * @typedef {import('hast').Element} Element
- * @typedef {import('mdast').Delete} Delete
- * @typedef {import('../state.js').State} State
+ * @import {Element} from 'hast'
+ * @import {Delete} from 'mdast'
+ * @import {State} from '../state.js'
  */
-
-// Make VS Code show references to the above types.
-''
 
 /**
  * Turn an mdast `delete` node into hast.
@@ -65233,13 +65220,10 @@ function strikethrough(state, node) {
 
 ;// CONCATENATED MODULE: ./node_modules/mdast-util-to-hast/lib/handlers/emphasis.js
 /**
- * @typedef {import('hast').Element} Element
- * @typedef {import('mdast').Emphasis} Emphasis
- * @typedef {import('../state.js').State} State
+ * @import {Element} from 'hast'
+ * @import {Emphasis} from 'mdast'
+ * @import {State} from '../state.js'
  */
-
-// Make VS Code show references to the above types.
-''
 
 /**
  * Turn an mdast `emphasis` node into hast.
@@ -65265,9 +65249,9 @@ function emphasis(state, node) {
 
 ;// CONCATENATED MODULE: ./node_modules/mdast-util-to-hast/lib/handlers/footnote-reference.js
 /**
- * @typedef {import('hast').Element} Element
- * @typedef {import('mdast').FootnoteReference} FootnoteReference
- * @typedef {import('../state.js').State} State
+ * @import {Element} from 'hast'
+ * @import {FootnoteReference} from 'mdast'
+ * @import {State} from '../state.js'
  */
 
 
@@ -65337,13 +65321,10 @@ function footnoteReference(state, node) {
 
 ;// CONCATENATED MODULE: ./node_modules/mdast-util-to-hast/lib/handlers/heading.js
 /**
- * @typedef {import('hast').Element} Element
- * @typedef {import('mdast').Heading} Heading
- * @typedef {import('../state.js').State} State
+ * @import {Element} from 'hast'
+ * @import {Heading} from 'mdast'
+ * @import {State} from '../state.js'
  */
-
-// Make VS Code show references to the above types.
-''
 
 /**
  * Turn an mdast `heading` node into hast.
@@ -65369,14 +65350,11 @@ function heading(state, node) {
 
 ;// CONCATENATED MODULE: ./node_modules/mdast-util-to-hast/lib/handlers/html.js
 /**
- * @typedef {import('hast').Element} Element
- * @typedef {import('mdast').Html} Html
- * @typedef {import('../state.js').State} State
- * @typedef {import('../../index.js').Raw} Raw
+ * @import {Element} from 'hast'
+ * @import {Html} from 'mdast'
+ * @import {State} from '../state.js'
+ * @import {Raw} from '../../index.js'
  */
-
-// Make VS Code show references to the above types.
-''
 
 /**
  * Turn an mdast `html` node into hast (`raw` node in dangerous mode, otherwise
@@ -65402,16 +65380,10 @@ function html(state, node) {
 
 ;// CONCATENATED MODULE: ./node_modules/mdast-util-to-hast/lib/revert.js
 /**
- * @typedef {import('hast').ElementContent} ElementContent
- *
- * @typedef {import('mdast').Nodes} Nodes
- * @typedef {import('mdast').Reference} Reference
- *
- * @typedef {import('./state.js').State} State
+ * @import {ElementContent} from 'hast'
+ * @import {Reference, Nodes} from 'mdast'
+ * @import {State} from './state.js'
  */
-
-// Make VS Code show references to the above types.
-''
 
 /**
  * Return the content of a reference without definition as plain text.
@@ -65459,11 +65431,9 @@ function revert(state, node) {
 
 ;// CONCATENATED MODULE: ./node_modules/mdast-util-to-hast/lib/handlers/image-reference.js
 /**
- * @typedef {import('hast').Element} Element
- * @typedef {import('hast').ElementContent} ElementContent
- * @typedef {import('hast').Properties} Properties
- * @typedef {import('mdast').ImageReference} ImageReference
- * @typedef {import('../state.js').State} State
+ * @import {ElementContent, Element, Properties} from 'hast'
+ * @import {ImageReference} from 'mdast'
+ * @import {State} from '../state.js'
  */
 
 
@@ -65502,10 +65472,9 @@ function imageReference(state, node) {
 
 ;// CONCATENATED MODULE: ./node_modules/mdast-util-to-hast/lib/handlers/image.js
 /**
- * @typedef {import('hast').Element} Element
- * @typedef {import('hast').Properties} Properties
- * @typedef {import('mdast').Image} Image
- * @typedef {import('../state.js').State} State
+ * @import {Element, Properties} from 'hast'
+ * @import {Image} from 'mdast'
+ * @import {State} from '../state.js'
  */
 
 
@@ -65540,14 +65509,10 @@ function image_image(state, node) {
 
 ;// CONCATENATED MODULE: ./node_modules/mdast-util-to-hast/lib/handlers/inline-code.js
 /**
- * @typedef {import('hast').Element} Element
- * @typedef {import('hast').Text} Text
- * @typedef {import('mdast').InlineCode} InlineCode
- * @typedef {import('../state.js').State} State
+ * @import {Element, Text} from 'hast'
+ * @import {InlineCode} from 'mdast'
+ * @import {State} from '../state.js'
  */
-
-// Make VS Code show references to the above types.
-''
 
 /**
  * Turn an mdast `inlineCode` node into hast.
@@ -65577,11 +65542,9 @@ function inlineCode(state, node) {
 
 ;// CONCATENATED MODULE: ./node_modules/mdast-util-to-hast/lib/handlers/link-reference.js
 /**
- * @typedef {import('hast').Element} Element
- * @typedef {import('hast').ElementContent} ElementContent
- * @typedef {import('hast').Properties} Properties
- * @typedef {import('mdast').LinkReference} LinkReference
- * @typedef {import('../state.js').State} State
+ * @import {ElementContent, Element, Properties} from 'hast'
+ * @import {LinkReference} from 'mdast'
+ * @import {State} from '../state.js'
  */
 
 
@@ -65625,10 +65588,9 @@ function linkReference(state, node) {
 
 ;// CONCATENATED MODULE: ./node_modules/mdast-util-to-hast/lib/handlers/link.js
 /**
- * @typedef {import('hast').Element} Element
- * @typedef {import('hast').Properties} Properties
- * @typedef {import('mdast').Link} Link
- * @typedef {import('../state.js').State} State
+ * @import {Element, Properties} from 'hast'
+ * @import {Link} from 'mdast'
+ * @import {State} from '../state.js'
  */
 
 
@@ -65664,16 +65626,10 @@ function link_link(state, node) {
 
 ;// CONCATENATED MODULE: ./node_modules/mdast-util-to-hast/lib/handlers/list-item.js
 /**
- * @typedef {import('hast').Element} Element
- * @typedef {import('hast').ElementContent} ElementContent
- * @typedef {import('hast').Properties} Properties
- * @typedef {import('mdast').ListItem} ListItem
- * @typedef {import('mdast').Parents} Parents
- * @typedef {import('../state.js').State} State
+ * @import {ElementContent, Element, Properties} from 'hast'
+ * @import {ListItem, Parents} from 'mdast'
+ * @import {State} from '../state.js'
  */
-
-// Make VS Code show references to the above types.
-''
 
 /**
  * Turn an mdast `listItem` node into hast.
@@ -65791,14 +65747,10 @@ function listItemLoose(node) {
 
 ;// CONCATENATED MODULE: ./node_modules/mdast-util-to-hast/lib/handlers/list.js
 /**
- * @typedef {import('hast').Element} Element
- * @typedef {import('hast').Properties} Properties
- * @typedef {import('mdast').List} List
- * @typedef {import('../state.js').State} State
+ * @import {Element, Properties} from 'hast'
+ * @import {List} from 'mdast'
+ * @import {State} from '../state.js'
  */
-
-// Make VS Code show references to the above types.
-''
 
 /**
  * Turn an mdast `list` node into hast.
@@ -65849,13 +65801,10 @@ function list(state, node) {
 
 ;// CONCATENATED MODULE: ./node_modules/mdast-util-to-hast/lib/handlers/paragraph.js
 /**
- * @typedef {import('hast').Element} Element
- * @typedef {import('mdast').Paragraph} Paragraph
- * @typedef {import('../state.js').State} State
+ * @import {Element} from 'hast'
+ * @import {Paragraph} from 'mdast'
+ * @import {State} from '../state.js'
  */
-
-// Make VS Code show references to the above types.
-''
 
 /**
  * Turn an mdast `paragraph` node into hast.
@@ -65881,14 +65830,10 @@ function paragraph(state, node) {
 
 ;// CONCATENATED MODULE: ./node_modules/mdast-util-to-hast/lib/handlers/root.js
 /**
- * @typedef {import('hast').Parents} HastParents
- * @typedef {import('hast').Root} HastRoot
- * @typedef {import('mdast').Root} MdastRoot
- * @typedef {import('../state.js').State} State
+ * @import {Parents as HastParents, Root as HastRoot} from 'hast'
+ * @import {Root as MdastRoot} from 'mdast'
+ * @import {State} from '../state.js'
  */
-
-// Make VS Code show references to the above types.
-''
 
 /**
  * Turn an mdast `root` node into hast.
@@ -65909,13 +65854,10 @@ function root(state, node) {
 
 ;// CONCATENATED MODULE: ./node_modules/mdast-util-to-hast/lib/handlers/strong.js
 /**
- * @typedef {import('hast').Element} Element
- * @typedef {import('mdast').Strong} Strong
- * @typedef {import('../state.js').State} State
+ * @import {Element} from 'hast'
+ * @import {Strong} from 'mdast'
+ * @import {State} from '../state.js'
  */
-
-// Make VS Code show references to the above types.
-''
 
 /**
  * Turn an mdast `strong` node into hast.
@@ -66038,9 +65980,9 @@ function position(node) {
 
 ;// CONCATENATED MODULE: ./node_modules/mdast-util-to-hast/lib/handlers/table.js
 /**
- * @typedef {import('hast').Element} Element
- * @typedef {import('mdast').Table} Table
- * @typedef {import('../state.js').State} State
+ * @import {Table} from 'mdast'
+ * @import {Element} from 'hast'
+ * @import {State} from '../state.js'
  */
 
 
@@ -66101,16 +66043,10 @@ function table(state, node) {
 
 ;// CONCATENATED MODULE: ./node_modules/mdast-util-to-hast/lib/handlers/table-row.js
 /**
- * @typedef {import('hast').Element} Element
- * @typedef {import('hast').ElementContent} ElementContent
- * @typedef {import('hast').Properties} Properties
- * @typedef {import('mdast').Parents} Parents
- * @typedef {import('mdast').TableRow} TableRow
- * @typedef {import('../state.js').State} State
+ * @import {Element, ElementContent, Properties} from 'hast'
+ * @import {Parents, TableRow} from 'mdast'
+ * @import {State} from '../state.js'
  */
-
-// Make VS Code show references to the above types.
-''
 
 /**
  * Turn an mdast `tableRow` node into hast.
@@ -66172,13 +66108,10 @@ function tableRow(state, node, parent) {
 
 ;// CONCATENATED MODULE: ./node_modules/mdast-util-to-hast/lib/handlers/table-cell.js
 /**
- * @typedef {import('hast').Element} Element
- * @typedef {import('mdast').TableCell} TableCell
- * @typedef {import('../state.js').State} State
+ * @import {Element} from 'hast'
+ * @import {TableCell} from 'mdast'
+ * @import {State} from '../state.js'
  */
-
-// Make VS Code show references to the above types.
-''
 
 /**
  * Turn an mdast `tableCell` node into hast.
@@ -66277,10 +66210,9 @@ function trimLine(value, start, end) {
 
 ;// CONCATENATED MODULE: ./node_modules/mdast-util-to-hast/lib/handlers/text.js
 /**
- * @typedef {import('hast').Element} HastElement
- * @typedef {import('hast').Text} HastText
- * @typedef {import('mdast').Text} MdastText
- * @typedef {import('../state.js').State} State
+ * @import {Element as HastElement, Text as HastText} from 'hast'
+ * @import {Text as MdastText} from 'mdast'
+ * @import {State} from '../state.js'
  */
 
 
@@ -66304,13 +66236,10 @@ function text_text(state, node) {
 
 ;// CONCATENATED MODULE: ./node_modules/mdast-util-to-hast/lib/handlers/thematic-break.js
 /**
- * @typedef {import('hast').Element} Element
- * @typedef {import('mdast').ThematicBreak} ThematicBreak
- * @typedef {import('../state.js').State} State
+ * @import {Element} from 'hast'
+ * @import {ThematicBreak} from 'mdast'
+ * @import {State} from '../state.js'
  */
-
-// Make VS Code show references to the above types.
-''
 
 /**
  * Turn an mdast `thematicBreak` node into hast.
@@ -66335,6 +66264,10 @@ function thematicBreak(state, node) {
 }
 
 ;// CONCATENATED MODULE: ./node_modules/mdast-util-to-hast/lib/handlers/index.js
+/**
+ * @import {Handlers} from '../state.js'
+ */
+
 
 
 
@@ -66362,7 +66295,7 @@ function thematicBreak(state, node) {
 /**
  * Default handlers for nodes.
  *
- * @satisfies {import('../state.js').Handlers}
+ * @satisfies {Handlers}
  */
 const handlers_handlers = {
   blockquote: blockquote,
@@ -66406,22 +66339,25 @@ var lib_default = __nccwpck_require__(7776);
 var lib = __nccwpck_require__(3617);
 ;// CONCATENATED MODULE: ./node_modules/mdast-util-to-hast/lib/state.js
 /**
- * @typedef {import('hast').Element} HastElement
- * @typedef {import('hast').ElementContent} HastElementContent
- * @typedef {import('hast').Nodes} HastNodes
- * @typedef {import('hast').Properties} HastProperties
- * @typedef {import('hast').RootContent} HastRootContent
- * @typedef {import('hast').Text} HastText
- *
- * @typedef {import('mdast').Definition} MdastDefinition
- * @typedef {import('mdast').FootnoteDefinition} MdastFootnoteDefinition
- * @typedef {import('mdast').Nodes} MdastNodes
- * @typedef {import('mdast').Parents} MdastParents
- *
- * @typedef {import('vfile').VFile} VFile
- *
- * @typedef {import('./footer.js').FootnoteBackContentTemplate} FootnoteBackContentTemplate
- * @typedef {import('./footer.js').FootnoteBackLabelTemplate} FootnoteBackLabelTemplate
+ * @import {
+ *   ElementContent as HastElementContent,
+ *   Element as HastElement,
+ *   Nodes as HastNodes,
+ *   Properties as HastProperties,
+ *   RootContent as HastRootContent,
+ *   Text as HastText
+ * } from 'hast'
+ * @import {
+ *   Definition as MdastDefinition,
+ *   FootnoteDefinition as MdastFootnoteDefinition,
+ *   Nodes as MdastNodes,
+ *   Parents as MdastParents
+ * } from 'mdast'
+ * @import {VFile} from 'vfile'
+ * @import {
+ *   FootnoteBackContentTemplate,
+ *   FootnoteBackLabelTemplate
+ * } from './footer.js'
  */
 
 /**
@@ -66881,9 +66817,9 @@ function trimMarkdownSpaceStart(value) {
 
 ;// CONCATENATED MODULE: ./node_modules/mdast-util-to-hast/lib/index.js
 /**
- * @typedef {import('hast').Nodes} HastNodes
- * @typedef {import('mdast').Nodes} MdastNodes
- * @typedef {import('./state.js').Options} Options
+ * @import {Nodes as HastNodes} from 'hast'
+ * @import {Nodes as MdastNodes} from 'mdast'
+ * @import {Options} from './state.js'
  */
 
 
