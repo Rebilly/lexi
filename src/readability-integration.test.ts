@@ -34,7 +34,7 @@ KYC protects your account from fraud and identity theft.
         ] as const;
 
         for (const metric of metrics) {
-            expect(Math.abs(a[metric] - b[metric])).toBeLessThan(1e-9);
+            expect(a[metric]).toBeCloseTo(b[metric], 9);
         }
     });
 });
