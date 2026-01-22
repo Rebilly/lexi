@@ -31176,7 +31176,10 @@ function calculateReadabilityOfText(text) {
             colemanLiauIndex: exports.METRIC_RANGES.colemanLiauIndex.min,
         };
     const stripped = preprocessMarkdown(String(text));
-    const scores = scoreText(stripped);
+    // Normalize whitespace so formatting changes (like semantic line breaks)
+    // do not affect readability metrics.
+    const normalizedForScoring = stripped.replace(/\s+/g, ' ').trim();
+    const scores = scoreText(normalizedForScoring);
     const normalized = normalizeScores(scores);
     const readabilityScore = calculateReadabilityScore(normalized);
     return Object.assign({ readabilityScore }, scores);
