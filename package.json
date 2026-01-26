@@ -34,7 +34,7 @@
         "unist-util-visit": "^5.0.0"
     },
     "devDependencies": {
-        "@guolao/vue-monaco-editor": "^1.5.5",
+        "@guolao/vue-monaco-editor": "^1.6.0",
         "@rebilly/revel": "^8.16.2",
         "@types/glob": "^8.1.0",
         "@types/mdast": "^4.0.4",
