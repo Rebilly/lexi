@@ -19,7 +19,7 @@
         "playground:build": "vue-tsc --project ./playground && vite build --config ./playground/vite.config.ts"
     },
     "dependencies": {
-        "@actions/core": "^1.11.1",
+        "@actions/core": "^3.0.0",
         "@actions/exec": "^1.1.0",
         "@actions/github": "^6.0.1",
         "glob": "^13.0.0",
