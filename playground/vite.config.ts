@@ -9,6 +9,9 @@ export default defineConfig({
     // path such as www.example.com/lexi/
     base: './',
     plugins: [vue(), mkcert()],
+    build: {
+        cssMinify: false,
+    },
     server: {
         https: true,
     },

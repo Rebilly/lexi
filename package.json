@@ -7,11 +7,11 @@
     "main": "src/index.ts",
     "type": "module",
     "scripts": {
-        "build": "ncc build --source-map --license licenses.txt",
+        "build": "rollup --config rollup.config.ts --configPlugin @rollup/plugin-typescript",
         "test": "vitest run",
         "format": "prettier --write .",
         "format-check": "prettier --check '**/*.ts'",
-        "lint": "eslint 'src/**/*.ts'",
+        "lint": "eslint .",
         "all": "npm run build && npm run format && npm run lint && npm test",
         "run:local:report": "tsx ./src/cli/report.ts",
         "run:local:debugfile": "tsx ./src/cli/debug-file.ts",
@@ -19,12 +19,12 @@
         "playground:build": "vue-tsc --project ./playground && vite build --config ./playground/vite.config.ts"
     },
     "dependencies": {
-        "@actions/core": "^1.11.1",
-        "@actions/exec": "^1.1.0",
-        "@actions/github": "^6.0.1",
+        "@actions/core": "^3.0.0",
+        "@actions/exec": "^3.0.0",
+        "@actions/github": "^9.0.0",
         "glob": "^13.0.0",
         "rehype-stringify": "^10.0.1",
-        "remark": "^14.0.3",
+        "remark": "^15.0.1",
         "remark-gfm": "^4.0.1",
         "remark-parse": "^11.0.0",
         "remark-rehype": "^11.1.2",
@@ -35,28 +35,32 @@
     },
     "devDependencies": {
         "@guolao/vue-monaco-editor": "^1.6.0",
-        "@rebilly/revel": "^8.16.2",
-        "@types/glob": "^8.1.0",
+        "@rebilly/revel": "^12.22.1",
+        "@rollup/plugin-commonjs": "^29.0.2",
+        "@rollup/plugin-json": "^6.1.0",
+        "@rollup/plugin-node-resolve": "^16.0.3",
+        "@rollup/plugin-typescript": "^12.3.0",
         "@types/mdast": "^4.0.4",
         "@types/node": "^25.5.0",
-        "@typescript-eslint/parser": "^8.54.0",
-        "@vercel/ncc": "^0.38.4",
-        "@vitejs/plugin-vue": "^6.0.3",
+        "@vitejs/plugin-vue": "^6.0.5",
         "commander": "^14.0.0",
-        "eslint": "^8.57.0",
-        "eslint-plugin-github": "^5.1.8",
+        "eslint": "^9.39.4",
+        "eslint-plugin-github": "^6.0.0",
         "eslint-plugin-prettier": "^5.5.5",
+        "globals": "^17.4.0",
         "js-yaml": "^4.1.1",
         "moment": "^2.30.1",
         "prettier": "^3.8.1",
+        "rollup": "^4.59.0",
+        "tslib": "^2.8.1",
         "tsx": "^4.21.0",
-        "typescript": "^5.7.3",
-        "vite": "^7.1.12",
-        "vite-plugin-mkcert": "^1.17.9",
-        "vitest": "^3.2.4",
-        "vue": "^3.5.22",
+        "typescript": "^5.9.3",
+        "vite": "^8.0.1",
+        "vite-plugin-mkcert": "^1.17.10",
+        "vitest": "^4.1.0",
+        "vue": "^3.5.30",
         "vue-codemirror": "^6.1.1",
-        "vue-tsc": "^3.2.5"
+        "vue-tsc": "^3.2.6"
     },
     "prettier": {
         "tabWidth": 4,
@@ -64,7 +68,6 @@
         "bracketSpacing": false
     },
     "resolutions": {
-        "text-readability/syllable/trim": "^0.0.3",
-        "vite/esbuild": "^0.25.0"
+        "text-readability/syllable/trim": "^0.0.3"
     }
 }

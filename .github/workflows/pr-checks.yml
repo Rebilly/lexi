@@ -44,11 +44,14 @@ jobs:
               run: yarn test
 
     build:
-        name: Check build is committed
+        name: Commit build
         runs-on: ubuntu-latest
         steps:
             - name: Checkout repo
               uses: actions/checkout@v6
+              with:
+                  ref: ${{ github.head_ref }}
+                  token: ${{ secrets.MACHINE_USER_PAT }}
             - name: Setup node
               uses: actions/setup-node@v6
               with:
@@ -62,10 +65,20 @@ jobs:
               run: yarn
             - name: Build
               run: yarn build
-            - name: Ensure that the committed dist matches the build
-              # See if there are any diffs in the dist file. Grep returns an error
-              # when there are no changes, so we flip the output
-              run: (git diff --name-only | grep dist/index.js || exit 0 && exit 1)
+            - name: Commit updated dist if it differs from build
+              run: |
+                if ! git diff --quiet dist/; then
+                  if [ "$(git log -1 --format='%an')" = "github-actions[bot]" ]; then
+                    echo "::error::dist still differs after a CI rebuild - a dependency may produce non-deterministic output"
+                    git diff --text dist/
+                    exit 1
+                  fi
+                  git config user.name "github-actions[bot]"
+                  git config user.email "github-actions[bot]@users.noreply.github.com"
+                  git add dist/
+                  git commit -m "chore: rebuild dist"
+                  git push
+                fi
 
     build-playground:
         name: Build the playground
