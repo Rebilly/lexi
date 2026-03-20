@@ -33846,7 +33846,7 @@ const listComments = async (client, context, prNumber, hiddenHeader) => {
         ...context.repo,
         issue_number: prNumber,
     });
-    return existingComments.filter((comment) => comment.body?.startsWith(hiddenHeader));
+    return existingComments.filter(({ body }) => body?.startsWith(hiddenHeader));
 };
 const insertComment = async (client, context, prNumber, body, hiddenHeader) => client.rest.issues.createComment({
     ...context.repo,
@@ -33890,10 +33890,7 @@ const getFileStatusesFromPR = async (client, context, prNumber) => {
             .map((file) => file.filename),
         renamed: files
             .filter((file) => file.status === 'renamed')
-            .map((file) => ({
-            from: file.previous_filename,
-            to: file.filename,
-        })),
+            .map((file) => ({ from: file.previous_filename, to: file.filename })),
     };
 };
 
