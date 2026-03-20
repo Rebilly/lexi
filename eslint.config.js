@@ -9,6 +9,7 @@ export default [
             'node_modules/',
             'playground/',
             'rollup.config.ts',
+            'vite.config.ts',
         ],
     },
     github.getFlatConfigs().recommended,

@@ -35,14 +35,14 @@
     },
     "devDependencies": {
         "@guolao/vue-monaco-editor": "^1.6.0",
-        "@rebilly/revel": "^8.16.2",
+        "@rebilly/revel": "^12.22.1",
         "@rollup/plugin-commonjs": "^29.0.2",
         "@rollup/plugin-json": "^6.1.0",
         "@rollup/plugin-node-resolve": "^16.0.3",
         "@rollup/plugin-typescript": "^12.3.0",
         "@types/mdast": "^4.0.4",
         "@types/node": "^25.5.0",
-        "@vitejs/plugin-vue": "^6.0.3",
+        "@vitejs/plugin-vue": "^6.0.5",
         "commander": "^14.0.0",
         "eslint": "^9.39.4",
         "eslint-plugin-github": "^6.0.0",
@@ -55,12 +55,12 @@
         "tslib": "^2.8.1",
         "tsx": "^4.21.0",
         "typescript": "^5.9.3",
-        "vite": "^7.1.12",
-        "vite-plugin-mkcert": "^1.17.9",
-        "vitest": "^3.2.4",
-        "vue": "^3.5.22",
+        "vite": "^8.0.1",
+        "vite-plugin-mkcert": "^1.17.10",
+        "vitest": "^4.1.0",
+        "vue": "^3.5.30",
         "vue-codemirror": "^6.1.1",
-        "vue-tsc": "^3.2.5"
+        "vue-tsc": "^3.2.6"
     },
     "prettier": {
         "tabWidth": 4,
@@ -68,7 +68,6 @@
         "bracketSpacing": false
     },
     "resolutions": {
-        "text-readability/syllable/trim": "^0.0.3",
-        "vite/esbuild": "^0.25.0"
+        "text-readability/syllable/trim": "^0.0.3"
     }
 }

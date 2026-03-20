@@ -8,8 +8,8 @@
         "strict": true,
         "noImplicitAny": true,
         "esModuleInterop": true,
-        "types": ["vitest/globals", "text-readability"],
-        "typeRoots": ["./node_modules", "./typings"]
+        "types": ["vitest/globals", "text-readability", "node"],
+        "typeRoots": ["./node_modules/@types", "./node_modules", "./typings"]
     },
     "exclude": ["node_modules", "typings", "playground", "vite.config.ts"]
 }

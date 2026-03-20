@@ -33966,7 +33966,7 @@ const defaults = {
 };
 
 /** @type {Readonly<Options>} */
-const emptyOptions$5 = {};
+const emptyOptions$4 = {};
 /** @type {ReadonlyArray<Nodes['type']>} */
 const emptyTypes = [];
 
@@ -33985,7 +33985,7 @@ const emptyTypes = [];
  */
 function stripMarkdown(options) {
   const handlers = {...defaults};
-  const settings = emptyOptions$5;
+  const settings = emptyOptions$4;
   const keep = settings.keep || emptyTypes;
   const remove = settings.remove || emptyTypes;
 
@@ -34208,7 +34208,7 @@ function empty$2() {
  */
 
 /** @type {Options} */
-const emptyOptions$4 = {};
+const emptyOptions$3 = {};
 
 /**
  * Get the text content of a node or list of nodes.
@@ -34223,8 +34223,8 @@ const emptyOptions$4 = {};
  * @returns {string}
  *   Serialized `value`.
  */
-function toString$2(value, options) {
-  const settings = emptyOptions$4;
+function toString$1(value, options) {
+  const settings = emptyOptions$3;
   const includeImageAlt =
     typeof settings.includeImageAlt === 'boolean'
       ? settings.includeImageAlt
@@ -34232,7 +34232,7 @@ function toString$2(value, options) {
   const includeHtml =
     typeof settings.includeHtml === 'boolean' ? settings.includeHtml : true;
 
-  return one$3(value, includeImageAlt, includeHtml)
+  return one$2(value, includeImageAlt, includeHtml)
 }
 
 /**
@@ -34247,8 +34247,8 @@ function toString$2(value, options) {
  * @returns {string}
  *   Serialized node.
  */
-function one$3(value, includeImageAlt, includeHtml) {
-  if (node$1(value)) {
+function one$2(value, includeImageAlt, includeHtml) {
+  if (node(value)) {
     if ('value' in value) {
       return value.type === 'html' && !includeHtml ? '' : value.value
     }
@@ -34258,12 +34258,12 @@ function one$3(value, includeImageAlt, includeHtml) {
     }
 
     if ('children' in value) {
-      return all$2(value.children, includeImageAlt, includeHtml)
+      return all$1(value.children, includeImageAlt, includeHtml)
     }
   }
 
   if (Array.isArray(value)) {
-    return all$2(value, includeImageAlt, includeHtml)
+    return all$1(value, includeImageAlt, includeHtml)
   }
 
   return ''
@@ -34281,13 +34281,13 @@ function one$3(value, includeImageAlt, includeHtml) {
  * @returns {string}
  *   Serialized nodes.
  */
-function all$2(values, includeImageAlt, includeHtml) {
+function all$1(values, includeImageAlt, includeHtml) {
   /** @type {Array<string>} */
   const result = [];
   let index = -1;
 
   while (++index < values.length) {
-    result[index] = one$3(values[index], includeImageAlt, includeHtml);
+    result[index] = one$2(values[index], includeImageAlt, includeHtml);
   }
 
   return result.join('')
@@ -34301,7 +34301,7 @@ function all$2(values, includeImageAlt, includeHtml) {
  * @returns {value is Nodes}
  *   Whether `value` is a node.
  */
-function node$1(value) {
+function node(value) {
   return Boolean(value && typeof value === 'object')
 }
 
@@ -36627,6 +36627,39 @@ function constructs(existing, list) {
   }
 
   splice(existing, 0, 0, before);
+}
+
+/**
+ * Turn the number (in string form as either hexa- or plain decimal) coming from
+ * a numeric character reference into a character.
+ *
+ * Sort of like `String.fromCodePoint(Number.parseInt(value, base))`, but makes
+ * non-characters and control characters safe.
+ *
+ * @param {string} value
+ *   Value to decode.
+ * @param {number} base
+ *   Numeric base.
+ * @returns {string}
+ *   Character.
+ */
+function decodeNumericCharacterReference(value, base) {
+  const code = Number.parseInt(value, base);
+  if (
+  // C0 except for HT, LF, FF, CR, space.
+  code < 9 || code === 11 || code > 13 && code < 32 ||
+  // Control character (DEL) of C0, and C1 controls.
+  code > 126 && code < 160 ||
+  // Lone high surrogates and low surrogates.
+  code > 55_295 && code < 57_344 ||
+  // Noncharacters.
+  code > 64_975 && code < 65_008 || /* eslint-disable no-bitwise */
+  (code & 65_535) === 65_535 || (code & 65_535) === 65_534 || /* eslint-enable no-bitwise */
+  // Out of range
+  code > 1_114_111) {
+    return "\uFFFD";
+  }
+  return String.fromCodePoint(code);
 }
 
 /**
@@ -39304,7 +39337,7 @@ function tokenizeCodeText(effects, ok, nok) {
  * @template T
  *   Item type.
  */
-let SpliceBuffer$1 = class SpliceBuffer {
+class SpliceBuffer {
   /**
    * @param {ReadonlyArray<T> | null | undefined} [initial]
    *   Initial items (optional).
@@ -39403,7 +39436,7 @@ let SpliceBuffer$1 = class SpliceBuffer {
     const count = deleteCount || 0;
     this.setCursor(Math.trunc(start));
     const removed = this.right.splice(this.right.length - count, Number.POSITIVE_INFINITY);
-    if (items) chunkedPush$1(this.left, items);
+    if (items) chunkedPush(this.left, items);
     return removed.reverse();
   }
 
@@ -39445,7 +39478,7 @@ let SpliceBuffer$1 = class SpliceBuffer {
    */
   pushMany(items) {
     this.setCursor(Number.POSITIVE_INFINITY);
-    chunkedPush$1(this.left, items);
+    chunkedPush(this.left, items);
   }
 
   /**
@@ -39473,7 +39506,7 @@ let SpliceBuffer$1 = class SpliceBuffer {
    */
   unshiftMany(items) {
     this.setCursor(0);
-    chunkedPush$1(this.right, items.reverse());
+    chunkedPush(this.right, items.reverse());
   }
 
   /**
@@ -39493,14 +39526,14 @@ let SpliceBuffer$1 = class SpliceBuffer {
     if (n < this.left.length) {
       // Move cursor to the this.left
       const removed = this.left.splice(n, Number.POSITIVE_INFINITY);
-      chunkedPush$1(this.right, removed.reverse());
+      chunkedPush(this.right, removed.reverse());
     } else {
       // Move cursor to the this.right
       const removed = this.right.splice(this.left.length + this.right.length - n, Number.POSITIVE_INFINITY);
-      chunkedPush$1(this.left, removed.reverse());
+      chunkedPush(this.left, removed.reverse());
     }
   }
-};
+}
 
 /**
  * Avoid stack overflow by pushing items onto the stack in segments
@@ -39514,7 +39547,7 @@ let SpliceBuffer$1 = class SpliceBuffer {
  * @return {undefined}
  *   Nothing.
  */
-function chunkedPush$1(list, right) {
+function chunkedPush(list, right) {
   /** @type {number} */
   let chunkStart = 0;
   if (right.length < 10000) {
@@ -39541,7 +39574,7 @@ function chunkedPush$1(list, right) {
  *   Whether subtokens were found.
  */
 // eslint-disable-next-line complexity
-function subtokenize$1(eventsArray) {
+function subtokenize(eventsArray) {
   /** @type {Record<string, number>} */
   const jumps = {};
   let index = -1;
@@ -39559,7 +39592,7 @@ function subtokenize$1(eventsArray) {
   let subevents;
   /** @type {boolean | undefined} */
   let more;
-  const events = new SpliceBuffer$1(eventsArray);
+  const events = new SpliceBuffer(eventsArray);
   while (++index < events.length) {
     while (index in jumps) {
       index = jumps[index];
@@ -39590,7 +39623,7 @@ function subtokenize$1(eventsArray) {
     // Enter.
     if (event[0] === 'enter') {
       if (event[1].contentType) {
-        Object.assign(jumps, subcontent$1(events, index));
+        Object.assign(jumps, subcontent(events, index));
         index = jumps[index];
         more = true;
       }
@@ -39642,7 +39675,7 @@ function subtokenize$1(eventsArray) {
  * @returns {Record<string, number>}
  *   Gaps.
  */
-function subcontent$1(events, eventIndex) {
+function subcontent(events, eventIndex) {
   const token = events.get(eventIndex)[1];
   const context = events.get(eventIndex)[2];
   let startPosition = eventIndex - 1;
@@ -39776,7 +39809,7 @@ const continuationConstruct = {
  * @type {Resolver}
  */
 function resolveContent(events) {
-  subtokenize$1(events);
+  subtokenize(events);
   return events;
 }
 
@@ -44820,474 +44853,6 @@ function parse(options) {
 }
 
 /**
- * Some of the internal operations of micromark do lots of editing
- * operations on very large arrays. This runs into problems with two
- * properties of most circa-2020 JavaScript interpreters:
- *
- *  - Array-length modifications at the high end of an array (push/pop) are
- *    expected to be common and are implemented in (amortized) time
- *    proportional to the number of elements added or removed, whereas
- *    other operations (shift/unshift and splice) are much less efficient.
- *  - Function arguments are passed on the stack, so adding tens of thousands
- *    of elements to an array with `arr.push(...newElements)` will frequently
- *    cause stack overflows. (see <https://stackoverflow.com/questions/22123769/rangeerror-maximum-call-stack-size-exceeded-why>)
- *
- * SpliceBuffers are an implementation of gap buffers, which are a
- * generalization of the "queue made of two stacks" idea. The splice buffer
- * maintains a cursor, and moving the cursor has cost proportional to the
- * distance the cursor moves, but inserting, deleting, or splicing in
- * new information at the cursor is as efficient as the push/pop operation.
- * This allows for an efficient sequence of splices (or pushes, pops, shifts,
- * or unshifts) as long such edits happen at the same part of the array or
- * generally sweep through the array from the beginning to the end.
- *
- * The interface for splice buffers also supports large numbers of inputs by
- * passing a single array argument rather passing multiple arguments on the
- * function call stack.
- *
- * @template T
- *   Item type.
- */
-class SpliceBuffer {
-  /**
-   * @param {ReadonlyArray<T> | null | undefined} [initial]
-   *   Initial items (optional).
-   * @returns
-   *   Splice buffer.
-   */
-  constructor(initial) {
-    /** @type {Array<T>} */
-    this.left = initial ? [...initial] : [];
-    /** @type {Array<T>} */
-    this.right = [];
-  }
-
-  /**
-   * Array access;
-   * does not move the cursor.
-   *
-   * @param {number} index
-   *   Index.
-   * @return {T}
-   *   Item.
-   */
-  get(index) {
-    if (index < 0 || index >= this.left.length + this.right.length) {
-      throw new RangeError('Cannot access index `' + index + '` in a splice buffer of size `' + (this.left.length + this.right.length) + '`');
-    }
-    if (index < this.left.length) return this.left[index];
-    return this.right[this.right.length - index + this.left.length - 1];
-  }
-
-  /**
-   * The length of the splice buffer, one greater than the largest index in the
-   * array.
-   */
-  get length() {
-    return this.left.length + this.right.length;
-  }
-
-  /**
-   * Remove and return `list[0]`;
-   * moves the cursor to `0`.
-   *
-   * @returns {T | undefined}
-   *   Item, optional.
-   */
-  shift() {
-    this.setCursor(0);
-    return this.right.pop();
-  }
-
-  /**
-   * Slice the buffer to get an array;
-   * does not move the cursor.
-   *
-   * @param {number} start
-   *   Start.
-   * @param {number | null | undefined} [end]
-   *   End (optional).
-   * @returns {Array<T>}
-   *   Array of items.
-   */
-  slice(start, end) {
-    /** @type {number} */
-    const stop = end === null || end === undefined ? Number.POSITIVE_INFINITY : end;
-    if (stop < this.left.length) {
-      return this.left.slice(start, stop);
-    }
-    if (start > this.left.length) {
-      return this.right.slice(this.right.length - stop + this.left.length, this.right.length - start + this.left.length).reverse();
-    }
-    return this.left.slice(start).concat(this.right.slice(this.right.length - stop + this.left.length).reverse());
-  }
-
-  /**
-   * Mimics the behavior of Array.prototype.splice() except for the change of
-   * interface necessary to avoid segfaults when patching in very large arrays.
-   *
-   * This operation moves cursor is moved to `start` and results in the cursor
-   * placed after any inserted items.
-   *
-   * @param {number} start
-   *   Start;
-   *   zero-based index at which to start changing the array;
-   *   negative numbers count backwards from the end of the array and values
-   *   that are out-of bounds are clamped to the appropriate end of the array.
-   * @param {number | null | undefined} [deleteCount=0]
-   *   Delete count (default: `0`);
-   *   maximum number of elements to delete, starting from start.
-   * @param {Array<T> | null | undefined} [items=[]]
-   *   Items to include in place of the deleted items (default: `[]`).
-   * @return {Array<T>}
-   *   Any removed items.
-   */
-  splice(start, deleteCount, items) {
-    /** @type {number} */
-    const count = deleteCount || 0;
-    this.setCursor(Math.trunc(start));
-    const removed = this.right.splice(this.right.length - count, Number.POSITIVE_INFINITY);
-    if (items) chunkedPush(this.left, items);
-    return removed.reverse();
-  }
-
-  /**
-   * Remove and return the highest-numbered item in the array, so
-   * `list[list.length - 1]`;
-   * Moves the cursor to `length`.
-   *
-   * @returns {T | undefined}
-   *   Item, optional.
-   */
-  pop() {
-    this.setCursor(Number.POSITIVE_INFINITY);
-    return this.left.pop();
-  }
-
-  /**
-   * Inserts a single item to the high-numbered side of the array;
-   * moves the cursor to `length`.
-   *
-   * @param {T} item
-   *   Item.
-   * @returns {undefined}
-   *   Nothing.
-   */
-  push(item) {
-    this.setCursor(Number.POSITIVE_INFINITY);
-    this.left.push(item);
-  }
-
-  /**
-   * Inserts many items to the high-numbered side of the array.
-   * Moves the cursor to `length`.
-   *
-   * @param {Array<T>} items
-   *   Items.
-   * @returns {undefined}
-   *   Nothing.
-   */
-  pushMany(items) {
-    this.setCursor(Number.POSITIVE_INFINITY);
-    chunkedPush(this.left, items);
-  }
-
-  /**
-   * Inserts a single item to the low-numbered side of the array;
-   * Moves the cursor to `0`.
-   *
-   * @param {T} item
-   *   Item.
-   * @returns {undefined}
-   *   Nothing.
-   */
-  unshift(item) {
-    this.setCursor(0);
-    this.right.push(item);
-  }
-
-  /**
-   * Inserts many items to the low-numbered side of the array;
-   * moves the cursor to `0`.
-   *
-   * @param {Array<T>} items
-   *   Items.
-   * @returns {undefined}
-   *   Nothing.
-   */
-  unshiftMany(items) {
-    this.setCursor(0);
-    chunkedPush(this.right, items.reverse());
-  }
-
-  /**
-   * Move the cursor to a specific position in the array. Requires
-   * time proportional to the distance moved.
-   *
-   * If `n < 0`, the cursor will end up at the beginning.
-   * If `n > length`, the cursor will end up at the end.
-   *
-   * @param {number} n
-   *   Position.
-   * @return {undefined}
-   *   Nothing.
-   */
-  setCursor(n) {
-    if (n === this.left.length || n > this.left.length && this.right.length === 0 || n < 0 && this.left.length === 0) return;
-    if (n < this.left.length) {
-      // Move cursor to the this.left
-      const removed = this.left.splice(n, Number.POSITIVE_INFINITY);
-      chunkedPush(this.right, removed.reverse());
-    } else {
-      // Move cursor to the this.right
-      const removed = this.right.splice(this.left.length + this.right.length - n, Number.POSITIVE_INFINITY);
-      chunkedPush(this.left, removed.reverse());
-    }
-  }
-}
-
-/**
- * Avoid stack overflow by pushing items onto the stack in segments
- *
- * @template T
- *   Item type.
- * @param {Array<T>} list
- *   List to inject into.
- * @param {ReadonlyArray<T>} right
- *   Items to inject.
- * @return {undefined}
- *   Nothing.
- */
-function chunkedPush(list, right) {
-  /** @type {number} */
-  let chunkStart = 0;
-  if (right.length < 10000) {
-    list.push(...right);
-  } else {
-    while (chunkStart < right.length) {
-      list.push(...right.slice(chunkStart, chunkStart + 10000));
-      chunkStart += 10000;
-    }
-  }
-}
-
-/**
- * @import {Chunk, Event, Token} from 'micromark-util-types'
- */
-
-
-/**
- * Tokenize subcontent.
- *
- * @param {Array<Event>} eventsArray
- *   List of events.
- * @returns {boolean}
- *   Whether subtokens were found.
- */
-// eslint-disable-next-line complexity
-function subtokenize(eventsArray) {
-  /** @type {Record<string, number>} */
-  const jumps = {};
-  let index = -1;
-  /** @type {Event} */
-  let event;
-  /** @type {number | undefined} */
-  let lineIndex;
-  /** @type {number} */
-  let otherIndex;
-  /** @type {Event} */
-  let otherEvent;
-  /** @type {Array<Event>} */
-  let parameters;
-  /** @type {Array<Event>} */
-  let subevents;
-  /** @type {boolean | undefined} */
-  let more;
-  const events = new SpliceBuffer(eventsArray);
-  while (++index < events.length) {
-    while (index in jumps) {
-      index = jumps[index];
-    }
-    event = events.get(index);
-
-    // Add a hook for the GFM tasklist extension, which needs to know if text
-    // is in the first content of a list item.
-    if (index && event[1].type === "chunkFlow" && events.get(index - 1)[1].type === "listItemPrefix") {
-      subevents = event[1]._tokenizer.events;
-      otherIndex = 0;
-      if (otherIndex < subevents.length && subevents[otherIndex][1].type === "lineEndingBlank") {
-        otherIndex += 2;
-      }
-      if (otherIndex < subevents.length && subevents[otherIndex][1].type === "content") {
-        while (++otherIndex < subevents.length) {
-          if (subevents[otherIndex][1].type === "content") {
-            break;
-          }
-          if (subevents[otherIndex][1].type === "chunkText") {
-            subevents[otherIndex][1]._isInFirstContentOfListItem = true;
-            otherIndex++;
-          }
-        }
-      }
-    }
-
-    // Enter.
-    if (event[0] === 'enter') {
-      if (event[1].contentType) {
-        Object.assign(jumps, subcontent(events, index));
-        index = jumps[index];
-        more = true;
-      }
-    }
-    // Exit.
-    else if (event[1]._container) {
-      otherIndex = index;
-      lineIndex = undefined;
-      while (otherIndex--) {
-        otherEvent = events.get(otherIndex);
-        if (otherEvent[1].type === "lineEnding" || otherEvent[1].type === "lineEndingBlank") {
-          if (otherEvent[0] === 'enter') {
-            if (lineIndex) {
-              events.get(lineIndex)[1].type = "lineEndingBlank";
-            }
-            otherEvent[1].type = "lineEnding";
-            lineIndex = otherIndex;
-          }
-        } else if (otherEvent[1].type === "linePrefix") ; else {
-          break;
-        }
-      }
-      if (lineIndex) {
-        // Fix position.
-        event[1].end = {
-          ...events.get(lineIndex)[1].start
-        };
-
-        // Switch container exit w/ line endings.
-        parameters = events.slice(lineIndex, index);
-        parameters.unshift(event);
-        events.splice(lineIndex, index - lineIndex + 1, parameters);
-      }
-    }
-  }
-
-  // The changes to the `events` buffer must be copied back into the eventsArray
-  splice(eventsArray, 0, Number.POSITIVE_INFINITY, events.slice(0));
-  return !more;
-}
-
-/**
- * Tokenize embedded tokens.
- *
- * @param {SpliceBuffer<Event>} events
- *   Events.
- * @param {number} eventIndex
- *   Index.
- * @returns {Record<string, number>}
- *   Gaps.
- */
-function subcontent(events, eventIndex) {
-  const token = events.get(eventIndex)[1];
-  const context = events.get(eventIndex)[2];
-  let startPosition = eventIndex - 1;
-  /** @type {Array<number>} */
-  const startPositions = [];
-  const tokenizer = token._tokenizer || context.parser[token.contentType](token.start);
-  const childEvents = tokenizer.events;
-  /** @type {Array<[number, number]>} */
-  const jumps = [];
-  /** @type {Record<string, number>} */
-  const gaps = {};
-  /** @type {Array<Chunk>} */
-  let stream;
-  /** @type {Token | undefined} */
-  let previous;
-  let index = -1;
-  /** @type {Token | undefined} */
-  let current = token;
-  let adjust = 0;
-  let start = 0;
-  const breaks = [start];
-
-  // Loop forward through the linked tokens to pass them in order to the
-  // subtokenizer.
-  while (current) {
-    // Find the position of the event for this token.
-    while (events.get(++startPosition)[1] !== current) {
-      // Empty.
-    }
-    startPositions.push(startPosition);
-    if (!current._tokenizer) {
-      stream = context.sliceStream(current);
-      if (!current.next) {
-        stream.push(null);
-      }
-      if (previous) {
-        tokenizer.defineSkip(current.start);
-      }
-      if (current._isInFirstContentOfListItem) {
-        tokenizer._gfmTasklistFirstContentOfListItem = true;
-      }
-      tokenizer.write(stream);
-      if (current._isInFirstContentOfListItem) {
-        tokenizer._gfmTasklistFirstContentOfListItem = undefined;
-      }
-    }
-
-    // Unravel the next token.
-    previous = current;
-    current = current.next;
-  }
-
-  // Now, loop back through all events (and linked tokens), to figure out which
-  // parts belong where.
-  current = token;
-  while (++index < childEvents.length) {
-    if (
-    // Find a void token that includes a break.
-    childEvents[index][0] === 'exit' && childEvents[index - 1][0] === 'enter' && childEvents[index][1].type === childEvents[index - 1][1].type && childEvents[index][1].start.line !== childEvents[index][1].end.line) {
-      start = index + 1;
-      breaks.push(start);
-      // Help GC.
-      current._tokenizer = undefined;
-      current.previous = undefined;
-      current = current.next;
-    }
-  }
-
-  // Help GC.
-  tokenizer.events = [];
-
-  // If there’s one more token (which is the cases for lines that end in an
-  // EOF), that’s perfect: the last point we found starts it.
-  // If there isn’t then make sure any remaining content is added to it.
-  if (current) {
-    // Help GC.
-    current._tokenizer = undefined;
-    current.previous = undefined;
-  } else {
-    breaks.pop();
-  }
-
-  // Now splice the events from the subtokenizer into the current events,
-  // moving back to front so that splice indices aren’t affected.
-  index = breaks.length;
-  while (index--) {
-    const slice = childEvents.slice(breaks[index], breaks[index + 1]);
-    const start = startPositions.pop();
-    jumps.push([start, start + slice.length - 1]);
-    events.splice(start, 2, slice);
-  }
-  jumps.reverse();
-  index = -1;
-  while (++index < jumps.length) {
-    gaps[adjust + jumps[index][0]] = adjust + jumps[index][1];
-    adjust += jumps[index][1] - jumps[index][0] - 1;
-  }
-  return gaps;
-}
-
-/**
  * @import {Event} from 'micromark-util-types'
  */
 
@@ -45421,39 +44986,6 @@ function preprocess() {
   }
 }
 
-/**
- * Turn the number (in string form as either hexa- or plain decimal) coming from
- * a numeric character reference into a character.
- *
- * Sort of like `String.fromCodePoint(Number.parseInt(value, base))`, but makes
- * non-characters and control characters safe.
- *
- * @param {string} value
- *   Value to decode.
- * @param {number} base
- *   Numeric base.
- * @returns {string}
- *   Character.
- */
-function decodeNumericCharacterReference(value, base) {
-  const code = Number.parseInt(value, base);
-  if (
-  // C0 except for HT, LF, FF, CR, space.
-  code < 9 || code === 11 || code > 13 && code < 32 ||
-  // Control character (DEL) of C0, and C1 controls.
-  code > 126 && code < 160 ||
-  // Lone high surrogates and low surrogates.
-  code > 55_295 && code < 57_344 ||
-  // Noncharacters.
-  code > 64_975 && code < 65_008 || /* eslint-disable no-bitwise */
-  (code & 65_535) === 65_535 || (code & 65_535) === 65_534 || /* eslint-enable no-bitwise */
-  // Out of range
-  code > 1_114_111) {
-    return "\uFFFD";
-  }
-  return String.fromCodePoint(code);
-}
-
 const characterEscapeOrReference = /\\([!-/:-@[-`{-~])|&(#(?:\d{1,7}|x[\da-f]{1,6})|[\da-z]{1,31});/gi;
 
 /**
@@ -45534,7 +45066,7 @@ function decode($0, $1, $2) {
  *   An empty string (`''`) is returned if the given value is neither `node`,
  *   `position`, nor `point`.
  */
-function stringifyPosition$1(value) {
+function stringifyPosition(value) {
   // Nothing.
   if (!value || typeof value !== 'object') {
     return ''
@@ -45542,17 +45074,17 @@ function stringifyPosition$1(value) {
 
   // Node.
   if ('position' in value || 'type' in value) {
-    return position$2(value.position)
+    return position$1(value.position)
   }
 
   // Position.
   if ('start' in value || 'end' in value) {
-    return position$2(value)
+    return position$1(value)
   }
 
   // Point.
   if ('line' in value || 'column' in value) {
-    return point$3(value)
+    return point$2(value)
   }
 
   // ?
@@ -45563,23 +45095,23 @@ function stringifyPosition$1(value) {
  * @param {Point | PointLike | null | undefined} point
  * @returns {string}
  */
-function point$3(point) {
-  return index$1(point && point.line) + ':' + index$1(point && point.column)
+function point$2(point) {
+  return index(point && point.line) + ':' + index(point && point.column)
 }
 
 /**
  * @param {Position | PositionLike | null | undefined} pos
  * @returns {string}
  */
-function position$2(pos) {
-  return point$3(pos && pos.start) + '-' + point$3(pos && pos.end)
+function position$1(pos) {
+  return point$2(pos && pos.start) + '-' + point$2(pos && pos.end)
 }
 
 /**
  * @param {number | null | undefined} value
  * @returns {number}
  */
-function index$1(value) {
+function index(value) {
   return value && typeof value === 'number' ? value : 1
 }
 
@@ -45827,12 +45359,12 @@ function compiler(options) {
 
     // Figure out `root` position.
     tree.position = {
-      start: point$2(events.length > 0 ? events[0][1].start : {
+      start: point$1(events.length > 0 ? events[0][1].start : {
         line: 1,
         column: 1,
         offset: 0
       }),
-      end: point$2(events.length > 0 ? events[events.length - 2][1].end : {
+      end: point$1(events.length > 0 ? events[events.length - 2][1].end : {
         line: 1,
         column: 1,
         offset: 0
@@ -46002,7 +45534,7 @@ function compiler(options) {
     this.stack.push(node);
     this.tokenStack.push([token, errorHandler || undefined]);
     node.position = {
-      start: point$2(token.start),
+      start: point$1(token.start),
       // @ts-expect-error: `end` will be patched later.
       end: undefined
     };
@@ -46037,7 +45569,7 @@ function compiler(options) {
     const node = this.stack.pop();
     const open = this.tokenStack.pop();
     if (!open) {
-      throw new Error('Cannot close `' + token.type + '` (' + stringifyPosition$1({
+      throw new Error('Cannot close `' + token.type + '` (' + stringifyPosition({
         start: token.start,
         end: token.end
       }) + '): it’s not open');
@@ -46049,14 +45581,14 @@ function compiler(options) {
         handler.call(this, token, open[0]);
       }
     }
-    node.position.end = point$2(token.end);
+    node.position.end = point$1(token.end);
   }
 
   /**
    * @type {CompileContext['resume']}
    */
   function resume() {
-    return toString$2(this.stack.pop());
+    return toString$1(this.stack.pop());
   }
 
   //
@@ -46217,7 +45749,7 @@ function compiler(options) {
       // Add a new text node.
       tail = text();
       tail.position = {
-        start: point$2(token.start),
+        start: point$1(token.start),
         // @ts-expect-error: we’ll add `end` later.
         end: undefined
       };
@@ -46234,7 +45766,7 @@ function compiler(options) {
   function onexitdata(token) {
     const tail = this.stack.pop();
     tail.value += this.sliceSerialize(token);
-    tail.position.end = point$2(token.end);
+    tail.position.end = point$1(token.end);
   }
 
   /**
@@ -46247,7 +45779,7 @@ function compiler(options) {
     // If we’re at a hard break, include the line ending in there.
     if (this.data.atHardBreak) {
       const tail = context.children[context.children.length - 1];
-      tail.position.end = point$2(token.end);
+      tail.position.end = point$1(token.end);
       this.data.atHardBreak = undefined;
       return;
     }
@@ -46483,7 +46015,7 @@ function compiler(options) {
    */
   function onexitcharacterreference(token) {
     const tail = this.stack.pop();
-    tail.position.end = point$2(token.end);
+    tail.position.end = point$1(token.end);
   }
 
   /**
@@ -46667,7 +46199,7 @@ function compiler(options) {
  * @returns {Point}
  *   unist point.
  */
-function point$2(d) {
+function point$1(d) {
   return {
     line: d.line,
     column: d.column,
@@ -46737,15 +46269,15 @@ function extension(combined, extension) {
 /** @type {OnEnterError} */
 function defaultOnError(left, right) {
   if (left) {
-    throw new Error('Cannot close `' + left.type + '` (' + stringifyPosition$1({
+    throw new Error('Cannot close `' + left.type + '` (' + stringifyPosition({
       start: left.start,
       end: left.end
-    }) + '): a different token (`' + right.type + '`, ' + stringifyPosition$1({
+    }) + '): a different token (`' + right.type + '`, ' + stringifyPosition({
       start: right.start,
       end: right.end
     }) + ') is open');
   } else {
-    throw new Error('Cannot close document, a token (`' + right.type + '`, ' + stringifyPosition$1({
+    throw new Error('Cannot close document, a token (`' + right.type + '`, ' + stringifyPosition({
       start: right.start,
       end: right.end
     }) + ') is still open');
@@ -49129,115 +48661,6 @@ function visit(tree, testOrVisitor, visitorOrReverse, maybeReverse) {
     const index = parent ? parent.children.indexOf(node) : undefined;
     return visitor(node, index, parent)
   }
-}
-
-/**
- * @typedef {import('mdast').Nodes} Nodes
- *
- * @typedef Options
- *   Configuration (optional).
- * @property {boolean | null | undefined} [includeImageAlt=true]
- *   Whether to use `alt` for `image`s (default: `true`).
- * @property {boolean | null | undefined} [includeHtml=true]
- *   Whether to use `value` of HTML (default: `true`).
- */
-
-/** @type {Options} */
-const emptyOptions$3 = {};
-
-/**
- * Get the text content of a node or list of nodes.
- *
- * Prefers the node’s plain-text fields, otherwise serializes its children,
- * and if the given value is an array, serialize the nodes in it.
- *
- * @param {unknown} [value]
- *   Thing to serialize, typically `Node`.
- * @param {Options | null | undefined} [options]
- *   Configuration (optional).
- * @returns {string}
- *   Serialized `value`.
- */
-function toString$1(value, options) {
-  const settings = emptyOptions$3;
-  const includeImageAlt =
-    typeof settings.includeImageAlt === 'boolean'
-      ? settings.includeImageAlt
-      : true;
-  const includeHtml =
-    typeof settings.includeHtml === 'boolean' ? settings.includeHtml : true;
-
-  return one$2(value, includeImageAlt, includeHtml)
-}
-
-/**
- * One node or several nodes.
- *
- * @param {unknown} value
- *   Thing to serialize.
- * @param {boolean} includeImageAlt
- *   Include image `alt`s.
- * @param {boolean} includeHtml
- *   Include HTML.
- * @returns {string}
- *   Serialized node.
- */
-function one$2(value, includeImageAlt, includeHtml) {
-  if (node(value)) {
-    if ('value' in value) {
-      return value.type === 'html' && !includeHtml ? '' : value.value
-    }
-
-    if (includeImageAlt && 'alt' in value && value.alt) {
-      return value.alt
-    }
-
-    if ('children' in value) {
-      return all$1(value.children, includeImageAlt, includeHtml)
-    }
-  }
-
-  if (Array.isArray(value)) {
-    return all$1(value, includeImageAlt, includeHtml)
-  }
-
-  return ''
-}
-
-/**
- * Serialize a list of nodes.
- *
- * @param {Array<unknown>} values
- *   Thing to serialize.
- * @param {boolean} includeImageAlt
- *   Include image `alt`s.
- * @param {boolean} includeHtml
- *   Include HTML.
- * @returns {string}
- *   Serialized nodes.
- */
-function all$1(values, includeImageAlt, includeHtml) {
-  /** @type {Array<string>} */
-  const result = [];
-  let index = -1;
-
-  while (++index < values.length) {
-    result[index] = one$2(values[index], includeImageAlt, includeHtml);
-  }
-
-  return result.join('')
-}
-
-/**
- * Check if `value` looks like a node.
- *
- * @param {unknown} value
- *   Thing.
- * @returns {value is Nodes}
- *   Whether `value` is a node.
- */
-function node(value) {
-  return Boolean(value && typeof value === 'object')
 }
 
 /**
@@ -54382,7 +53805,7 @@ function strong(state, node) {
  * @returns
  *   Point.
  */
-const pointEnd = point$1('end');
+const pointEnd = point('end');
 
 /**
  * Get the starting point of `node`.
@@ -54392,7 +53815,7 @@ const pointEnd = point$1('end');
  * @returns
  *   Point.
  */
-const pointStart = point$1('start');
+const pointStart = point('start');
 
 /**
  * Get the positional info of `node`.
@@ -54402,7 +53825,7 @@ const pointStart = point$1('start');
  * @returns
  *   Getter.
  */
-function point$1(type) {
+function point(type) {
   return point
 
   /**
@@ -54440,7 +53863,7 @@ function point$1(type) {
  * @returns {Position | undefined}
  *   Position.
  */
-function position$1(node) {
+function position(node) {
   const start = pointStart(node);
   const end = pointEnd(node);
 
@@ -55415,7 +54838,7 @@ function createState(tree, options) {
  *   Nothing.
  */
 function patch(from, to) {
-  if (from.position) to.position = position$1(from);
+  if (from.position) to.position = position(from);
 }
 
 /**
@@ -64333,91 +63756,6 @@ function wrap(middleware, callback) {
   function then(value) {
     done(null, value);
   }
-}
-
-/**
- * @typedef {import('unist').Node} Node
- * @typedef {import('unist').Point} Point
- * @typedef {import('unist').Position} Position
- */
-
-/**
- * @typedef NodeLike
- * @property {string} type
- * @property {PositionLike | null | undefined} [position]
- *
- * @typedef PointLike
- * @property {number | null | undefined} [line]
- * @property {number | null | undefined} [column]
- * @property {number | null | undefined} [offset]
- *
- * @typedef PositionLike
- * @property {PointLike | null | undefined} [start]
- * @property {PointLike | null | undefined} [end]
- */
-
-/**
- * Serialize the positional info of a point, position (start and end points),
- * or node.
- *
- * @param {Node | NodeLike | Point | PointLike | Position | PositionLike | null | undefined} [value]
- *   Node, position, or point.
- * @returns {string}
- *   Pretty printed positional info of a node (`string`).
- *
- *   In the format of a range `ls:cs-le:ce` (when given `node` or `position`)
- *   or a point `l:c` (when given `point`), where `l` stands for line, `c` for
- *   column, `s` for `start`, and `e` for end.
- *   An empty string (`''`) is returned if the given value is neither `node`,
- *   `position`, nor `point`.
- */
-function stringifyPosition(value) {
-  // Nothing.
-  if (!value || typeof value !== 'object') {
-    return ''
-  }
-
-  // Node.
-  if ('position' in value || 'type' in value) {
-    return position(value.position)
-  }
-
-  // Position.
-  if ('start' in value || 'end' in value) {
-    return position(value)
-  }
-
-  // Point.
-  if ('line' in value || 'column' in value) {
-    return point(value)
-  }
-
-  // ?
-  return ''
-}
-
-/**
- * @param {Point | PointLike | null | undefined} point
- * @returns {string}
- */
-function point(point) {
-  return index(point && point.line) + ':' + index(point && point.column)
-}
-
-/**
- * @param {Position | PositionLike | null | undefined} pos
- * @returns {string}
- */
-function position(pos) {
-  return point(pos && pos.start) + '-' + point(pos && pos.end)
-}
-
-/**
- * @param {number | null | undefined} value
- * @returns {number}
- */
-function index(value) {
-  return value && typeof value === 'number' ? value : 1
 }
 
 /**

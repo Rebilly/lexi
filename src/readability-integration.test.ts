@@ -1,10 +1,10 @@
-import {describe, it, expect, vi} from 'vitest';
+import {describe, it, expect} from 'vitest';
+
+// Ensure we use the real library (other tests mock this module).
+vi.unmock('text-readability');
 
 describe('readability (integration)', () => {
     it('should not change scores for semantic line breaks vs normal wrapping', async () => {
-        // Ensure we use the real library (other tests mock this module).
-        vi.unmock('text-readability');
-
         const {calculateReadabilityOfText} = await import('./readability');
 
         const original = `
