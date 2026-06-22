@@ -35,7 +35,7 @@
     },
     "devDependencies": {
         "@guolao/vue-monaco-editor": "^1.6.0",
-        "@rebilly/revel": "^12.22.1",
+        "@rebilly/revel": "^12.38.0",
         "@rollup/plugin-commonjs": "^29.0.2",
         "@rollup/plugin-json": "^6.1.0",
         "@rollup/plugin-node-resolve": "^16.0.3",
