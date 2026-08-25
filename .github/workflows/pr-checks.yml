@@ -10,7 +10,7 @@ jobs:
             - name: Checkout repo
               uses: actions/checkout@v7
             - name: Setup node
-              uses: actions/setup-node@v6
+              uses: actions/setup-node@v7
               with:
                   node-version: 22
             - name: Restore node_modules cache
@@ -30,7 +30,7 @@ jobs:
             - name: Checkout repo
               uses: actions/checkout@v7
             - name: Setup node
-              uses: actions/setup-node@v6
+              uses: actions/setup-node@v7
               with:
                   node-version: 22
             - name: Restore node_modules cache
@@ -54,7 +54,7 @@ jobs:
               with:
                   ref: ${{ github.head_ref }}
             - name: Setup node
-              uses: actions/setup-node@v6
+              uses: actions/setup-node@v7
               with:
                   node-version: 22
             - name: Restore node_modules cache
@@ -88,7 +88,7 @@ jobs:
             - name: Checkout repo
               uses: actions/checkout@v7
             - name: Setup node
-              uses: actions/setup-node@v6
+              uses: actions/setup-node@v7
               with:
                   node-version: 22
             - name: Restore node_modules cache
