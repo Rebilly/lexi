@@ -514,10 +514,10 @@
   resolved "https://registry.npmjs.org/@pkgr/core/-/core-0.2.9.tgz"
   integrity sha512-QNqXyfVS2wm9hweSYD2O7F0G06uurj9kZ96TRQE5Y9hU7+tgdZwIkbAKc5Ocy1HxEY2kuDQa6cQ1WRs/O5LFKA==
 
-"@rebilly/revel@^12.22.1":
-  version "12.22.1"
-  resolved "https://registry.npmjs.org/@rebilly/revel/-/revel-12.22.1.tgz"
-  integrity sha512-sISOyZBAqZ4gOroanngXz+n8FsfD9eNfKRshura0iDWYVGiTX5NUY1sU5iXbtNs2SLGgRpKqxD5Q+GBDVmqKZg==
+"@rebilly/revel@^12.50.4":
+  version "12.50.4"
+  resolved "https://registry.yarnpkg.com/@rebilly/revel/-/revel-12.50.4.tgz#9dd291d11ae8874b0a78d16678f495ad6d1f4232"
+  integrity sha512-bHCeitwBNqx9mMuEbq8IRyUJQITOLnXROGJHhMhRH57AdDF7S9k2wp8jZG0j9duyDiCI/zBNnbnewQtsoNMNIA==
   dependencies:
     es-toolkit "^1.39.8"
 
