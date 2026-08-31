@@ -31,7 +31,7 @@
         "strip-markdown": "^6.0.0",
         "text-readability": "^1.1.1",
         "unified": "^11.0.5",
-        "unist-util-visit": "^5.0.0"
+        "unist-util-visit": "^5.1.0"
     },
     "devDependencies": {
         "@guolao/vue-monaco-editor": "^1.6.0",
