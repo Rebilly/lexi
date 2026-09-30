@@ -48865,9 +48865,8 @@ function emphasisPeek(_, _1, state) {
 }
 
 /**
- * @typedef {import('unist').Node} UnistNode
- * @typedef {import('unist').Parent} UnistParent
- * @typedef {import('unist-util-visit-parents').VisitorResult} VisitorResult
+ * @import {Node as UnistNode, Parent as UnistParent} from 'unist'
+ * @import {VisitorResult} from 'unist-util-visit-parents'
  */
 
 
