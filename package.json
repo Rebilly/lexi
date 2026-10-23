@@ -48,7 +48,7 @@
         "eslint-plugin-github": "^6.0.0",
         "eslint-plugin-prettier": "^5.5.5",
         "globals": "^17.12.0",
-        "js-yaml": "^4.3.2",
+        "js-yaml": "^5.5.0",
         "moment": "^2.31.0",
         "prettier": "^3.8.1",
         "rollup": "^4.62.2",
