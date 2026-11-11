@@ -21,6 +21,12 @@
         "noFallthroughCasesInSwitch": true,
         "typeRoots": ["../node_modules/@types", "../typings"]
     },
-    "include": ["src/**/*.ts", "src/**/*.d.ts", "src/**/*.tsx", "src/**/*.vue"],
+    "include": [
+        "src/**/*.ts",
+        "src/**/*.d.ts",
+        "src/**/*.tsx",
+        "src/**/*.vue",
+        "../typings/text-readability/index.d.ts"
+    ],
     "references": [{"path": "./tsconfig.node.json"}]
 }
