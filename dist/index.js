@@ -47203,16 +47203,19 @@ function looksLikeANode(value) {
 }
 
 /**
+ * Color a string.
+ *
  * @param {string} d
+ *   Value.
  * @returns {string}
+ *   Colored value.
  */
 function color(d) {
   return d
 }
 
 /**
- * @typedef {import('unist').Node} UnistNode
- * @typedef {import('unist').Parent} UnistParent
+ * @import {Node as UnistNode, Parent as UnistParent} from 'unist'
  */
 
 
@@ -47231,6 +47234,7 @@ const EXIT = false;
 
 /**
  * Do not traverse this node’s children.
+ * Only works when entering a node.
  */
 const SKIP = 'skip';
 
@@ -47238,10 +47242,13 @@ const SKIP = 'skip';
  * Visit nodes, with ancestral information.
  *
  * This algorithm performs *depth-first* *tree traversal* in *preorder*
- * (**NLR**) or if `reverse` is given, in *reverse preorder* (**NRL**).
+ * (**NLR**) or if `reverse` is given,
+ * in *reverse preorder* (**NRL**).
+ * An `exit` visitor is called in *postorder* (**LRN**)
+ * or if `reverse` is given, in *reverse postorder* (**RLN**).
  *
- * You can choose for which nodes `visitor` is called by passing a `test`.
- * For complex tests, you should test yourself in `visitor`, as it will be
+ * You can choose which nodes are visited by passing a `test`.
+ * For complex tests, you should test yourself in a visitor, as it will be
  * faster and will have improved type information.
  *
  * Walking the tree is an intensive task.
@@ -47250,29 +47257,72 @@ const SKIP = 'skip';
  * to check if a node matches, and then perform different operations.
  *
  * You can change the tree.
- * See `Visitor` for more info.
+ * Changes inside a node made when entering it are walked,
+ * changes made when exiting it are not.
+ * See `Visitor` and `VisitorExit` for more info.
  *
  * @overload
  * @param {Tree} tree
+ *   Tree to traverse.
  * @param {Check} check
- * @param {BuildVisitor<Tree, Check>} visitor
+ *   `unist-util-is`-compatible test.
+ * @param {BuildVisitor<Tree, Check>} enter
+ *   Handle each node when entering it.
  * @param {boolean | null | undefined} [reverse]
+ *   Walk children from last to first;
+ *   for `enter`, reverse preorder (NRL) instead of preorder (NLR);
+ *   for `exit`, reverse postorder (RLN) instead of postorder (LRN).
  * @returns {undefined}
+ *   Nothing.
  *
  * @overload
  * @param {Tree} tree
- * @param {BuildVisitor<Tree>} visitor
+ *   Tree to traverse.
+ * @param {Check} check
+ *   `unist-util-is`-compatible test.
+ * @param {BuildVisitors<Tree, Check>} visitors
+ *   Handle each node when exiting it, and optionally when entering it.
  * @param {boolean | null | undefined} [reverse]
+ *   Walk children from last to first;
+ *   for `enter`, reverse preorder (NRL) instead of preorder (NLR);
+ *   for `exit`, reverse postorder (RLN) instead of postorder (LRN).
  * @returns {undefined}
+ *   Nothing.
+ *
+ * @overload
+ * @param {Tree} tree
+ *   Tree to traverse.
+ * @param {BuildVisitor<Tree>} enter
+ *   Handle each node when entering it.
+ * @param {boolean | null | undefined} [reverse]
+ *   Walk children from last to first;
+ *   for `enter`, reverse preorder (NRL) instead of preorder (NLR);
+ *   for `exit`, reverse postorder (RLN) instead of postorder (LRN).
+ * @returns {undefined}
+ *   Nothing.
+ *
+ * @overload
+ * @param {Tree} tree
+ *   Tree to traverse.
+ * @param {BuildVisitors<Tree>} visitors
+ *   Handle each node when exiting it, and optionally when entering it.
+ * @param {boolean | null | undefined} [reverse]
+ *   Walk children from last to first;
+ *   for `enter`, reverse preorder (NRL) instead of preorder (NLR);
+ *   for `exit`, reverse postorder (RLN) instead of postorder (LRN).
+ * @returns {undefined}
+ *   Nothing.
  *
  * @param {UnistNode} tree
  *   Tree to traverse.
- * @param {Visitor | Test} test
- *   `unist-util-is`-compatible test
- * @param {Visitor | boolean | null | undefined} [visitor]
- *   Handle each node.
+ * @param {Visitor | Visitors | Test} testOrEnterOrVisitors
+ *   `unist-util-is`-compatible test, `enter`, or `visitors`.
+ * @param {Visitor | Visitors | boolean | null | undefined} [enterOrVisitorsOrReverse]
+ *   `enter`, `visitors`, or `reverse` after a test.
  * @param {boolean | null | undefined} [reverse]
- *   Traverse in reverse preorder (NRL) instead of the default preorder (NLR).
+ *   Walk children from last to first;
+ *   for `enter`, reverse preorder (NRL) instead of preorder (NLR);
+ *   for `exit`, reverse postorder (RLN) instead of postorder (LRN).
  * @returns {undefined}
  *   Nothing.
  *
@@ -47281,28 +47331,87 @@ const SKIP = 'skip';
  * @template {Test} Check
  *   `unist-util-is`-compatible test.
  */
-function visitParents(tree, test, visitor, reverse) {
+function visitParents(
+  tree,
+  testOrEnterOrVisitors,
+  enterOrVisitorsOrReverse,
+  reverse
+) {
+  if (!tree || typeof tree !== 'object') {
+    throw new Error('Unexpected value `' + tree + '` for `tree`, expected node')
+  }
+
+  let preorder = true;
   /** @type {Test} */
   let check;
+  /** @type {Visitors | Visitor} */
+  let visitors;
+  /** @type {Visitor | null | undefined} */
+  let enter;
+  /** @type {VisitorExit | null | undefined} */
+  let exit;
 
-  if (typeof test === 'function' && typeof visitor !== 'function') {
-    reverse = visitor;
-    // @ts-expect-error no visitor given, so `visitor` is test.
-    visitor = test;
+  // Third parameter is an enter visitor or a visitors object, so expect a `test` too.
+  if (
+    typeof enterOrVisitorsOrReverse === 'function' ||
+    (enterOrVisitorsOrReverse && typeof enterOrVisitorsOrReverse === 'object')
+  ) {
+    check = /** @type {Test} */ (testOrEnterOrVisitors);
+    visitors = enterOrVisitorsOrReverse;
+    if (reverse) preorder = false;
+  }
+  // Assume no test.
+  else {
+    visitors = /** @type {Visitors | Visitor} */ (testOrEnterOrVisitors);
+    if (enterOrVisitorsOrReverse) preorder = false;
+  }
+
+  if (typeof visitors === 'function') {
+    enter = visitors;
+  } else if (visitors && typeof visitors === 'object') {
+    if (visitors.enter === null || visitors.enter === undefined) ; else if (typeof visitors.enter === 'function') {
+      enter = visitors.enter;
+    } else {
+      throw new Error(
+        'Unexpected value `' +
+          visitors.enter +
+          '` for `visitors.enter`, expected optional visitor'
+      )
+    }
+
+    if (typeof visitors.exit === 'function') {
+      exit = visitors.exit;
+    } else {
+      throw new Error(
+        'Unexpected value `' +
+          visitors.exit +
+          '` for `visitors.exit`, expected visitor (pass a visitor directly if you only want an enter visitor)'
+      )
+    }
   } else {
-    // @ts-expect-error visitor given, so `test` isn’t a visitor.
-    check = test;
+    throw new Error(
+      'Unexpected value `' +
+        visitors +
+        '` for `enter` or `visitors`, expected visitor or object with visitors'
+    )
   }
 
   const is = convert(check);
-  const step = reverse ? -1 : 1;
+  const step = preorder ? 1 : -1;
 
   factory(tree, undefined, [])();
 
   /**
+   * Create a function to visit a node.
+   *
    * @param {UnistNode} node
+   *   Node to visit.
    * @param {number | undefined} index
+   *   Index of `node` in its parent.
    * @param {Array<UnistParent>} parents
+   *   Ancestors of `node`.
+   * @returns {() => Readonly<ActionTuple>}
+   *   Visit `node`.
    */
   function factory(node, index, parents) {
     const value = /** @type {Record<string, unknown>} */ (
@@ -47315,9 +47424,9 @@ function visitParents(tree, test, visitor, reverse) {
         typeof value.tagName === 'string'
           ? value.tagName
           : // `xast`
-          typeof value.name === 'string'
-          ? value.name
-          : undefined;
+            typeof value.name === 'string'
+            ? value.name
+            : undefined;
 
       Object.defineProperty(visit, 'name', {
         value:
@@ -47328,18 +47437,13 @@ function visitParents(tree, test, visitor, reverse) {
     return visit
 
     function visit() {
+      const matches =
+        !check || is(node, index, parents[parents.length - 1] || undefined);
       /** @type {Readonly<ActionTuple>} */
       let result = empty$1;
-      /** @type {Readonly<ActionTuple>} */
-      let subresult;
-      /** @type {number} */
-      let offset;
-      /** @type {Array<UnistParent>} */
-      let grandparents;
 
-      if (!test || is(node, index, parents[parents.length - 1] || undefined)) {
-        // @ts-expect-error: `visitor` is now a visitor.
-        result = toResult(visitor(node, parents));
+      if (enter && matches) {
+        result = toResult(enter(node, parents, index));
 
         if (result[0] === EXIT) {
           return result
@@ -47350,13 +47454,13 @@ function visitParents(tree, test, visitor, reverse) {
         const nodeAsParent = /** @type {UnistParent} */ (node);
 
         if (nodeAsParent.children && result[0] !== SKIP) {
-          offset = (reverse ? nodeAsParent.children.length : -1) + step;
-          grandparents = parents.concat(nodeAsParent);
+          let offset = (preorder ? -1 : nodeAsParent.children.length) + step;
+          const grandparents = [...parents, nodeAsParent];
 
           while (offset > -1 && offset < nodeAsParent.children.length) {
             const child = nodeAsParent.children[offset];
 
-            subresult = factory(child, offset, grandparents)();
+            const subresult = factory(child, offset, grandparents)();
 
             if (subresult[0] === EXIT) {
               return subresult
@@ -47365,6 +47469,23 @@ function visitParents(tree, test, visitor, reverse) {
             offset =
               typeof subresult[1] === 'number' ? subresult[1] : offset + step;
           }
+        }
+      }
+
+      if (exit && matches) {
+        const exitResult = toResult(exit(node, parents, index));
+
+        if (exitResult[0] === SKIP) {
+          throw new Error(
+            'Unexpected value `' +
+              exitResult[0] +
+              '` from `exit`, expected `CONTINUE`, `EXIT`, index, or nothing'
+          )
+        }
+
+        // Prefer a result from `exit` over `enter`.
+        if (exitResult[0] === EXIT || typeof exitResult[1] === 'number') {
+          return exitResult
         }
       }
 
@@ -49234,9 +49355,14 @@ function emphasisPeek(_, _1, state) {
 }
 
 /**
- * @typedef {import('unist').Node} UnistNode
- * @typedef {import('unist').Parent} UnistParent
- * @typedef {import('unist-util-visit-parents').VisitorResult} VisitorResult
+ * @import {Node as UnistNode, Parent as UnistParent} from 'unist'
+ * @import {
+ *   InclusiveDescendant,
+ *   Matches,
+ *   Visitors as ParentsVisitors,
+ *   VisitorResult,
+ *   VisitorResultExit
+ * } from 'unist-util-visit-parents'
  */
 
 
@@ -49244,10 +49370,13 @@ function emphasisPeek(_, _1, state) {
  * Visit nodes.
  *
  * This algorithm performs *depth-first* *tree traversal* in *preorder*
- * (**NLR**) or if `reverse` is given, in *reverse preorder* (**NRL**).
+ * (**NLR**) or if `reverse` is given,
+ * in *reverse preorder* (**NRL**).
+ * An `exit` visitor is called in *postorder* (**LRN**)
+ * or if `reverse` is given, in *reverse postorder* (**RLN**).
  *
- * You can choose for which nodes `visitor` is called by passing a `test`.
- * For complex tests, you should test yourself in `visitor`, as it will be
+ * You can choose which nodes are visited by passing a `test`.
+ * For complex tests, you should test yourself in a visitor, as it will be
  * faster and will have improved type information.
  *
  * Walking the tree is an intensive task.
@@ -49256,29 +49385,48 @@ function emphasisPeek(_, _1, state) {
  * to check if a node matches, and then perform different operations.
  *
  * You can change the tree.
- * See `Visitor` for more info.
+ * Changes inside a node made when entering it are walked,
+ * changes made when exiting it are not.
+ * See `Visitor` and `VisitorExit` for more info.
  *
  * @overload
  * @param {Tree} tree
+ *   Tree to traverse.
  * @param {Check} check
- * @param {BuildVisitor<Tree, Check>} visitor
+ *   `unist-util-is`-compatible test.
+ * @param {BuildVisitor<Tree, Check> | BuildVisitors<Tree, Check>} visitors
+ *   Handle each node when entering it,
+ *   or `{enter, exit}` to also handle it when exiting it.
  * @param {boolean | null | undefined} [reverse]
+ *   Walk children from last to first;
+ *   for `enter`, reverse preorder (NRL) instead of preorder (NLR);
+ *   for `exit`, reverse postorder (RLN) instead of postorder (LRN).
  * @returns {undefined}
+ *   Nothing.
  *
  * @overload
  * @param {Tree} tree
- * @param {BuildVisitor<Tree>} visitor
+ *   Tree to traverse.
+ * @param {BuildVisitor<Tree> | BuildVisitors<Tree>} visitors
+ *   Handle each node when entering it,
+ *   or `{enter, exit}` to also handle it when exiting it.
  * @param {boolean | null | undefined} [reverse]
+ *   Walk children from last to first;
+ *   for `enter`, reverse preorder (NRL) instead of preorder (NLR);
+ *   for `exit`, reverse postorder (RLN) instead of postorder (LRN).
  * @returns {undefined}
+ *   Nothing.
  *
  * @param {UnistNode} tree
  *   Tree to traverse.
- * @param {Visitor | Test} testOrVisitor
- *   `unist-util-is`-compatible test (optional, omit to pass a visitor).
- * @param {Visitor | boolean | null | undefined} [visitorOrReverse]
- *   Handle each node (when test is omitted, pass `reverse`).
- * @param {boolean | null | undefined} [maybeReverse=false]
- *   Traverse in reverse preorder (NRL) instead of the default preorder (NLR).
+ * @param {Visitor | Visitors | Test} testOrEnterOrVisitors
+ *   `unist-util-is`-compatible test, `enter`, or `visitors`.
+ * @param {Visitor | Visitors | boolean | null | undefined} [enterOrVisitorsOrReverse]
+ *   `enter`, `visitors`, or `reverse` after a test.
+ * @param {boolean | null | undefined} [maybeReverse]
+ *   Walk children from last to first;
+ *   for `enter`, reverse preorder (NRL) instead of preorder (NLR);
+ *   for `exit`, reverse postorder (RLN) instead of postorder (LRN).
  * @returns {undefined}
  *   Nothing.
  *
@@ -49287,39 +49435,90 @@ function emphasisPeek(_, _1, state) {
  * @template {Test} Check
  *   `unist-util-is`-compatible test.
  */
-function visit(tree, testOrVisitor, visitorOrReverse, maybeReverse) {
+function visit(
+  tree,
+  testOrEnterOrVisitors,
+  enterOrVisitorsOrReverse,
+  maybeReverse
+) {
+  /** @type {Test} */
+  let check;
+  /** @type {Visitor | Visitors} */
+  let visitors;
   /** @type {boolean | null | undefined} */
   let reverse;
-  /** @type {Test} */
-  let test;
-  /** @type {Visitor} */
-  let visitor;
 
+  // Third parameter is an enter visitor or a visitors object, so expect a `test` too.
   if (
-    typeof testOrVisitor === 'function' &&
-    typeof visitorOrReverse !== 'function'
+    typeof enterOrVisitorsOrReverse === 'function' ||
+    (enterOrVisitorsOrReverse && typeof enterOrVisitorsOrReverse === 'object')
   ) {
-    test = undefined;
-    visitor = testOrVisitor;
-    reverse = visitorOrReverse;
-  } else {
-    // @ts-expect-error: assume the overload with test was given.
-    test = testOrVisitor;
-    // @ts-expect-error: assume the overload with test was given.
-    visitor = visitorOrReverse;
+    check = /** @type {Test} */ (testOrEnterOrVisitors);
+    visitors = enterOrVisitorsOrReverse;
     reverse = maybeReverse;
   }
+  // Assume no test.
+  else {
+    visitors = /** @type {Visitor | Visitors} */ (testOrEnterOrVisitors);
+    reverse = enterOrVisitorsOrReverse;
+  }
 
-  visitParents(tree, test, overload, reverse);
+  if (typeof visitors === 'function') {
+    visitParents(tree, check, wrap$2(visitors), reverse);
+  } else {
+    visitParents(tree, check, wrapVisitors(visitors), reverse);
+  }
+}
+
+/**
+ * Turn `visit` visitors into `visitParents` visitors.
+ *
+ * @param {Visitors} visitors
+ *   Visitors for `visit`.
+ * @returns {ParentsVisitors}
+ *   Visitors for `visitParents`.
+ */
+function wrapVisitors(visitors) {
+  // Pass anything else straight to `visitParents` to get its errors.
+  if (!visitors || typeof visitors !== 'object') return visitors
+
+  return {
+    enter:
+      typeof visitors.enter === 'function'
+        ? wrap$2(visitors.enter)
+        : visitors.enter,
+    exit:
+      typeof visitors.exit === 'function' ? wrap$2(visitors.exit) : visitors.exit
+  }
+}
+
+/**
+ * Turn a `visit` visitor into a `visitParents` one.
+ *
+ * @template {VisitorResult} Result
+ *   Result type.
+ * @param {(node: UnistNode, index: number | undefined, parent: UnistParent | undefined) => Result} visitor
+ *   Visitor for `visit`.
+ * @returns {(node: UnistNode, parents: Array<UnistParent>, index: number | undefined) => Result}
+ *   Visitor for `visitParents`.
+ */
+function wrap$2(visitor) {
+  return overload
 
   /**
+   * Call `visitor` with `index` and `parent` instead of `parents`.
+   *
    * @param {UnistNode} node
+   *   Visited node.
    * @param {Array<UnistParent>} parents
+   *   Ancestors of `node`.
+   * @param {number | undefined} index
+   *   Index of `node` in its parent.
+   * @returns {Result}
+   *   What to do next.
    */
-  function overload(node, parents) {
-    const parent = parents[parents.length - 1];
-    const index = parent ? parent.children.indexOf(node) : undefined;
-    return visitor(node, index, parent)
+  function overload(node, parents, index) {
+    return visitor(node, index, parents[parents.length - 1])
   }
 }
 
