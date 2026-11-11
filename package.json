@@ -70,6 +70,6 @@
     "resolutions": {
         "text-readability/syllable/trim": "^0.0.3",
         "**/@typescript-eslint/typescript-estree/minimatch": "11.0.7",
-        "deepmerge": "file:vendor/deepmerge"
+        "deepmerge": "4.1.2"
     }
 }
