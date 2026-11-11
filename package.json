@@ -22,7 +22,7 @@
         "@actions/core": "^3.0.0",
         "@actions/exec": "^3.0.0",
         "@actions/github": "^9.1.1",
-        "glob": "^13.0.0",
+        "glob": "^14.0.2",
         "rehype-stringify": "^10.0.1",
         "remark": "^15.0.1",
         "remark-gfm": "^4.0.1",
