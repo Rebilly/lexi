@@ -8,6 +8,7 @@ export default [
             'lib/',
             'node_modules/',
             'playground/',
+            'vendor/',
             'rollup.config.ts',
             'vite.config.ts',
         ],
